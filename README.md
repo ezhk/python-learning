@@ -1,2 +1,2 @@
 # python-learning
-Geekbrains's python course homeworks
+Geekbrains's python course homeworks.
