@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Магазин &laquo;Все товары&raquo;</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <nav>
-           <ul>
+           <ul class="menu-list">
                <li><a href="index.html">Главная</a></li>
                <li><a href="catalog/products.html">Каталог</a></li>
                <li><a href="contacts.html">Контакты</a></li>
@@ -17,16 +18,16 @@
     </header>
 
     <h2>Напишите нам</h2>
-    <form action="" name="request">
-        Имя <input type="text" placeholder="login"><br>
-        Адрес электронной почты <input type="email" placeholder="email address"><br>
-        Тема <input type="text" placeholder="subject"><br>
-        Текст обращения<br><textarea name="message" id="" cols="80" rows="10"></textarea>
-        <br>
+    <form action="" name="request" class="contacts-form">
+        Имя <input type="text" placeholder="login" class="contacts-input"><br>
+        Электронная&nbsp;почта <input type="email" placeholder="email" class="contacts-input"><br>
+        Тема <input type="text" placeholder="subject" class="contacts-input"><br><br>
+        Текст обращения<br>
+        <textarea name="message" id="" cols="80" rows="10" ></textarea>
         <button type="submit">Отправить</button>
         <button type="reset">Очистить</button>
     </form>
-
+   
     <h2>Адрес</h2>
     <p>
         Тел.: <a href="tel:+74951234567">+7&nbsp;495 123-45-67</a><br>

@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Магазин &laquo;Все товары&raquo;</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <header>
         <nav>
-           <ul>
+           <ul class="menu-list">
                <li><a href="../index.html">Главная</a></li>
                <li><a href="products.html">Каталог</a></li>
                <li><a href="../contacts.html">Контакты</a></li>
@@ -17,15 +18,19 @@
     </header>
 
     <h1>Каталог</h1>
-    <div style="display: inline-block;">
-        <img src="images/dyson-v7.jpg" alt="Dyson V7" width="100">
-        <p><a href="dyson-v7.html">Dyson&nbsp;V7</a></p>
+    <div class="products-view">
+        <a href="dyson-v7.html">
+            <img src="images/dyson-v7.jpg" alt="Dyson V7" width="100"><br>
+            Dyson&nbsp;V7<br>
+        </a>
     </div>
-    <div style="display: inline-block; align-items: center">
-        <img src="images/vacuum-cleaner.jpg" alt="Mi Vacuum Cleaner" width="100">
-        <p><a href="mi-vacuum-cleaner.html">Mi&nbsp;Vacuum&nbsp;Cleaner</a></p>
+    <div class="products-view">
+        <a href="mi-vacuum-cleaner.html">
+            <img src="images/vacuum-cleaner.jpg" alt="Mi Vacuum Cleaner" width="100"><br>
+            Mi&nbsp;Vacuum&nbsp;Cleaner<br>
+        </a>
     </div>
-   
+
     <footer>
         <hr>
         <p>&copy;&nbsp;&laquo;Все права защищены&raquo;</p>
