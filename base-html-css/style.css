@@ -18,10 +18,16 @@ body {
     display: inline-block;
     text-align: center;
 }
+.products-view img {
+    width: 100px;
+}
 
 .product-image {
     border: 2px solid #e0e0e0;
     float: left;
+}
+.product-image img {
+    width: 250px;
 }
 
 .product-header {
