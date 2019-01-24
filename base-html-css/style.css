@@ -24,7 +24,7 @@ body {
 }
 
 .products-view {
-    display: inline-block;
+    display: inline;
     text-align: center;
 }
 .products-view-img {
