@@ -3,31 +3,46 @@ body {
     color: black;
 }
 
+.logo {
+    width: 200px;
+    border-radius: 10px;
+}
+
 .menu-list {
+    list-style-type: none;
+}
+
+.menu-list-a {
     font-size: 1.3em;
     font-weight: lighter;
     font-family: "Input", "Inconsolata", monospace;
-    
-    list-style-type: none;
+
+    text-decoration: none;
 }
-.menu-list a:visited {
-    color: gray;
+.menu-list-a:hover {
+    color: darkcyan;
 }
 
 .products-view {
     display: inline-block;
     text-align: center;
 }
-.products-view img {
+.products-view-img {
+    outline: 2px solid #e0e0e0;
     width: 100px;
+}
+.products-view-img:hover {
+    outline: none;
 }
 
 .product-image {
-    border: 2px solid #e0e0e0;
+    outline: 2px solid #e0e0e0;
     float: left;
-}
-.product-image img {
     width: 250px;
+}
+
+.product-image:hover {
+    outline: none;
 }
 
 .product-header {
@@ -60,6 +75,17 @@ body {
     text-align: left;
 }
 
+.product-table-data {
+    border-width: 1px;
+    border-style: solid;
+    width: 20%;
+}
+
+.product-table-row:first-child {
+    background-color: antiquewhite;
+    height: 50px;
+}
+
 .contacts-form {
     width: 450px;
 }
@@ -71,10 +97,23 @@ body {
     height: 16px;
     width: 150px;
     margin: 1px;
+
+    text-transform: capitalize;
 }
 input::placeholder {
     color: dimgrey;
     font-size: 1.1em;
+}
+
+.contacts-input-email:focus {
+    background-color: lightgray;
+    color: darkslategrey;
+    font-weight: bold;
+}
+
+.form-button {
+    height: 25px;
+    width: 100px;
 }
 
 .clear {

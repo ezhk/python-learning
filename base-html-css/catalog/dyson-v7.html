@@ -6,23 +6,22 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <header>
+    <div class="header">
+        <a href="../index.html"><img class="logo" src="../logo.png" alt="Все товары"></a>
         <nav>
            <ul class="menu-list">
-               <li><a href="../index.html">Главная</a></li>
-               <li><a href="products.html">Каталог</a></li>
-               <li><a href="../contacts.html">Контакты</a></li>
+               <li><a class="menu-list-a" href="../index.html">Главная</a></li>
+               <li><a class="menu-list-a" href="products.html">Каталог</a></li>
+               <li><a class="menu-list-a" href="../contacts.html">Контакты</a></li>
            </ul>
         </nav>
         <hr>
-    </header>
+    </div>
 
     <h1 align="center">Пылесос Dyson V7 Cord-free</h1>
-    <div class="product-image">
-        <a href="images/dyson-v7.jpg" target="_blank">
-            <img src="images/dyson-v7.jpg" alt="Dyson V7">
-        </a>
-    </div>
+    <a href="images/dyson-v7.jpg" target="_blank">
+        <img class="product-image" src="images/dyson-v7.jpg" alt="Dyson V7">
+    </a>
 
     <h2 class="product-header">Краткое описание товара</h2>
     <p class="product-short-descrition">Вертикальный пылесос Dyson V7&nbsp;Cord Free&nbsp;&mdash; прибор 2&nbsp;в 1. С&nbsp;установленной удлинительной трубкой вы&nbsp;сможете очищать напольные покрытия, а&nbsp;без неё&nbsp;&mdash; мебель, книги, мягкие игрушки и&nbsp;разные бытовые предметы.<br>
@@ -30,6 +29,43 @@
     <div class="clear"></div>
 
     <h2 class="product-header">Характеристики товара</h2>
+
+    <table class="product-table">
+        <tr class="product-table-row">
+            <th>Ключевые особенности</th>
+            <th>Отличия от других пылесосов</th>
+            <th>Технические детали</th>
+            <th>Индикация</th>
+            <th>Электропитание</th>
+        </tr>
+        <tr class="product-table-row">
+            <td class="product-table-data">Вертикальный аккумуляторный пылесос</td>
+            <td class="product-table-data">Отсоединяемый ручной пылесос</td>
+            <td class="product-table-data">Макс. мощность всасывания 100 Вт</td>
+            <td class="product-table-data">Индикация включения</td>
+            <td class="product-table-data">Работа от аккумулятора до 30 минут</td>
+        </tr>
+        <tr class="product-table-row">
+            <td class="product-table-data">Сухая уборка</td>
+            <td class="product-table-data" rowspan="2">Циклонная технология 2 Tier Radial<br>Трансформируется в портативный</td>
+            <td class="product-table-data">Потребляемая мощность 350 Вт</td>
+            <td class="product-table-data">Индикация перегрева</td>
+            <td class="product-table-data">Время зарядки аккумулятора до 3 ч 50 мин</td>
+        </tr>
+        <tr class="product-table-row">
+            <td class="product-table-data">Циклоническая система</td>
+            <td class="product-table-data">Уровень шума: 85 дБ</td>
+            <td class="product-table-data" colspan="2">Индикация зарядки аккумулятора и тип аккумулятора Li-Ion</td>
+        </tr>
+        <tr class="product-table-row">
+            <td class="product-table-data">Наличие турборежима</td>
+            <td class="product-table-data">Управление мощностью на рукоятке</td>
+            <td class="product-table-data">Двигатель с цифровым управлением V7</td>
+            <td class="product-table-data">Индикатор заполнения пылесборника</td>
+            <td class="product-table-data">Емкость аккумулятора	2100 мАч</td>
+        </tr>
+    </table>
+
     <ul class="product-specifications">
         <li>вертикальный аккумуляторный пылесос, отсоединяемый ручной пылесос</li>
         <li>сухая уборка</li>
@@ -49,9 +85,9 @@
    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis exercitationem amet saepe necessitatibus rem porro repellat tenetur consectetur, ut reprehenderit ullam quas, aliquid. Aliquid corrupti reiciendis doloremque temporibus animi quae recusandae cum mollitia voluptatum fugiat, ipsum officiis laboriosam delectus officia eaque magnam similique facere alias quam amet minima dolore necessitatibus!<br>
    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius ullam aut, laudantium aspernatur cupiditate, consectetur dolorum quia enim iusto dolores odio dolorem qui voluptatum quos perferendis atque assumenda, quidem vero. Dolores aliquam, dicta harum nisi ratione ipsum neque temporibus labore laudantium! Quis odit alias voluptatibus enim, unde suscipit laborum quasi!</p>
    
-    <footer>
+    <div class="footer">
         <hr>
         <p>&copy;&nbsp;&laquo;Все права защищены&raquo;</p>
-    </footer>
+    </div>
 </body>
 </html>
