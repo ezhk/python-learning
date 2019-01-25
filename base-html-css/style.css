@@ -14,7 +14,7 @@ body {
 
 .menu-list li {
     display: inline;
-    padding: 20px;
+    margin: 20px;
     font-size: 18px;
 }
 
@@ -84,6 +84,12 @@ body {
     font-weight: 400;
     line-height: 24px;
     text-align: left;
+}
+
+.product-table {
+    border-collapse: collapse;
+    border-width: 1px;
+    border-style: dashed;
 }
 
 .product-table-data {
