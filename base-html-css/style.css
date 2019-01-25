@@ -12,6 +12,12 @@ body {
     list-style-type: none;
 }
 
+.menu-list li {
+    display: inline;
+    padding: 20px;
+    font-size: 18px;
+}
+
 .menu-list-a {
     font-size: 1.3em;
     font-weight: lighter;
@@ -21,6 +27,11 @@ body {
 }
 .menu-list-a:hover {
     color: darkcyan;
+}
+
+.header {
+    display: flex;
+    align-items: center;
 }
 
 .products-view {
