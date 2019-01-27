@@ -3,23 +3,50 @@ body {
     color: black;
 }
 
+.wrapper {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+}
+
+.footer {
+    padding: 10px;
+    border-top: 1px solid lightgray;
+}
+
 .logo {
-    width: 200px;
+    height: 70px;
     border-radius: 10px;
 }
 
 .menu-list {
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
     list-style-type: none;
 }
 
 .menu-list li {
-    display: inline;
-    margin: 20px;
-    font-size: 18px;
+    height: 15px;
+    line-height: 15px;
+    padding: 10px;
+    border-right: 1px solid lightgray;
+}
+
+.menu-list li:last-child {
+    border: none;
 }
 
 .menu-list-a {
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-weight: lighter;
     font-family: "Input", "Inconsolata", monospace;
 
@@ -27,11 +54,6 @@ body {
 }
 .menu-list-a:hover {
     color: darkcyan;
-}
-
-.header {
-    display: flex;
-    align-items: center;
 }
 
 .products-view {
