@@ -24,6 +24,8 @@ body {
 }
 
 .content {
+    padding: 3px;
+    min-height: calc(100vh - 175px);
 }
 
 .footer {
@@ -176,6 +178,8 @@ body {
 .contacts-appeal {
     width: 500px;
     padding: 7px;
+    border-left: 1px solid darkgray;
+    border-radius: 3px;
 }
 .contacts-appeal-input {
     float: left;
@@ -225,7 +229,7 @@ input::placeholder {
     font-size: 18px;
     font-family: serif;
     padding: 7px;
-    border: 1px solid darkgray;
+    border-left: 1px solid darkgray;
     border-radius: 3px;
 }
 .contacts-map {
