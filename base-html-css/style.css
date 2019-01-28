@@ -19,12 +19,13 @@ body {
     padding-top: 10px;
     padding-bottom: 5px;
 
+    margin-top: 5px;
     margin-bottom: 10px;
     border-bottom: 1px solid lightgray;
 }
 
 .content {
-    padding: 3px;
+    padding: 1px;
     min-height: calc(100vh - 175px);
 }
 
@@ -37,6 +38,7 @@ body {
     margin-top: 10px;
     border-top: 1px solid lightgray;
 
+    margin-bottom: 5px;
     position: relative;
 }
 
