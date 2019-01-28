@@ -14,7 +14,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-/*    background-color: #eee;*/
    
     background-image: url(images/background-header-footer.png);
     padding-top: 10px;
