@@ -1,0 +1,89 @@
+body {
+    background: #f8f8f8;
+    color: black;
+}
+
+.container {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.header {
+    height: 70px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-image: url(../images/background-header-footer.png);
+    padding-top: 10px;
+    padding-bottom: 5px;
+
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid lightgray;
+}
+
+.content {
+    padding: 1px;
+    min-height: calc(100vh - 175px);
+}
+
+.footer {
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
+
+    background-image: url(../images/background-header-footer.png);
+    margin-top: 10px;
+    border-top: 1px solid lightgray;
+
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.footer-rights {
+    position: absolute;
+    right: 10px;
+    top: 1px;
+}
+
+.logo {
+    margin-left: 8px;
+
+    height: 70px;
+    border-radius: 10px;
+}
+
+.menu-list {
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+    list-style-type: none;
+}
+
+.menu-list li {
+    height: 15px;
+    line-height: 15px;
+    padding: 10px;
+    border-right: 1px solid lightgray;
+}
+
+.menu-list li:last-child {
+    border: none;
+}
+
+.menu-list-a {
+    font-size: 1.2em;
+    font-weight: lighter;
+    font-family: "Input", "Inconsolata", monospace;
+
+    text-decoration: none;
+}
+.menu-list-a:hover {
+    color: rgb(12, 96, 131);
+}
+
+.clear {
+    clear: both;
+}
