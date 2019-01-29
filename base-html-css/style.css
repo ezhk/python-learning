@@ -202,7 +202,7 @@ body {
 .contacts-appeal {
     width: 500px;
     padding: 7px;
-    border-left: 1px solid darkgray;
+    border-left: 1px solid rgb(12, 96, 131);
     border-radius: 3px;
 }
 .contacts-appeal-input {
@@ -253,7 +253,7 @@ input::placeholder {
     font-size: 18px;
     font-family: serif;
     padding: 7px;
-    border-left: 1px solid darkgray;
+    border-left: 1px solid rgb(12, 96, 131);
     border-radius: 3px;
 }
 .contacts-map {
@@ -261,7 +261,7 @@ input::placeholder {
     width: 500px;
 
     padding: 7px;
-    border: 1px solid darkgray;
+    border: 1px solid rgb(12, 96, 131);
     border-radius: 3px;
 }
 
