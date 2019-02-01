@@ -212,25 +212,30 @@ body {
 }
 
 .featured-border {
-    border: 1px solid #9c9c9c;
+/*    border: 1px solid #9c9c9c;*/
     position: relative;
 }
 
-.featured-block-hover:hover {
-    border-bottom: 1px solid #9c9c9c;
+.featured-block {
+    border: 1px solid transparent;
+}
+.featured-block:hover {
+    border-color: #9c9c9c;
+}
+
+.featured-block:hover >.featured-background {
+    z-index: -1;
+    opacity: 0.1;
 }
 
 .featured-background {
     position: absolute;
-    z-index: -1;
 
     display: block;
     width: 270px;
     height: 270px;
 
     background-color: #ffffff;
-    background-image: url(img/lamp.jpg);
-    opacity: 0.1;
 }
 
 .featured-next-button {
@@ -416,6 +421,16 @@ body {
     align-self: center;
 }
 
+.exclusive-small-block {
+    width: 270px;
+    height: 270px;
+    border-bottom: 1px solid transparent;
+}
+.exclusive-small-block:hover >.featured-background {
+    z-index: -1;
+    opacity: 0.1;
+}
+
 .bg-second-exclusive-left {
     background-image: url(img/exclusive-second-left.jpg);
 }
@@ -588,3 +603,5 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.6px;
 }
+
+
