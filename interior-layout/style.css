@@ -212,18 +212,18 @@ body {
 }
 
 .featured-border {
-/*    border: 1px solid #9c9c9c;*/
     position: relative;
 }
 
 .featured-block {
     border: 1px solid transparent;
 }
+
 .featured-block:hover {
     border-color: #9c9c9c;
 }
 
-.featured-block:hover >.featured-background {
+.featured-block:hover > .featured-background {
     z-index: -1;
     opacity: 0.1;
 }
@@ -426,7 +426,8 @@ body {
     height: 270px;
     border-bottom: 1px solid transparent;
 }
-.exclusive-small-block:hover >.featured-background {
+
+.exclusive-small-block:hover > .featured-background {
     z-index: -1;
     opacity: 0.1;
 }
@@ -607,5 +608,3 @@ body {
 .footer-a {
     text-decoration: none;
 }
-
-
