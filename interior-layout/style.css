@@ -194,20 +194,22 @@ body {
 .featured-blocks {
     display: flex;
     padding-top: 72px;
+    flex-wrap: wrap;
 }
 
 .featured-block {
     width: 270px;
     height: 270px;
-    margin: 0 15px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
     border-bottom: 1px solid transparent;
+    box-sizing: border-box;
 }
-
-.featured-block:first-child {
+.featured-block:nth-child(4n-3) {
     margin-left: 0px;
 }
-
-.featured-block:last-child {
+.featured-block:nth-child(4n) {
     margin-right: 0px;
 }
 
@@ -564,6 +566,7 @@ body {
     width: 370px;
     height: 48px;
     margin-top: 26px;
+    padding-right: 13.5px;
 }
 
 .contact-input-form {
@@ -581,10 +584,10 @@ body {
 .contact-input-button {
     position: absolute;
     right: 0px;
-    top: 3px;
+    top: 1px;
     height: 48px;
-    width: 48px;
-    height: 48px;
+    width: 47px;
+    height: 47px;
     border-color: transparent;
 }
 
@@ -607,4 +610,7 @@ body {
 
 .footer-a {
     text-decoration: none;
+}
+.footer-a:hover {
+    text-decoration: underline;
 }
