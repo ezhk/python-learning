@@ -628,6 +628,7 @@ body {
     font-size: 62px;
     font-weight: 200;
     line-height: 72px;
+    text-transform: capitalize;
 }
 
 .contact-us-header {
@@ -708,4 +709,60 @@ body {
 
 .contact-a:hover {
     text-decoration: underline;
+}
+
+.footer-social {
+    display: flex;
+    justify-content: space-between;
+    background-image: url(img/social-links.jpg);
+    background-repeat: no-repeat;
+    width: 129px;
+}
+
+.social-link {
+    display: block;
+    height: 28px;
+    width: 28px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid transparent;
+}
+
+.social-link:hover {
+    border-color: #6c6c6c;
+}
+
+.products-menu {
+    list-style: none;
+    display: flex;
+}
+
+.products-menu-li {
+    padding: 0 15px 20px 15px;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #212121;
+    letter-spacing: 1.8px;
+    border-bottom: 1px solid #6c6c6c;
+}
+.products-menu-li:first-child {
+    padding-left: 5px;
+}
+.products-menu-li:last-child {
+    padding-right: 5px;
+}
+.products-menu-li-active {
+    border-bottom: 3px solid black;
+}
+
+.our-oroducts {
+    padding-top: 70px;
+}
+.refresh {
+}
+
+.refresh-button {
+    display: flex;
+    justify-content: center;
+    margin: 70px 0 140px 0;
 }
