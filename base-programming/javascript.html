@@ -1,12 +1,43 @@
-<meta charset = "utf-8">
-<script>
-    var a = prompt ("Int a:");
-    var b = prompt ("Int b:");
+<!DOCTYPE html>
+<html lang="en">
 
-    a = parseInt(a);
-    b = parseInt(b);
-    c = a + b;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
 
-    document.writeln("sum " + a + " + " + b + " = " + c );
-    alert(a**b);
-</script>
+<body>
+    <script>
+        var a = prompt("Int a:");
+        var b = prompt("Int b:");
+
+        a = parseInt(a);
+        b = parseInt(b);
+        c = a + b;
+
+        var count = 0;
+        if (a == "123") {
+            count++;
+        } else if (a >= 123) {
+            alert('too much');
+        }
+        if (b == "2") {
+            count++;
+        }
+
+        if (a > b) {
+            if (b >= c) {
+                document.writeln("A is bigger");
+            } else if (a >= c) {
+                document.writeln("A is bigger");
+            }
+        }
+
+        document.writeln(count);
+        document.writeln("sum " + a + " + " + b + " = " + c);
+    </script>
+</body>
+
+</html>

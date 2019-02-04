@@ -609,6 +609,11 @@ body {
     height: 47px;
     background-color: white;
     border-color: transparent;
+    opacity: 0.5;
+}
+
+.contact-input-button:hover {
+    opacity: 1;
 }
 
 .footer {
