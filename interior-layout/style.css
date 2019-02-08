@@ -919,20 +919,16 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  text-transform: uppercase;
+  color: #8c8c8c;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
 }
 
 .products-menu-li {
   padding: 0 15px 20px 15px;
-  font-size: 18px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #8c8c8c;
-  letter-spacing: 1.8px;
   border-bottom: 1px solid #6c6c6c;
-}
-
-.products-menu-li:hover {
-  color: #212121;
 }
 
 .products-menu-li:first-child {
@@ -944,8 +940,20 @@ body {
 }
 
 .products-menu-li-active {
-  color: #212121;
   border-bottom: 3px solid black;
+}
+
+.products-menu-a {
+  text-decoration: none;
+  color: #8c8c8c;
+}
+
+.products-menu-a:hover {
+  color: #212121;
+}
+
+.products-menu-a-active {
+  color: #212121;
 }
 
 .our-oroducts {
@@ -960,6 +968,19 @@ body {
       -ms-flex-pack: center;
           justify-content: center;
   margin: 70px 0 140px 0;
+}
+
+.refresh-button-a {
+  opacity: 0.5;
+}
+
+.refresh-button-a:hover {
+  opacity: 1;
+}
+
+.refresh-button-img {
+  width: 50px;
+  height: 39px;
 }
 
 .detailed-product-header {
