@@ -695,18 +695,20 @@ body {
   height: 100%;
   width: 328px;
   padding-right: 42px;
-}
-
-.contact-input-form[type="email"] {
+  border: 1px solid #d9dee1;
   color: #6c6c6c;
   font-size: 14px;
   font-weight: 300;
   padding-left: 10px;
 }
 
+.contact-input-form:focus {
+  outline: none;
+}
+
 .contact-input-button {
   position: absolute;
-  right: 1px;
+  right: 5px;
   top: 6px;
   height: 48px;
   width: 40px;

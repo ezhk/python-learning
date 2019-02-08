@@ -598,18 +598,21 @@ body {
     height: 100%;
     width: 328px;
     padding-right: 42px;
-}
+    border: 1px solid #d9dee1;
 
-.contact-input-form[type="email"] {
     color: #6c6c6c;
     font-size: 14px;
     font-weight: 300;
     padding-left: 10px;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .contact-input-button {
     position: absolute;
-    right: 1px;
+    right: 5px;
     top: 6px;
     height: 48px;
     width: 40px;
@@ -617,10 +620,10 @@ body {
     background-color: white;
     border-color: transparent;
     opacity: 0.5;
-}
 
-.contact-input-button:hover {
-    opacity: 1;
+    &:hover {
+        opacity: 1;
+    }
 }
 
 .footer {
