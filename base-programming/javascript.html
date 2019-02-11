@@ -10,33 +10,206 @@
 
 <body>
     <script>
-        var a = prompt("Int a:");
-        var b = prompt("Int b:");
+        // function between(x, min, max) {
+        //     return (max >= x && x >= min)
+        // }
+        // var a = prompt("Int a:");
+        // var b = prompt("Int b:");
 
-        a = parseInt(a);
-        b = parseInt(b);
-        c = a + b;
+        // a = parseInt(a);
+        // b = parseInt(b);
+        // c = a + b;
 
-        var count = 0;
-        if (a == "123") {
-            count++;
-        } else if (a >= 123) {
-            alert('too much');
+        // var count = 0;
+        // if (a == "123") {
+        //     count++;
+        // } else if (a >= 123) {
+        //     alert('too much');
+        // }
+        // if (b == "2") {
+        //     count++;
+        // }
+
+        // if (a > b && a != c) {
+        //     document.writeln("a is bigger");
+        // }
+
+        // document.writeln(typeof (a));
+        // document.writeln("between: " + between(a, 10, 30));
+
+        // document.writeln(count);
+        // document.writeln("sum " + a + " + " + b + " = " + c);
+
+
+        // var n = 0;
+        // while (n <= 9) {
+        //     n++;
+        //     alert(n);
+        // }
+        // do {
+        //     document.writeln(n);
+        // } while (parseInt(prompt(n)) <= 20);
+
+
+        // n = 0;
+        // while (true) {
+        //     if ((Math.random() * 6) < 1) {
+        //         break;
+        //     }
+
+        //     if (prompt("Stop?") == "yes") {
+        //         break;
+        //     }
+        //     n++;
+        // }
+
+        // alert("You win " + n);
+
+        // for (var n = 0; n <= 10; n++) {
+        //     alert("here " + n);
+        // }
+
+
+        // var sum = parseFloat(prompt("Введите сумму вклада"));
+        // var percent = parseFloat(prompt("Введите процентную ставку"));
+        // var years = parseInt(prompt("Количество лет вклада"));
+
+        // while (years > 0) {
+        //     sum += sum * percent / 100;
+        //     alert(sum);
+        //     years--;
+        // }
+
+        // document.writeln("Накопленная сумма: " + sum);
+
+
+        // var arr = [1, 2, 3];
+        // alert(arr);
+        // arr.push(10);
+        // alert(arr);
+
+        // document.writeln(arr.reverse());
+        // document.writeln(arr);
+
+
+        // var arr = [];
+        // for (var n = 0; n <= 1000000; n++) {
+        //     var value = Math.round(Math.random() * 36);
+        //     if (value == 0) {
+        //         arr.push(value);
+        //         continue;
+        //     }
+
+        //     if (value % 2 == 0) {
+        //         arr.push("black");
+        //     } else {
+        //         arr.push("red");
+        //     }
+        // }
+
+        // var longest_red = [];
+        // var current_counter = 0;
+
+        // for (var i = 0; i < arr.length; i++) {
+        //     if (arr[i] != "red") {
+        //         if (current_counter > 0) {
+        //             longest_red.push(current_counter);
+        //             current_counter = 0;
+        //         }
+        //     } else {
+        //         current_counter++;
+        //     }
+        // }
+
+        // longest_red.push(current_counter);
+        // document.writeln(Math.max(...longest_red));
+
+
+        // BLACK JACK
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
-        if (b == "2") {
-            count++;
+
+        function getCard() {
+            var cards = ['6', '7', '8', '9', '10', 'Q', 'K', 'A'];
+            return cards[getRandomInt(0, cards.length - 1)];
         }
 
-        if (a > b) {
-            if (b >= c) {
-                document.writeln("A is bigger");
-            } else if (a >= c) {
-                document.writeln("A is bigger");
+        function getSum(arr) {
+            var cost = {
+                'J': 10,
+                'Q': 10,
+                'K': 10,
+                // 'A': 1 or 11
+                '6': 6,
+                '7': 7,
+                '8': 8,
+                '9': 9,
+                '10': 10,
+            };
+
+            var sum = 0;
+            var counter_a = 0;
+
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] == "A") {
+                    counter_a++;
+                    continue;
+                }
+                sum += cost[arr[i]];
+            }
+
+            // calculate A as 1 and, if possible, as 11
+            sum += 1 * counter_a;
+            while (counter_a) {
+                if (sum + 10 <= 21) {
+                    sum += 10;
+                }
+                counter_a--;
+            }
+
+            return sum;
+        }
+
+        function getStatus() {
+            return 'Дилер: ' + dealer.join(' ') + ' Игрок: ' + player.join(" ")
+        }
+
+        var dealer = [getCard()]
+        var player = [getCard(), getCard()]
+
+        while (prompt("Твои карты: " + player + "\nВзять ещё одну карту, 1 — да, что-то другое — нет") == "1") {
+            player.push(getCard());
+            if (getSum(player) >= 21) {
+                break;
             }
         }
 
-        document.writeln(count);
-        document.writeln("sum " + a + " + " + b + " = " + c);
+        if (getSum(player) > 21) {
+            alert("Ты проиграл, сумма очков больше 21");
+        }
+
+        // dealer limit 17
+        while (getSum(player) <= 21 && getSum(player) > getSum(dealer) && getSum(dealer) < 17) {
+            dealer.push(getCard());
+        }
+
+        if (getSum(player) > 21) {
+            if (getSum(dealer) > 21) {
+                document.writeln("Ничья!<br>");
+            } else {
+                document.writeln("Ты проиграл!<br>");
+            }
+        } else if (getSum(dealer) > 21 || getSum(player) > getSum(dealer)) {
+            document.writeln("Ты выиграл!<br>");
+        } else if (getSum(dealer) == getSum(player)) {
+            document.writeln("Ничья<br>");
+        } else {
+            document.writeln("Ты проиграл<br>");
+        }
+
+        document.writeln("<br>" + getStatus() + "<br> Сумма очков дилера: " + getSum(dealer) +
+            "<br> Сумма очков игрока: " + getSum(player));
     </script>
 </body>
 
