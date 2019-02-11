@@ -131,21 +131,21 @@
         }
 
         function getCard() {
-            var cards = ['6', '7', '8', '9', '10', 'Q', 'K', 'A'];
+            var cards = ["6", "7", "8", "9", "10", "Q", "K", "A"];
             return cards[getRandomInt(0, cards.length - 1)];
         }
 
         function getSum(arr) {
             var cost = {
-                'J': 10,
-                'Q': 10,
-                'K': 10,
-                // 'A': 1 or 11
-                '6': 6,
-                '7': 7,
-                '8': 8,
-                '9': 9,
-                '10': 10,
+                "J": 10,
+                "Q": 10,
+                "K": 10,
+                // "A": 1 or 11
+                "6": 6,
+                "7": 7,
+                "8": 8,
+                "9": 9,
+                "10": 10,
             };
 
             var sum = 0;
@@ -164,6 +164,8 @@
             while (counter_a) {
                 if (sum + 10 <= 21) {
                     sum += 10;
+                } else {
+                    break;
                 }
                 counter_a--;
             }
@@ -172,13 +174,14 @@
         }
 
         function getStatus() {
-            return 'Дилер: ' + dealer.join(' ') + ' Игрок: ' + player.join(" ")
+            return "Дилер: " + dealer.join(" ") + ", игрок: " + player.join(" ")
         }
 
-        var dealer = [getCard()]
-        var player = [getCard(), getCard()]
+        var dealer = [getCard()];
+        var player = [getCard(), getCard()];
 
-        while (prompt("Твои карты: " + player + "\nВзять ещё одну карту, 1 — да, что-то другое — нет") == "1") {
+        while (prompt("Твои карты: " + player +
+                "\nВзять ещё одну карту, 1 — да, что-то другое — нет") == "1") {
             player.push(getCard());
             if (getSum(player) >= 21) {
                 break;
@@ -190,7 +193,9 @@
         }
 
         // dealer limit 17
-        while (getSum(player) <= 21 && getSum(player) > getSum(dealer) && getSum(dealer) < 17) {
+        while (getSum(player) <= 21 &&
+            getSum(player) > getSum(dealer) &&
+            getSum(dealer) < 17) {
             dealer.push(getCard());
         }
 
@@ -208,7 +213,8 @@
             document.writeln("Ты проиграл<br>");
         }
 
-        document.writeln("<br>" + getStatus() + "<br> Сумма очков дилера: " + getSum(dealer) +
+        document.writeln("<br>" + getStatus() +
+            "<br> Сумма очков дилера: " + getSum(dealer) +
             "<br> Сумма очков игрока: " + getSum(player));
     </script>
 </body>
