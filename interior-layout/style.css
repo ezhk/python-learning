@@ -123,8 +123,8 @@ body {
   color: #212121;
   letter-spacing: 3.6px;
   text-decoration: none;
-  -webkit-box-shadow: 0 2px 5px 1px rgba(33, 33, 33, 0.35);
-          box-shadow: 0 2px 5px 1px rgba(33, 33, 33, 0.35);
+  -webkit-box-shadow: 0 1px 5px 1px rgba(33, 33, 33, 0.35);
+          box-shadow: 0 1px 5px 1px rgba(33, 33, 33, 0.35);
   border-radius: 23px;
   background-color: #ffffff;
   display: inline-block;
@@ -140,10 +140,8 @@ body {
 }
 
 .button:active {
-  -webkit-box-shadow: 0 0 5px 1px rgba(33, 33, 33, 0.35);
-          box-shadow: 0 0 5px 1px rgba(33, 33, 33, 0.35);
-  position: relative;
-  top: 2px;
+  -webkit-box-shadow: inset 0 1px 5px 1px rgba(33, 33, 33, 0.35);
+          box-shadow: inset 0 1px 5px 1px rgba(33, 33, 33, 0.35);
 }
 
 .slider-text {
