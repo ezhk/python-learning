@@ -73,3 +73,26 @@
     -rw-r--r-- 1 root root  309 Mar 27 16:11 users.bson
     -rw-r--r-- 1 root root  125 Mar 27 16:11 users.metadata.json
 
+
+# Restore dump
+
+    > use users
+    switched to db users
+    > db.dropDatabase()
+    { "dropped" : "users", "ok" : 1 }
+    > 
+    bye
+    # mongorestore dump/
+    2019-03-27T16:16:19.638+0300	preparing collections to restore from
+    2019-03-27T16:16:19.639+0300	reading metadata for users.users from dump/users/users.metadata.json
+    2019-03-27T16:16:19.645+0300	restoring users.users from dump/users/users.bson
+    2019-03-27T16:16:19.654+0300	no indexes to restore
+    2019-03-27T16:16:19.654+0300	finished restoring users.users (3 documents)
+    2019-03-27T16:16:19.654+0300	done
+
+    # mongo
+    > use users
+    switched to db users
+    > show collections
+    users
+
