@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url
+from django.urls import re_path
 
 import mainapp.views as mainapp
 
 urlpatterns = [
-    url(r'^/?$', mainapp.main),
-    url(r'^contacts/?$', mainapp.contacts),
-    url(r'^products/?$', mainapp.products),
-    url(r'^products/(?P<product_name>[^/]+)/?$', mainapp.products),
-    url(r'^admin/', admin.site.urls),
+    re_path(r'^/?$', mainapp.main, name="index"),
+    re_path(r'^contacts/?$', mainapp.contacts, name="contacts"),
+
+    re_path(r'^products/?$', mainapp.products, name="products"),
+    re_path(r'^products/(?P<product_name>[^/]+)/?$', mainapp.products),
+
+    re_path(r'^admin/', admin.site.urls),
 ]
