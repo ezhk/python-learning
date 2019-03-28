@@ -1,0 +1,22 @@
+[
+    {
+        "href": "all",
+        "name": "все"
+    },
+    {
+        "href": "home",
+        "name": "дом"
+    },
+    {
+        "href": "office",
+        "name": "офис"
+    },
+    {
+        "href": "modern",
+        "name": "модерн"
+    },
+    {
+        "href": "classic",
+        "name": "классика"
+    }
+]

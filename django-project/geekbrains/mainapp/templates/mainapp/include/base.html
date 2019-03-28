@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ title | upper }}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/contacts.css' %}">
+    <link rel="stylesheet" href="{% static 'mainapp/css/styles.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/"><img class="logo" src="{% static 'mainapp/img/logo.png' %}" alt="Все товары"></a>
+            <ul class="menu-list">
+                <li><a class="menu-list-a" href="{% url 'index' %}">Главная</a></li>
+                <li><a class="menu-list-a" href="{% url 'products' %}">Каталог</a></li>
+                <li><a class="menu-list-a" href="{% url 'contacts' %}">Контакты</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div class="footer">
+            <div class="footer-rights">
+                <p>&laquo;Все права защищены&raquo; &copy;&nbsp;2019</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
