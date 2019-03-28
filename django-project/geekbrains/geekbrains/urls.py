@@ -21,10 +21,10 @@ import mainapp.views as mainapp
 
 urlpatterns = [
     re_path(r'^/?$', mainapp.main, name="index"),
-    re_path(r'^contacts/?$', mainapp.contacts, name="contacts"),
+    re_path(r'^contacts/$', mainapp.contacts, name="contacts"),
 
-    re_path(r'^products/?$', mainapp.products, name="products"),
-    re_path(r'^products/(?P<product_name>[^/]+)/?$', mainapp.products),
+    re_path(r'^products/detail/(?P<product_name>[^/]+)/?$', mainapp.products),
+    re_path(r'^products/', mainapp.products, name="products"),
 
     re_path(r'^admin/', admin.site.urls),
 ]

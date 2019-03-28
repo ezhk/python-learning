@@ -6,8 +6,24 @@
 
 {% block content %}
 <h1>Каталог</h1>
+
+<ul class="menu-subcategories">
+{% url 'products' as products %}
+{% for link in categories %}
+    <li class="menu-subcategories-li">
+        <a class="menu-subcategories-a
+                {% if request.get_full_path == products|add:link.href or request.get_full_path == products and link.href == "all" %}
+                    active-subcategory
+                {% endif %}"
+            href="{% url 'products' %}{{ link.href }}">
+            {{ link.name | upper }}
+        </a>
+    </li>
+{% endfor %}
+</ul>
+
 <div class="products">
-    <a class="product-view" href="{% url 'products' %}/dyson-v7">
+    <a class="product-view" href="{% url 'products' %}detail/dyson-v7">
         <div class="product-view-a">
             <div class="product-view-img">
                 <img class="product-view-img" src="{% static  'mainapp/img/products/dyson-v7.jpg' %}" alt="Dyson V7">
@@ -18,7 +34,7 @@
         </div>
     </a>
 
-    <a class="product-view" href="{% url 'products' %}/mi-vacuum-cleaner">
+    <a class="product-view" href="{% url 'products' %}detail/mi-vacuum-cleaner">
         <div class="product-view-a">
             <div class="product-view-img">
                 <img class="product-view-img" src="{% static 'mainapp/img/products/vacuum-cleaner.jpg' %}"
