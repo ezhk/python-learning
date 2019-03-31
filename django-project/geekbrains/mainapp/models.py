@@ -12,6 +12,7 @@ class ProductCategory(models.Model):
     def __str__(self):
         return f"{self.name} ({self.description})"
 
+
 class Products(models.Model):
     class Meta:
         verbose_name = 'Product'
@@ -29,13 +30,22 @@ class Products(models.Model):
     def __str__(self):
         return f"{self.name} ({self.category.name}, {self.price})"
 
-class ProductProperty(models.Model):
+
+class Properties(models.Model):
     class Meta:
         verbose_name = 'Product property'
         verbose_name_plural = 'Product properties'
 
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    name = models.CharField(verbose_name='property', max_length=128)
+    name = models.CharField(verbose_name='property', max_length=128, unique=True)
 
     def __str__(self):
         return f"{self.name}"
+
+
+class ProductAndProperty(models.Model):
+    class Meta:
+        verbose_name = 'Link between products and properties'
+        verbose_name_plural = 'Links between products and properties'
+
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    property = models.ForeignKey(Properties, on_delete=models.CASCADE)

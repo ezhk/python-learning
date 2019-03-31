@@ -23,7 +23,7 @@
 <h2 class="product-header">Характеристики товара</h2>
 <ul class="product-specifications">
 {% for property in product_properties %}
-    <li>{{ property.name | safe }}</li>
+    <li>{{ property.property.name | safe }}</li>
 {% endfor %}
 </ul>
 

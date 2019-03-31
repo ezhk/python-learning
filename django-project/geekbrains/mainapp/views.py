@@ -3,7 +3,9 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponseNotFound
 
-from mainapp.models import Products, ProductCategory, ProductProperty
+from mainapp.models import Products,\
+                           ProductCategory,\
+                           ProductAndProperty
 
 def main(request):
     return render(request, 'mainapp/index.html')
@@ -27,7 +29,9 @@ def products_details(request, pk=None):
         HttpResponseNotFound("product ID not found")
 
     product = Products.objects.get(pk=pk)
-    properties = ProductProperty.objects.filter(product=pk).values('name')
+    properties = ProductAndProperty.objects.select_related(
+            'property'
+        ).filter(product=pk).all()
     return render(request, 'mainapp/product-detail.html',
                   {'product_description': product,
                    'product_properties': properties})

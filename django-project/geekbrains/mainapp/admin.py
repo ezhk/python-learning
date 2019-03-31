@@ -1,6 +1,10 @@
 from django.contrib import admin
-from mainapp.models import ProductCategory, Products, ProductProperty
+from mainapp.models import Products, \
+                           Properties, \
+                           ProductCategory, \
+                           ProductAndProperty
 
-admin.site.register(ProductCategory)
 admin.site.register(Products)
-admin.site.register(ProductProperty)
+admin.site.register(Properties)
+admin.site.register(ProductCategory)
+admin.site.register(ProductAndProperty)
