@@ -16,8 +16,6 @@ def products(request, pk=None):
     else:
         products = Products.objects.all()
 
-    # with open(settings.PRODUCT_CATEGORIES_MENU, 'r') as fh:
-    #     product_categories = json.load(fh)
     return render(request, 'mainapp/products.html',
                   {
                       'products': products,
@@ -27,6 +25,7 @@ def products(request, pk=None):
 def products_details(request, pk=None):
     if pk is not None:
         HttpResponseNotFound("product ID not found")
+
     product = Products.objects.get(pk=pk)
     properties = ProductProperty.objects.filter(product=pk).values('name')
     return render(request, 'mainapp/product-detail.html',
