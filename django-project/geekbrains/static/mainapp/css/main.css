@@ -22,6 +22,8 @@ body {
     margin-top: 5px;
     margin-bottom: 10px;
     border-bottom: 1px solid lightgray;
+
+    border-radius: 15px;
 }
 
 .content {
@@ -40,6 +42,8 @@ body {
 
     margin-bottom: 5px;
     position: relative;
+
+    border-radius: 15px;
 }
 
 .footer-rights {
