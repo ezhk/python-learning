@@ -79,10 +79,13 @@ body {
     font-family: "Input", "Inconsolata", monospace;
 
     text-decoration: none;
+    color: darkgray;
 }
 .menu-list-a:hover {
-    color: rgb(12, 96, 131);
+    text-decoration: underline;
 }
+.active-menu-list-a {
+    color: black;
 
 .clear {
     clear: both;
