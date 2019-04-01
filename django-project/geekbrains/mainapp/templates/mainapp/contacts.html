@@ -7,30 +7,47 @@
 <h1>Напишите нам</h1>
 <div class="contacts-appeal">
     <form action="" name="request">
-        <div class="contacts-appeal-input">
-            <input type="text" placeholder="login" class="contacts-input"><br>
-            <input type="email" placeholder="email" class="contacts-input contacts-input-email"><br>
-            <input type="text" placeholder="subject" class="contacts-input">
-        </div>
-        <div class="contacts-appeal-description">
-            — имя<br>
-            — электронная&nbsp;почта<br>
-            — тема
-        </div>
-
-        <div class="contacts-appeal-description-area">Текст обращения</div>
-        <div class="contacts-appeal-area"><textarea name="message" id="" cols="80" rows="10"
-                placeholder="Appeal"></textarea></div>
-        <button class="form-button" type="submit">Отправить</button>
-        <button class="form-button" type="reset">Очистить</button>
+            <div class="form-group row">
+                <label for="inputLogin" class="col-sm-2 col-form-label">Имя</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputLogin" name="login" placeholder="login">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Почта</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="email">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputSubject" class="col-sm-2 col-form-label">Тема</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputSubject" name="subject" placeholder="subject">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="message" class="col-sm-2 col-form-label">Текст</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="message" name="message" placeholder="Appeal" cols="80" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="text-center">
+                <div class="col-sm-7 btn-group">
+                    <button class="btn btn-outline-secondary" type="submit">Отправить</button>
+                    <button class="btn btn-outline-secondary" type="reset">Очистить</button>
+                </div>
+            </div>
     </form>
 </div>
 
+<br>
 <h2>Адрес</h2>
 <div class="contacts-vcard">
-    Тел.: <a href="tel:+74951234567">+7&nbsp;495 123-45-67</a><br>
-    email: <a href="mailto:test@testdomain.com">test@testdomain.com</a><br>
-    Адрес: 115035, Москва, ул. Тверская, 1<br>
+    <div class="text-decoration-none">
+        Тел.: <a href="tel:+74951234567">+7&nbsp;495 123-45-67</a><br>
+        email: <a href="mailto:test@testdomain.com">test@testdomain.com</a><br>
+        Адрес: 115035, Москва, ул. Тверская, 1<br>
+    </div>
 </div>
 <div class="contacts-map">
     <script type="text/javascript" charset="utf-8" async

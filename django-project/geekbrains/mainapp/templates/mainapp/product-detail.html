@@ -8,10 +8,13 @@
 <h1 align="center">{{ product_description.name }}</h1>
 <div class="product-image-button">
     <a href="{{  product_description.image_preview.url }}" target="_blank">
-        <img class="product-image" src="{{  product_description.image_preview.url }}" alt="Dyson V7"></a><br>
+        <img class="product-image" src="{{  product_description.image_preview.url }}" alt="product_description.name"></a><br>
     <form action="" name="buy">
         <input type="hidden" name="buy" value="true">
-        <button class="buy-button" type="submit" value="buy">Купить за {{ product_description.price }}</button>
+        <button class="btn btn-outline-secondary" style="margin: 20px 0;" type="submit" value="buy">
+            Купить за {{ product_description.price }}
+        </button>
+{#        <button class="buy-button" type="submit" value="buy">Купить за {{ product_description.price }}</button>#}
     </form>
 </div>
 

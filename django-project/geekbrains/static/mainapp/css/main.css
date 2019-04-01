@@ -3,13 +3,18 @@ body {
     color: black;
 }
 
+h1, h2, h3 {
+    font-family: "Raleway";
+    font-weight: 400;
+}
+
 .container {
-    max-width: 1366px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 .header {
-    height: 70px;
+    min-height: 90px;
 
     display: flex;
     justify-content: space-between;
@@ -32,7 +37,7 @@ body {
 }
 
 .footer {
-    height: 50px;
+    min-height: 50px;
     display: flex;
     justify-content: flex-end;
 
@@ -49,7 +54,7 @@ body {
 .footer-rights {
     position: absolute;
     right: 10px;
-    top: 1px;
+    top: 12.5px;
 }
 
 .logo {
@@ -80,7 +85,8 @@ body {
 .menu-list-a {
     font-size: 1.2em;
     font-weight: lighter;
-    font-family: "Input", "Inconsolata", monospace;
+    font-family: "Raleway", sans-serif;
+    letter-spacing: 1.5px;
 
     text-decoration: none;
     color: darkgray;
