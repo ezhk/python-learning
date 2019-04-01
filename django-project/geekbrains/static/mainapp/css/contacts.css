@@ -1,3 +1,7 @@
+.form-group {
+    margin-bottom: 0.5rem !important;
+}
+
 .contacts-appeal {
     width: 500px;
     border-left: 1px solid darkgrey;
