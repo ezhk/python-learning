@@ -87,6 +87,7 @@
 .product-image-button {
     float: left;
     text-align: center;
+    margin-right: 15px;
 }
 
 .product-image {
@@ -136,19 +137,20 @@
 }
 
 .product-short-descrition {
+    /*font-style: italic;*/
     color: #707070;
-    font-size: 14px;
-    font-style: italic;
+    font-size: 1rem;
     line-height: 16px;
     text-align: left;
 }
 
 .product-specifications {
+    /*color: darkslategray;*/
+    /*font-family: monospace;*/
     overflow: hidden;
-    color: darkslategray;
     font-size: 16px;
-    font-family: monospace;
     list-style-image: url(../img/list-icon.png);
+    list-style-position: inside;
 }
 
 .product-full-descrition {
