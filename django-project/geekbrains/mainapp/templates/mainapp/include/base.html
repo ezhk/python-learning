@@ -13,20 +13,21 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <a href="/"><img class="logo" src="{% static 'mainapp/img/logo.png' %}" alt="Все товары"></a>
-            <ul class="menu-list">
-                <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.view_name == 'index' %}active-menu-list-a{% endif %}" href="{% url 'index' %}">Главная</a></li>
-                <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.namespace == 'products' %}active-menu-list-a{% endif %}" href="{% url 'products:index' %}">Каталог</a></li>
-                <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.view_name == 'contacts' %}active-menu-list-a{% endif %}" href="{% url 'contacts' %}">Контакты</a></li>
-            </ul>
-        </div>
+        <dev class="top">
+            <div class="header">
+                <a href="/"><img class="logo" src="{% static 'mainapp/img/logo.png' %}" alt="Все товары"></a>
+                <ul class="menu-list">
+                    <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.view_name == 'index' %}active-menu-list-a{% endif %}" href="{% url 'index' %}">Главная</a></li>
+                    <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.namespace == 'products' %}active-menu-list-a{% endif %}" href="{% url 'products:index' %}">Каталог</a></li>
+                    <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.view_name == 'contacts' %}active-menu-list-a{% endif %}" href="{% url 'contacts' %}">Контакты</a></li>
+                </ul>
+            </div>
 
-        <div class="content">
-            {% block content %}
-            {% endblock %}
-        </div>
-
+            <div class="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </dev>
         <div class="footer">
             <div class="footer-rights">
                 <p>&laquo;Все права защищены&raquo; &copy;&nbsp;2019</p>
