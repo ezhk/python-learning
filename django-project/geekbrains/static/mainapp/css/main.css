@@ -78,13 +78,14 @@ h1, h2, h3 {
     justify-content: flex-end;
     align-content: center;
     list-style-type: none;
+    margin: 0;
 }
 
 .menu-list li {
-    height: 15px;
-    line-height: 15px;
-    padding: 10px;
-    border-right: 1px solid lightgray;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 10px;
+    border-right: 1px solid darkgray;
 }
 
 .menu-list li:last-child {
