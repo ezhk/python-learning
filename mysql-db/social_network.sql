@@ -16,29 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `object_content`
+-- Table structure for table `images`
 --
 
-DROP TABLE IF EXISTS `object_content`;
+DROP TABLE IF EXISTS `images`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `object_content` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `images` (
+  `id` bigint(20) NOT NULL,
   `object` bigint(20) NOT NULL,
-  `content` text NOT NULL,
+  `url` varchar(2084) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_object_id_idx` (`object`),
-  CONSTRAINT `fk_object_content_id` FOREIGN KEY (`object`) REFERENCES `objects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_images_objects` FOREIGN KEY (`object`) REFERENCES `objects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `object_content`
+-- Dumping data for table `images`
 --
 
-LOCK TABLES `object_content` WRITE;
-/*!40000 ALTER TABLE `object_content` DISABLE KEYS */;
-/*!40000 ALTER TABLE `object_content` ENABLE KEYS */;
+LOCK TABLES `images` WRITE;
+/*!40000 ALTER TABLE `images` DISABLE KEYS */;
+/*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -54,6 +54,7 @@ CREATE TABLE `object_likes` (
   `from` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `only_one_like_per_user` (`object`,`from`),
   KEY `fk_object_likes_id_idx` (`object`),
   KEY `fk_object_likes_user_idx` (`from`),
   CONSTRAINT `fk_object_likes_id` FOREIGN KEY (`object`) REFERENCES `objects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -78,9 +79,9 @@ DROP TABLE IF EXISTS `object_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `object_types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `object` bigint(20) NOT NULL,
-  `type` enum('image','text') NOT NULL,
+  `type` enum('image','post') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_object_id_idx` (`object`),
   CONSTRAINT `fk_object_id` FOREIGN KEY (`object`) REFERENCES `objects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -105,6 +106,7 @@ DROP TABLE IF EXISTS `objects`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `objects` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `owner` int(11) NOT NULL,
   `author` int(11) NOT NULL,
   `parent_object` bigint(20) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -112,7 +114,9 @@ CREATE TABLE `objects` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `index3` (`parent_object`),
   KEY `fk_objects_author_idx` (`author`),
+  KEY `fk_objects_owner_idx` (`owner`),
   CONSTRAINT `fk_objects_author` FOREIGN KEY (`author`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_objects_owner` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_objects_parent` FOREIGN KEY (`parent_object`) REFERENCES `objects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -124,6 +128,32 @@ CREATE TABLE `objects` (
 LOCK TABLES `objects` WRITE;
 /*!40000 ALTER TABLE `objects` DISABLE KEYS */;
 /*!40000 ALTER TABLE `objects` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `posts`
+--
+
+DROP TABLE IF EXISTS `posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts` (
+  `id` bigint(20) NOT NULL,
+  `object` bigint(20) NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_posts_object_idx` (`object`),
+  CONSTRAINT `fk_posts_object` FOREIGN KEY (`object`) REFERENCES `objects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `posts`
+--
+
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -139,7 +169,7 @@ CREATE TABLE `users` (
   `surname` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,6 +178,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Andrey','A'),(4,'Vasya','I'),(5,'Igor','Tech'),(6,'Michael','D');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,7 +190,7 @@ DROP TABLE IF EXISTS `users_likes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users_likes` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `from` int(11) NOT NULL,
   `to` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -167,7 +198,7 @@ CREATE TABLE `users_likes` (
   KEY `fk_users_likes_to_idx` (`to`),
   CONSTRAINT `fk_users_likes_from` FOREIGN KEY (`from`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_likes_to` FOREIGN KEY (`to`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,6 +207,7 @@ CREATE TABLE `users_likes` (
 
 LOCK TABLES `users_likes` WRITE;
 /*!40000 ALTER TABLE `users_likes` DISABLE KEYS */;
+INSERT INTO `users_likes` VALUES (4,1,4),(5,1,5),(6,4,1);
 /*!40000 ALTER TABLE `users_likes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -188,4 +220,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-01 17:11:54
+-- Dump completed on 2019-04-03 11:37:00
