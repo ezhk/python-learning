@@ -18,8 +18,8 @@ def login(request):
             auth.login(request, user)
             return HttpResponseRedirect(reverse('index'))
 
-    content = {'title': title}
-    return render(request, 'authapp/login.html', content)
+    return render(request, 'authapp/login.html', {'title': title,
+                                                  'login_form': login_form})
 
 
 def logout(request):
@@ -31,16 +31,16 @@ def create(request):
     title = 'Все товары | Регистрация'
 
     if request.method == 'POST':
-        register_form = CreateForm(request.POST, request.FILES)
+        create_form = CreateForm(request.POST, request.FILES)
 
-        if register_form.is_valid():
-            register_form.save()
+        if create_form.is_valid():
+            create_form.save()
             return HttpResponseRedirect(reverse('auth:login'))
     else:
-        register_form = CreateForm()
+        create_form = CreateForm()
 
-    content = {'title': title, 'register_form': register_form}
-    return render(request, 'authapp/create.html', content)
+    return render(request, 'authapp/create.html', {'title': title,
+                                                   'create_form': create_form})
 
 
 def edit(request):
@@ -54,6 +54,5 @@ def edit(request):
     else:
         edit_form = EditForm(instance=request.user)
 
-    content = {'title': title, 'edit_form': edit_form}
-
-    return render(request, 'authapp/edit.html', content)
+    return render(request, 'authapp/edit.html', {'title': title,
+                                                 'edit_form': edit_form})
