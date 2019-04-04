@@ -49,3 +49,11 @@ class ProductAndProperty(models.Model):
 
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
     property = models.ForeignKey(Properties, on_delete=models.CASCADE)
+
+
+class FeedBack(models.Model):
+    username = models.CharField(verbose_name='Имя пользователя', max_length=64, blank=True, null=True)
+    email = models.EmailField(verbose_name='Адрес электронной почты', max_length=128)
+
+    subject = models.CharField(verbose_name='Тема', max_length=64, blank=True, null=True)
+    body = models.CharField(verbose_name='Сообщение', max_length=1024)

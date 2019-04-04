@@ -5,7 +5,10 @@ from django.http import HttpResponseNotFound
 
 from mainapp.models import Products, \
     ProductCategory, \
-    ProductAndProperty
+    ProductAndProperty, \
+    FeedBack
+
+from mainapp.forms import FeedBackForm
 
 
 def main(request):
@@ -46,5 +49,17 @@ def products_details(request, pk=None):
 
 def contacts(request):
     title = 'Все товары | Контакты'
+
+    feedback_form = FeedBackForm(request.POST)
+    if request.method == 'POST':
+        if feedback_form.is_valid():
+            FeedBack(
+                username=feedback_form.data.get('username', None),
+                email=feedback_form.data.get('email'),
+                subject=feedback_form.data.get('subject', None),
+                body=feedback_form.data.get('body')
+            ).save()
+
     return render(request, 'mainapp/contacts.html',
-                  {'title': title})
+                  {'title': title,
+                   'feedback_form': feedback_form})

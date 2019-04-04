@@ -1,40 +1,13 @@
 {% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
     <h1>Напишите нам</h1>
     <div class="contacts-appeal">
-        <form action="" name="request">
-            {% if not user.is_authenticated %}
-                <div class="form-group row">
-                    <label for="inputLogin" class="col-sm-2 col-form-label">Имя</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputLogin" name="login" placeholder="name">
-                    </div>
-                </div>
-            {% endif %}
+    <form class="form-horizontal" action="{% url 'contacts' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ feedback_form | crispy }}
 
-            {% if not user.email %}
-                <div class="form-group row">
-                    <label for="inputEmail" class="col-sm-2 col-form-label">Почта</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="email">
-                    </div>
-                </div>
-            {% endif %}
-
-            <div class="form-group row">
-                <label for="inputSubject" class="col-sm-2 col-form-label">Тема</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputSubject" name="subject" placeholder="subject">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="message" class="col-sm-2 col-form-label">Текст</label>
-                <div class="col-sm-10">
-                    <textarea class="form-control" id="message" name="message" placeholder="Appeal" cols="80"
-                              rows="10"></textarea>
-                </div>
-            </div>
             <div class="text-center">
                 <div class="col-sm-7 btn-group">
                     <button class="btn btn-outline-secondary" type="submit">Отправить</button>
