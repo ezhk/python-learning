@@ -4,36 +4,68 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{{ title | upper }}{% endblock %}</title>
+    <title>{% block title %}{{ title | capfirst }}{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/css/contacts.css' %}">
     <link rel="stylesheet" href="{% static 'mainapp/css/styles.css' %}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
-        <dev class="top">
-            <div class="header">
-                <a href="/"><img class="logo" src="{% static 'mainapp/img/logo.png' %}" alt="Все товары"></a>
-                <ul class="menu-list">
-                    <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.view_name == 'index' %}active-menu-list-a{% endif %}" href="{% url 'index' %}">Главная</a></li>
-                    <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.namespace == 'products' %}active-menu-list-a{% endif %}" href="{% url 'products:index' %}">Каталог</a></li>
-                    <li class="menu-list-li"><a class="menu-list-a {% if request.resolver_match.view_name == 'contacts' %}active-menu-list-a{% endif %}" href="{% url 'contacts' %}">Контакты</a></li>
-                </ul>
-            </div>
-
-            <div class="content">
-                {% block content %}
-                {% endblock %}
-            </div>
-        </dev>
-        <div class="footer">
-            <div class="footer-rights">
-                <p>&laquo;Все права защищены&raquo; &copy;&nbsp;2019</p>
+<div class="container">
+    <dev class="top">
+        <div class="header">
+            <a href="/"><img class="logo" src="{% static 'mainapp/img/logo.png' %}" alt="Все товары"></a>
+            <div class="right-part-header">
+                <div class="menu">
+                    <ul class="menu-list">
+                        <li class="menu-list-li"><a
+                                class="menu-list-a {% if request.resolver_match.view_name == 'index' %}active-menu-list-a{% endif %}"
+                                href="{% url 'index' %}">Главная</a></li>
+                        <li class="menu-list-li"><a
+                                class="menu-list-a {% if request.resolver_match.namespace == 'products' %}active-menu-list-a{% endif %}"
+                                href="{% url 'products:index' %}">Каталог</a></li>
+                        <li class="menu-list-li"><a
+                                class="menu-list-a {% if request.resolver_match.view_name == 'contacts' %}active-menu-list-a{% endif %}"
+                                href="{% url 'contacts' %}">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="login">
+                    <ul class="menu-list">
+                        {% if user.is_authenticated %}
+                            <li class="menu-list-li">
+                                <a class="menu-list-a active-menu-list-a" href="{% url 'auth:edit' %}">
+                                    {{ user.username | capfirst }}
+                                </a>
+                            </li>
+                            <li class="menu-list-li">
+                                <a class="menu-list-a" href="{% url 'auth:logout' %}">Выйти</a>
+                            </li>
+                        {% else %}
+                            <li class="menu-list-li">
+                                <a class="menu-list-a" href="{% url 'auth:login' %}">Войти</a>
+                            </li>
+                            <li class="menu-list-li">
+                                <a class="menu-list-a" href="{% url 'auth:create' %}">Зарегистрироваться</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div>
+
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </dev>
+    <div class="footer">
+        <div class="footer-rights">
+            <p>&laquo;Все права защищены&raquo; &copy;&nbsp;2019</p>
+        </div>
     </div>
+</div>
 </body>
 
 </html>

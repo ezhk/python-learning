@@ -1,6 +1,6 @@
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
@@ -65,11 +65,22 @@ h1, h2, h3 {
     top: 12.5px;
 }
 
+.right-part-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 75px;
+}
+
 .logo {
     margin-left: 8px;
 
     height: 70px;
     border-radius: 5px;
+}
+
+.login {
+    font-size: 0.8rem;
 }
 
 .menu-list {
@@ -100,9 +111,11 @@ h1, h2, h3 {
     text-decoration: none;
     color: darkgray;
 }
+
 .menu-list-a:hover {
     text-decoration: underline;
 }
+
 .active-menu-list-a {
     color: black;
 

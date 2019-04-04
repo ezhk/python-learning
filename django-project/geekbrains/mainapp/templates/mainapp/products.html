@@ -1,40 +1,37 @@
 {% extends 'mainapp/include/base.html' %}
 {% load static %}
-{% block title %}
-Магазин &laquo;Все товары&raquo;
-{% endblock %}
 
 {% block content %}
-
-<div class="products-header">
-<h1>Каталог</h1>
-<ul class="menu-subcategories">
-{% for category in categories %}
-    <li class="menu-subcategories-li">
-        <a class="menu-subcategories-a
+    <div class="products-header">
+        <h1>Каталог</h1>
+        <ul class="menu-subcategories">
+            {% for category in categories %}
+                <li class="menu-subcategories-li">
+                    <a class="menu-subcategories-a
                 {% if request.resolver_match.view_name == 'products:catogory' and request.resolver_match.kwargs.pk == category.pk %}
                     active-subcategory
                 {% endif %}"
-            href="{% url 'products:catogory' pk=category.pk %}">
-            {{ category.name | upper }}
-        </a>
-    </li>
-{% endfor %}
-</ul>
-</div>
+                       href="{% url 'products:catogory' pk=category.pk %}">
+                        {{ category.name | upper }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-<div class="products">
-    {% for product in products %}
-    <a class="product-view" style="text-decoration: none; color: black" href="{% url 'products:detail' pk=product.pk %}">
-        <div class="product-view-a">
-            <div class="product-view-img">
-                <img class="product-view-img" src="{{  product.image_preview.url }}" alt="Dyson V7">
-            </div>
-            <div class="product-view-desc">
-                {{ product.name }}
-            </div>
-        </div>
-    </a>
-    {% endfor %}
-</div>
+    <div class="products">
+        {% for product in products %}
+            <a class="product-view" style="text-decoration: none; color: black"
+               href="{% url 'products:detail' pk=product.pk %}">
+                <div class="product-view-a">
+                    <div class="product-view-img">
+                        <img class="product-view-img" src="{{ product.image_preview.url }}" alt="Dyson V7">
+                    </div>
+                    <div class="product-view-desc">
+                        {{ product.name }}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
 {% endblock %}

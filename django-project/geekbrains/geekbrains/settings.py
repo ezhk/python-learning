@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
-    'authapp.apps.AuthappConfig'
+    'authapp.apps.AuthappConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,4 +124,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 PRODUCT_CATEGORIES_MENU = 'product-categories.json'
-AUTH_USER_MODEL = 'authapp.User'
+AUTH_USER_MODEL = 'authapp.ShopUser'
+
+DATA_DUMP_DIR = os.path.join(BASE_DIR, 'data-dump')

@@ -25,6 +25,7 @@ urlpatterns = [
     re_path(r'^$', view.main, name='index'),
     re_path(r'^contacts/$', view.contacts, name='contacts'),
     re_path(r'^products/', include('mainapp.urls', namespace='products')),
+    re_path(r'^auth/', include('authapp.urls', namespace='auth')),
     re_path(r'^admin/', admin.site.urls),
 ]
 

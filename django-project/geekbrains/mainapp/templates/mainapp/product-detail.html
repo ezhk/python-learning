@@ -1,42 +1,38 @@
 {% extends 'mainapp/include/base.html' %}
 
-{% block title %}
-Магазин &laquo;Все товары&raquo;
-{% endblock %}
-
 {% block content %}
-<h1 align="center">{{ product_description.name }}</h1>
-<div class="product-image-button">
-    <a href="{{  product_description.image_preview.url }}" target="_blank">
-        <img class="product-image" src="{{  product_description.image_preview.url }}" alt="product_description.name"></a><br>
-    <form action="" name="buy">
-        <input type="hidden" name="buy" value="true">
-        <button class="btn btn-outline-secondary" style="margin: 20px 0;" type="submit" value="buy">
-            Купить за {{ product_description.price }}
-        </button>
-{#        <button class="buy-button" type="submit" value="buy">Купить за {{ product_description.price }}</button>#}
-    </form>
-</div>
+    <h1 align="center">{{ product_description.name }}</h1>
+    <div class="product-image-button">
+        <a href="{{ product_description.image_preview.url }}" target="_blank">
+            <img class="product-image" src="{{ product_description.image_preview.url }}" alt="product_description.name"></a><br>
+        <form action="" name="buy">
+            <input type="hidden" name="buy" value="true">
+            <button class="btn btn-outline-secondary" style="margin: 20px 0;" type="submit" value="buy">
+                Купить за {{ product_description.price }}
+            </button>
+            {#        <button class="buy-button" type="submit" value="buy">Купить за {{ product_description.price }}</button>#}
+        </form>
+    </div>
 
-<h2 class="product-header">Краткое описание товара</h2>
-<p class="product-short-descrition">
-    {{ product_description.short_description | safe }}
-<div class="clear"></div>
+    <h2 class="product-header">Краткое описание товара</h2>
+    <p class="product-short-descrition">
+        {{ product_description.short_description | safe }}
+    <div class="clear"></div>
 
-<h2 class="product-header">Характеристики товара</h2>
-<ul class="product-specifications">
-{% for property in product_properties %}
-    <li>{{ property.property.name | safe }}</li>
-{% endfor %}
-</ul>
+    <h2 class="product-header">Характеристики товара</h2>
+    <ul class="product-specifications">
+        {% for property in product_properties %}
+            <li>{{ property.property.name | safe }}</li>
+        {% endfor %}
+    </ul>
 
-<h2 class="product-header">Подробное описание товара</h2>
-<p class="product-full-descrition">
-    {{ product_description.full_description | safe }}
-</p>
+    <h2 class="product-header">Подробное описание товара</h2>
+    <p class="product-full-descrition">
+        {{ product_description.full_description | safe }}
+    </p>
 
-<h2 class="product-header">Обзор</h2>
-<p class="product-full-descrition">
-    {{ product_description.overview | safe }}
-</p>
+    <h2 class="product-header">Обзор</h2>
+    <p class="product-full-descrition">
+        {{ product_description.overview | safe }}
+    </p>
 {% endblock %}
