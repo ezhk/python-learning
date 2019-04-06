@@ -1,0 +1,11 @@
+{% extends 'mainapp/include/base.html' %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center text-center">
+        <h1 class="border-right mr-2 pr-2 font-weight-bold">404</h1>
+        <h2 class="font-weight-normal lead" style="max-width: 50%">
+            Not Found: <br>
+            {{ exception_path }}
+        </h2>
+    </div>
+{% endblock %}

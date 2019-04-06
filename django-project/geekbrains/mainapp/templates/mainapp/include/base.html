@@ -37,9 +37,18 @@
                             <li class="menu-list-li">
                                 <a class="menu-list-a active-menu-list-a" href="{% url 'auth:edit' %}">
                                     {% if user.avatar %}
-                                        <img class="avatar-login" src="/media/{{ user.avatar }}">
+                                        <img class="avatar-login" src="/media/{{ user.avatar }}" alt="avatar">
                                     {% endif %}
                                     {{ user.username | capfirst }}
+                                </a>
+                            </li>
+                            <li class="menu-list-li">
+                                <a class="menu-list-a active-menu-list-a cart-link {% if request.resolver_match.namespace == 'cart' %}cart-link-active{% endif %}" href="{% url 'cart:index' %}">
+                                    <img src="{% static 'mainapp/img/shopping-bag.svg' %}"
+                                         class="cart-img" alt="cart">
+                                    {% if user.cart.count > 0 %}
+                                        ({{ user.cart.count }})
+                                    {% endif %}
                                 </a>
                             </li>
                             <li class="menu-list-li">

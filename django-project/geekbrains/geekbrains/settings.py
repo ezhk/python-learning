@@ -24,7 +24,7 @@ SECRET_KEY = 'f0%fln67l9g%37m0*sm1@fodcqj7pbpo=u0hl#(k63u!6m#kph'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
     'authapp.apps.AuthappConfig',
+    'cartapp.apps.CartappConfig',
     'crispy_forms',
 ]
 

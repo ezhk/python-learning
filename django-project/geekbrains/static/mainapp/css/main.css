@@ -124,6 +124,34 @@ h1, h2, h3 {
 
 .active-menu-list-a {
     color: black;
+}
+
+.cart-link {
+    opacity: 0.5;
+}
+
+.cart-link:hover,
+.cart-link-active {
+    opacity: 1;
+}
+
+.cart-img {
+    width: 1.2rem;
+    height: 1.2rem;
+    padding-bottom: 3px;
+}
+
+.cart-text {
+    line-height: 2rem;
+    font-size: 1rem;
+    font-weight: lighter;
+    font-family: "Raleway", sans-serif;
+    color: black;
+}
+
+.cart-text-head {
+    font-weight: bold;
+}
 
 .clear {
     clear: both;

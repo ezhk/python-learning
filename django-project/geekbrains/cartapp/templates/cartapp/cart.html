@@ -1,0 +1,51 @@
+{% extends 'mainapp/include/base.html' %}
+
+{% block content %}
+    <h1>Корзина</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="cart-text cart-text-head">Товар</th>
+            <th scope="col" class="cart-text cart-text-head">Количество</th>
+            <th scope="col" class="cart-text cart-text-head">Cумма</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+            <tr>
+                <th scope="row">
+                    <a class="menu-list-a cart-text" href="{% url 'products:detail' item.product.id %}">
+                        {{ item.product.name }}
+                    </a>
+                </th>
+                <th class="cart-text">
+                    {{ item.quantity }}
+                </th>
+                <th class="cart-text">
+                    {% widthratio item.product.price 1 item.quantity %}
+                    ({{ item.quantity }} x {{ item.product.price }})
+                </th>
+                <th>
+                    <div class="d-flex justify-content-end">
+                        <form action="{% url 'cart:add' item.product.id %}"
+                              method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-success mr-2" type="submit" value="buy">
+                                Добавить
+                            </button>
+                        </form>
+                        <form action="{% url 'cart:delete' item.product.id %}"
+                              method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger" type="submit" value="buy">
+                                Удалить
+                            </button>
+                        </form>
+                    </div>
+                </th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

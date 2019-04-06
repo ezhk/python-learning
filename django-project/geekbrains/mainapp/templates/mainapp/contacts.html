@@ -4,7 +4,7 @@
 {% block content %}
     <h1>Напишите нам</h1>
     <div class="contacts-appeal">
-    <form class="form-horizontal" action="{% url 'contacts' %}" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="{% url 'contacts' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ feedback_form | crispy }}
 

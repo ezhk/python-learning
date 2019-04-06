@@ -17,15 +17,21 @@ from django.contrib import admin
 from django.urls import include, re_path
 
 from django.conf import settings
+from django.conf.urls import handler404, \
+    handler500
 from django.conf.urls.static import static
 
 import mainapp.views as view
+
+handler404 = view.page404
+handler500 = view.page500
 
 urlpatterns = [
     re_path(r'^$', view.main, name='index'),
     re_path(r'^contacts/$', view.contacts, name='contacts'),
     re_path(r'^products/', include('mainapp.urls', namespace='products')),
     re_path(r'^auth/', include('authapp.urls', namespace='auth')),
+    re_path(r'^cart/', include('cartapp.urls', namespace='cart')),
     re_path(r'^admin/', admin.site.urls),
 ]
 

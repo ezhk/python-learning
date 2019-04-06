@@ -1,6 +1,5 @@
-import json
-
-from django.shortcuts import render
+from django.shortcuts import render, \
+    get_object_or_404
 from django.http import HttpResponseNotFound
 
 from mainapp.models import Products, \
@@ -19,10 +18,15 @@ def main(request):
 def products(request, pk=None):
     title = 'Все товары | Каталог'
     categories = ProductCategory.objects.all()
-    if pk is not None:
-        products = Products.objects.filter(category=pk).all()
-    else:
+
+    if pk is None:
+        # welcome products page — hot deal will be here
         products = Products.objects.all()
+    elif not pk:
+        # 0 os "All" category
+        products = Products.objects.all()
+    elif get_object_or_404(ProductCategory, pk=pk):
+        products = Products.objects.filter(category=pk).all()
 
     return render(request, 'mainapp/products.html',
                   {
@@ -63,3 +67,14 @@ def contacts(request):
     return render(request, 'mainapp/contacts.html',
                   {'title': title,
                    'feedback_form': feedback_form})
+
+
+def page404(request, exception):
+    paths = [arg.get('path')
+             for arg in exception.args if arg.get('path', None) is not None]
+    return render(request, 'mainapp/page404.html',
+                  context={'exception_path': paths}, status=404)
+
+
+def page500(request):
+    return render(request, 'mainapp/page500.html', status=500)

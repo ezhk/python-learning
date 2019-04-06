@@ -1,7 +1,8 @@
 from django.shortcuts import render, HttpResponseRedirect
-from authapp.forms import LoginForm, CreateForm, EditForm
 from django.contrib import auth
 from django.urls import reverse
+
+from authapp.forms import LoginForm, CreateForm, EditForm
 
 
 def login(request):
