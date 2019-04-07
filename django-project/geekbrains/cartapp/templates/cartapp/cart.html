@@ -16,19 +16,19 @@
         <tbody>
         {% for item in cart %}
             <tr>
-                <th scope="row">
+                <th scope="row" class="cart-table-th">
                     <a class="menu-list-a cart-text" href="{% url 'products:detail' item.product.id %}">
                         {{ item.product.name }}
                     </a>
                 </th>
-                <th class="cart-text">
+                <th class="cart-text cart-table-th">
                     {{ item.quantity }}
                 </th>
-                <th class="cart-text">
+                <th class="cart-text cart-table-th">
                     {% widthratio item.product.price 1 item.quantity %}
                     ({{ item.quantity }} x {{ item.product.price }})
                 </th>
-                <th>
+                <th class="cart-table-th">
                     <div class="d-flex justify-content-end">
                         <form action="{% url 'cart:add' item.product.id %}"
                               method="post" enctype="multipart/form-data">
