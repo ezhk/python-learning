@@ -44,12 +44,14 @@ class Properties(models.Model):
 
 class ProductAndProperty(models.Model):
     class Meta:
-        verbose_name = 'Link between products and properties'
-        verbose_name_plural = 'Links between products and properties'
+        verbose_name = 'Product and property (link)'
+        verbose_name_plural = 'Products and properties (links)'
 
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
     property = models.ForeignKey(Properties, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.product.name}, {self.property.name}"
 
 class FeedBack(models.Model):
     username = models.CharField(verbose_name='Имя пользователя', max_length=64, blank=True, null=True)
@@ -57,3 +59,6 @@ class FeedBack(models.Model):
 
     subject = models.CharField(verbose_name='Тема', max_length=64, blank=True, null=True)
     body = models.CharField(verbose_name='Сообщение', max_length=1024)
+
+    def __str__(self):
+        return f"{self.email} ({self.subject})"
