@@ -2,8 +2,8 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <h1>Пользовательские данные</h1>
     <div class="contacts-appeal">
-        <h1>Регистрация</h1>
         <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ edit_form | crispy }}

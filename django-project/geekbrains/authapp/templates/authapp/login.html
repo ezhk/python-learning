@@ -2,8 +2,8 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <h1>Войдите</h1>
     <div class="contacts-appeal">
-        <h1>Войдите</h1>
         <form class="form-horizontal" action="{% url 'auth:login' %}" method="post">
             {% csrf_token %}
             {{ login_form | crispy }}
