@@ -16,19 +16,19 @@
         <tbody>
         {% for item in cart %}
             <tr>
-                <th scope="row" class="cart-table-th">
+                <td scope="row" class="cart-table-td">
                     <a class="menu-list-a cart-text" href="{% url 'products:detail' item.product.id %}">
                         {{ item.product.name }}
                     </a>
-                </th>
-                <th class="cart-text cart-table-th">
+                </td>
+                <td class="cart-text cart-table-td">
                     {{ item.quantity }}
-                </th>
-                <th class="cart-text cart-table-th">
+                </td>
+                <td class="cart-text cart-table-td">
                     {% widthratio item.product.price 1 item.quantity %}
                     ({{ item.quantity }} x {{ item.product.price }})
-                </th>
-                <th class="cart-table-th">
+                </td>
+                <td class="cart-table-td">
                     <div class="d-flex justify-content-end">
                         <form action="{% url 'cart:add' item.product.id %}"
                               method="post" enctype="multipart/form-data">
@@ -45,7 +45,7 @@
                             </button>
                         </form>
                     </div>
-                </th>
+                </td>
             </tr>
         {% endfor %}
         <tr>
@@ -55,10 +55,10 @@
             <td></td>
         </tr>
         <tr>
-            <td><p class="cart-text cart-text-head text-left">Итоговая сумма</p></td>
-            <td><p class="cart-text cart-text-head text-left">{{ cart | summary_count }}</p></td>
-            <td><p class="cart-text cart-text-head text-left">{{ cart | summary_price }}</p></td>
-            <td></td>
+            <td class="cart-table-td"><span class="cart-text cart-text-head text-left">Итоговая сумма</span></td>
+            <td class="cart-table-td"><span class="cart-text cart-text-head text-left">{{ cart | summary_count }}</span></td>
+            <td class="cart-table-td"><span class="cart-text cart-text-head text-left">{{ cart | summary_price }}</span></td>
+            <td class="cart-table-td"></td>
         </tr>
         </tbody>
     </table>
