@@ -1,4 +1,5 @@
 {% extends 'mainapp/include/base.html' %}
+{% load static %}
 {% load cart_extras %}
 
 {% block content %}
@@ -32,15 +33,15 @@
                         <form action="{% url 'cart:add' item.product.id %}"
                               method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <button class="btn btn-outline-success mr-2" type="submit" value="buy">
-                                Добавить
+                            <button class="btn btn-outline-success mr-2 cart-button" type="submit" value="buy">
+                                +
                             </button>
                         </form>
                         <form action="{% url 'cart:delete' item.product.id %}"
                               method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <button class="btn btn-outline-danger" type="submit" value="buy">
-                                Удалить
+                            <button class="btn btn-outline-danger cart-button" type="submit" value="buy">
+                                -
                             </button>
                         </form>
                     </div>
