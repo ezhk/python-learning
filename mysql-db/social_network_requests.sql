@@ -1,8 +1,8 @@
 USE `SocialNetwork`;
 
 -- id пользователя и имя
-SELECT `id` FROM `users`;
-SELECT `name` FROM `users` WHERE `name` = 'Andrey';
+SELECT `id` FROM `users` WHERE `name` = 'Andrey';
+SELECT `name` FROM `users`;
 
 -- лайков получено
 --   можно использовать COUNT, но в дальнейшем,
