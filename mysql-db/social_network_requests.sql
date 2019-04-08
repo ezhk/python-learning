@@ -32,17 +32,16 @@ WHERE `from` NOT IN (
 
 -- Список тех, кто не поставили like пользователю 5 и поставили 4 И 1
 BEGIN;
-SET @dislikes := (
-	SELECT `from` FROM `users_likes`
-		WHERE `users_likes`.`to` = 1
-);
+	SET @dislikes := (
+		SELECT `from` FROM `users_likes`
+			WHERE `users_likes`.`to` = 1
+	);
 
-SELECT t1.`from` FROM `users_likes` as t1
-INNER JOIN (
-	SELECT * FROM `users_likes`
-		WHERE `from` NOT IN (@dislikes) AND `users_likes`.`to` = 4
-) as t2 ON t1.`from` = t2.`from`
-WHERE t1.`from` NOT IN (@dislikes) AND t1.`to` = 5
-;
-
+	SELECT t1.`from` FROM `users_likes` as t1
+	INNER JOIN (
+		SELECT * FROM `users_likes`
+			WHERE `from` NOT IN (@dislikes) AND `users_likes`.`to` = 4
+	) as t2 ON t1.`from` = t2.`from`
+	WHERE t1.`from` NOT IN (@dislikes) AND t1.`to` = 5
+	;
 COMMIT;
