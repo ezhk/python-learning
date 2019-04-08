@@ -23,7 +23,7 @@ WHERE (`to` , `from`) IN (
     SELECT `from`, `to` FROM `users_likes`
 ) AND `from` = 1;
 
--- Список тех, кто не поставили like пользователю 5 и поставили 4 И 1
+-- Список тех, кто не поставили like пользователю 5 и поставили 4 ИЛИ 1
 SELECT * FROM `users_likes`
 WHERE `from` NOT IN (
 	SELECT `from` FROM `users_likes`
