@@ -43,7 +43,8 @@
                                 </a>
                             </li>
                             <li class="menu-list-li">
-                                <a class="menu-list-a active-menu-list-a cart-link {% if request.resolver_match.namespace == 'cart' %}cart-link-active{% endif %}" href="{% url 'cart:index' %}">
+                                <a class="menu-list-a active-menu-list-a cart-link {% if request.resolver_match.namespace == 'cart' %}cart-link-active{% endif %}"
+                                   href="{% url 'cart:index' %}">
                                     <img src="{% static 'mainapp/img/shopping-bag.svg' %}"
                                          class="cart-img" alt="cart">
                                     {% if user.cart.count > 0 %}
@@ -78,6 +79,9 @@
         </div>
     </div>
 </div>
-</body>
 
+{% block js %}
+{% endblock %}
+
+</body>
 </html>

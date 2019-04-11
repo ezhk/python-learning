@@ -120,6 +120,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 PRODUCT_CATEGORIES_MENU = 'product-categories.json'
+
+LOGIN_URL = '/auth/'
 AUTH_USER_MODEL = 'authapp.ShopUser'
 
 DATA_DUMP_DIR = os.path.join(BASE_DIR, 'data-dump')

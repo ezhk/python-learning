@@ -6,8 +6,11 @@
     <div class="contacts-appeal">
         <form class="form-horizontal" action="{% url 'auth:login' %}" method="post">
             {% csrf_token %}
-            {{ login_form | crispy }}
+            {% if next_page %}
+                <input type="hidden" name="next_page" value="{{ next_page }}">
+            {% endif %}
 
+            {{ login_form | crispy }}
             <br>
             <div class="text-center">
                 <div class="col-sm-4 btn-group">

@@ -1,6 +1,5 @@
 {% extends 'mainapp/include/base.html' %}
 {% load static %}
-{% load cart_extras %}
 
 {% block content %}
     <h1>Корзина</h1>
@@ -10,56 +9,15 @@
             <th scope="col" class="cart-text cart-text-head">Товар</th>
             <th scope="col" class="cart-text cart-text-head">Количество</th>
             <th scope="col" class="cart-text cart-text-head">Cумма</th>
-            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
-        {% for item in cart %}
-            <tr>
-                <td scope="row" class="cart-table-td">
-                    <a class="menu-list-a cart-text" href="{% url 'products:detail' item.product.id %}">
-                        {{ item.product.name }}
-                    </a>
-                </td>
-                <td class="cart-text cart-table-td">
-                    {{ item.quantity }}
-                </td>
-                <td class="cart-text cart-table-td">
-                    {% widthratio item.product.price 1 item.quantity %}
-                    ({{ item.quantity }} x {{ item.product.price }})
-                </td>
-                <td class="cart-table-td">
-                    <div class="d-flex justify-content-end">
-                        <form action="{% url 'cart:add' item.product.id %}"
-                              method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <button class="btn btn-outline-success mr-2 cart-button" type="submit" value="buy">
-                                +
-                            </button>
-                        </form>
-                        <form action="{% url 'cart:delete' item.product.id %}"
-                              method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <button class="btn btn-outline-danger cart-button" type="submit" value="buy">
-                                -
-                            </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="cart-table-td"><span class="cart-text cart-text-head text-left">Итоговая сумма</span></td>
-            <td class="cart-table-td"><span class="cart-text cart-text-head text-left">{{ cart | summary_count }}</span></td>
-            <td class="cart-table-td"><span class="cart-text cart-text-head text-left">{{ cart | summary_price }}</span></td>
-            <td class="cart-table-td"></td>
-        </tr>
+            {% include 'cartapp/include/cart_tbody.html' %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block js %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'cartapp/js/cart.js' %}"></script>
 {% endblock %}

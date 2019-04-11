@@ -16,12 +16,17 @@ def main(request):
 
 
 def products(request, pk=None):
+    def hot_deals():
+        """Logic hot deals: get first random element"""
+        return Products.objects.order_by('?').all()[:1]
+
     title = 'Все товары | Каталог'
     categories = ProductCategory.objects.all()
 
+    discount_products = hot_deals()
     if pk is None:
         # welcome products page — hot deal will be here
-        products = Products.objects.all()
+        products = discount_products
     elif not pk:
         # 0 os "All" category
         products = Products.objects.all()
@@ -32,6 +37,7 @@ def products(request, pk=None):
                   {
                       'title': title,
                       'products': products,
+                      'discount_products': discount_products,
                       'categories': categories
                   })
 

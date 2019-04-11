@@ -53,6 +53,7 @@ class ProductAndProperty(models.Model):
     def __str__(self):
         return f"{self.product.name}, {self.property.name}"
 
+
 class FeedBack(models.Model):
     username = models.CharField(verbose_name='Имя пользователя', max_length=64, blank=True, null=True)
     email = models.EmailField(verbose_name='Адрес электронной почты', max_length=128)

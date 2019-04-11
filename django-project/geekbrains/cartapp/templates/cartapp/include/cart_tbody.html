@@ -1,0 +1,41 @@
+{% load cart_extras %}
+
+{% for item in cart %}
+    <tr>
+        <td scope="row" class="cart-table-td">
+            <a class="menu-list-a cart-text" href="{% url 'products:detail' item.product.id %}">
+                {{ item.product.name }}
+            </a>
+        </td>
+        <td class="cart-text cart-table-td" id="quantity">
+            <div class="d-flex justify-content-begin">
+                <button class="btn btn-outline-success mr-1 cart-button" type="submit" value="+">
+                    +
+                </button>
+                <div class="text-center mr-1 cart-input-quantity" type="number"
+                      name="{{ item.product.pk }}" value="{{ item.quantity }}">
+                    {{ item.quantity }}
+                </div>
+                <button class="btn btn-outline-danger cart-button" type="submit" value="-">
+                    -
+                </button>
+            </div>
+        </td>
+        <td class="cart-text cart-table-td">
+            {% widthratio item.product.price 1 item.quantity %}
+            ({{ item.quantity }} x {{ item.product.price }})
+        </td>
+    </tr>
+{% endfor %}
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td class="cart-table-td"><span class="cart-text cart-text-head text-left">Итоговая сумма</span></td>
+    <td class="cart-table-td"><span class="cart-text cart-text-head text-left">{{ cart | summary_count }}</span>
+    </td>
+    <td class="cart-table-td"><span class="cart-text cart-text-head text-left">{{ cart | summary_price }}</span>
+    </td>
+</tr>

@@ -1,5 +1,6 @@
 {% extends 'mainapp/include/base.html' %}
 {% load static %}
+{% load main_extras %}
 
 {% block content %}
     <div class="products-header">
@@ -21,17 +22,22 @@
 
     <div class="products">
         {% for product in products %}
-            <a class="product-view" style="text-decoration: none; color: black"
-               href="{% url 'products:detail' pk=product.pk %}">
-                <div class="product-view-a">
-                    <div class="product-view-img">
-                        <img class="product-view-img" src="{{ product.image_preview.url }}" alt="Dyson V7">
+            <div class="product-container">
+                <a class="product-view" style="text-decoration: none; color: black"
+                   href="{% url 'products:detail' pk=product.pk %}">
+                    <div class="product-view-a">
+                        <div class="product-view-img">
+                            <img class="product-view-img" src="{{ product.image_preview.url }}" alt="Dyson V7">
+                        </div>
+                        <div class="product-view-desc">
+                            {{ product.name }}
+                        </div>
                     </div>
-                    <div class="product-view-desc">
-                        {{ product.name }}
-                    </div>
-                </div>
-            </a>
+                </a>
+                {% if discount_products|is_discount:product.pk %}
+                    <div class="product-hot-deal text-center">-50%</div>
+                {% endif %}
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

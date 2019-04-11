@@ -7,6 +7,7 @@ from authapp.forms import LoginForm, CreateForm, EditForm
 
 def login(request):
     title = 'Все товары | Войдите'
+    next_page = request.GET.get('next', None)
 
     if request.user and request.user.is_active:
         return HttpResponseRedirect(reverse('index'))
@@ -17,10 +18,13 @@ def login(request):
                                  password=request.POST.get('password', None))
         if user and user.is_active:
             auth.login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+        if request.POST.get('next_page', None) is not None:
+            return HttpResponseRedirect(request.POST.get('next_page'))
+        return HttpResponseRedirect(reverse('index'))
 
     return render(request, 'authapp/login.html', {'title': title,
-                                                  'login_form': login_form})
+                                                  'login_form': login_form,
+                                                  'next_page': next_page})
 
 
 def logout(request):
