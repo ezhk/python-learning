@@ -89,14 +89,15 @@
 
 .product-hot-deal {
     position: relative;
-    background-color: #b5294b;
-    color: white;
+    bottom: 246.3px;
+    left: 101.3px;
+    border-radius: 8%;
     width: 40px;
     height: 40px;
     line-height: 40px;
-    border-radius: 40%;
-    top: -248px;
-    right: -103px;
+    font-size: 14px;
+    background-color: #b5294b;
+    color: white;
 }
 
 .product-image-button {

@@ -1,6 +1,7 @@
 from django.shortcuts import render, \
     get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, \
+    HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from django.template.loader import render_to_string
@@ -36,7 +37,7 @@ def add(request, pk):
     cart.save()
 
     if request.META.get('HTTP_REFERER', None) is not None and \
-            request.META.get('HTTP_REFERER').startswith(settings.LOGIN_URL):
+            settings.LOGIN_URL not in request.META.get('HTTP_REFERER'):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     return HttpResponseRedirect(reverse('products:detail', args=[pk]))
@@ -50,7 +51,7 @@ def delete(request, pk):
         product=product
     ).first()
     if not cart:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return HttpResponseNotFound('object id %s not found in cart' % pk)
 
     if cart.quantity <= 1:
         cart.delete()
@@ -59,7 +60,7 @@ def delete(request, pk):
         cart.save()
 
     if request.META.get('HTTP_REFERER', None) is not None and \
-            request.META.get('HTTP_REFERER').startswith(settings.LOGIN_URL):
+            settings.LOGIN_URL not in request.META.get('HTTP_REFERER'):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     return HttpResponseRedirect(reverse('cart:index'))
