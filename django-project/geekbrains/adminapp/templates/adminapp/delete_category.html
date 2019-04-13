@@ -1,0 +1,19 @@
+{% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Вы действительно хотите удалить категорию {{ object.name|lower }}?</h1>
+    <div class="d-flex justify-content-left contacts-appeal">
+        <a class="without-decoration-a" href="{% url 'adminapp:categories' %}">
+            <button class="btn btn-outline-secondary mr-3" type="submit">
+                Отменить
+            </button>
+        </a>
+        <form method="POST" action="{% url 'admin:category_delete' pk=object.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-outline-danger" type="submit" value="DELETE">
+                Удалить
+            </button>
+        </form>
+    </div>
+{% endblock %}

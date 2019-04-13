@@ -122,6 +122,14 @@ h1, h2, h3 {
     text-decoration: underline;
 }
 
+.without-decoration-a {
+    text-decoration: none;
+}
+
+.without-decoration-a:hover {
+    text-decoration: none;
+}
+
 .active-menu-list-a {
     color: black;
 }
@@ -162,6 +170,10 @@ h1, h2, h3 {
     min-width: 38px;
     height: 38px;
     line-height: 38px;
+}
+
+.group-buttons {
+    width: 260px;
 }
 
 .clear {

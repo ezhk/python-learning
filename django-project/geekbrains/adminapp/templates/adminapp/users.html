@@ -1,0 +1,62 @@
+{% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
+{% load admin_extras %}
+
+{% block content %}
+    <h1>Пользователи</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="cart-text cart-text-head">Пользователь</th>
+            <th scope="col" class="cart-text cart-text-head">Имя</th>
+            <th scope="col" class="cart-text cart-text-head">Фамилия</th>
+            <th scope="col" class="cart-text cart-text-head">Возраст</th>
+            <th scope="col" class="cart-text cart-text-head">Пол</th>
+            <th scope="col">
+                <div class="text-right">
+                    <a class="without-decoration-a" href="{% url 'adminapp:user_create' %}">
+                        <button class="group-buttons btn btn-outline-success" type="submit">
+                            Создать нового пользователя
+                        </button>
+                    </a>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr>
+                <td scope="row" class="cart-text cart-table-td">
+                    {{ object.username|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td">
+                    {{ object.firstname|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td">
+                    {{ object.lastname|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td">
+                    {{ object.age|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td">
+                    {{ object|explain_gender|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td group-buttons">
+                    <div class="d-flex justify-content-between">
+                        <a class="without-decoration-a" href="{% url 'adminapp:user_update' pk=object.pk %}">
+                            <button class="btn btn-outline-secondary" type="submit">
+                                Редактировать
+                            </button>
+                        </a>
+                        <a class="without-decoration-a" href="{% url 'adminapp:user_delete' pk=object.pk %}">
+                            <button class="btn btn-outline-danger" type="submit">
+                                Удалить
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

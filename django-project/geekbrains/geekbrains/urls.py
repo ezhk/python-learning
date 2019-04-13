@@ -32,7 +32,8 @@ urlpatterns = [
     re_path(r'^products/', include('mainapp.urls', namespace='products')),
     re_path(r'^auth/', include('authapp.urls', namespace='auth')),
     re_path(r'^cart/', include('cartapp.urls', namespace='cart')),
-    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^admin/', include('adminapp.urls', namespace='admin'))
+    # re_path(r'^admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
