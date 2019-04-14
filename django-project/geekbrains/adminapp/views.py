@@ -8,6 +8,8 @@ from django.views.generic.list import ListView
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory
 
+from authapp.forms import CreateForm
+
 
 class IsSuperUserView(UserPassesTestMixin):
     def test_func(self):
@@ -18,12 +20,13 @@ class UsersList(IsSuperUserView, ListView):
     model = ShopUser
     template_name = 'adminapp/users.html'
 
+    def get_queryset(self):
+        return ShopUser.objects.order_by('-is_active').all()
+
 
 class UserCreate(IsSuperUserView, CreateView):
     model = ShopUser
-    fields = ('username', 'firstname', 'lastname',
-              'email', 'gender', 'age', 'avatar',
-              'password')
+    form_class = CreateForm
     template_name = 'adminapp/update_user.html'
     success_url = reverse_lazy('adminapp:users')
 
@@ -36,7 +39,8 @@ class UserCreate(IsSuperUserView, CreateView):
 class UserUpdate(IsSuperUserView, UpdateView):
     model = ShopUser
     fields = ('username', 'firstname', 'lastname',
-              'email', 'gender', 'age', 'avatar')
+              'email', 'gender', 'age', 'avatar',
+              'is_active')
     template_name = 'adminapp/update_user.html'
 
     def get_success_url(self):
@@ -53,6 +57,17 @@ class UserDelete(IsSuperUserView, DeleteView):
     model = ShopUser
     template_name = 'adminapp/delete_user.html'
     success_url = reverse_lazy('adminapp:users')
+
+    def delete(self, request, *args, **kwargs):
+        # first time we only disable category
+        user = ShopUser.objects.get(pk=self.kwargs.get('pk'))
+        if user.is_active:
+            user.is_active = False
+            user.save()
+            return HttpResponseRedirect(reverse_lazy('adminapp:users'))
+
+        # second time we remove category
+        return super(UserDelete, self).delete(request, *args, **kwargs)
 
 
 class ProductCategoriesList(IsSuperUserView, ListView):

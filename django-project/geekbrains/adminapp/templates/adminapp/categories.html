@@ -23,12 +23,10 @@
         <tbody>
         {% for object in object_list %}
             <tr>
-                <td scope="row" class="cart-text cart-table-td"
-                    {% if not object.is_active %}style="color: darkgray"{% endif %}>
+                <td scope="row" class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
                     {{ object.name|default:"&mdash;" }}
                 </td>
-                <td class="cart-text cart-table-td"
-                    {% if not object.is_active %}style="color: darkgray"{% endif %}>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
                     {{ object.description|default:"&mdash;" }}
                 </td>
                 <td class="cart-text cart-table-td group-buttons">

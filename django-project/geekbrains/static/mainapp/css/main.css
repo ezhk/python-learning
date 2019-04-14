@@ -176,6 +176,10 @@ h1, h2, h3 {
     width: 260px;
 }
 
+.inactive-color {
+    color: darkgray;
+}
+
 .clear {
     clear: both;
 }
