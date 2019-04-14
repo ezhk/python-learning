@@ -2,8 +2,11 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 
+from django.core.paginator import Paginator
+
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
+from django.views.generic import TemplateView
 
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory
@@ -11,12 +14,35 @@ from mainapp.models import ProductCategory
 from authapp.forms import CreateForm
 
 
-class IsSuperUserView(UserPassesTestMixin):
+class IsSuperUserMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
 
 
-class UsersList(IsSuperUserView, ListView):
+class IndexList(IsSuperUserMixin, TemplateView):
+    template_name = 'adminapp/index.html'
+
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super(IndexList, self).get_context_data(object_list=None, **kwargs)
+
+        users_page = self.request.GET.get('users_page')
+        users_list = ShopUser.objects.all()
+        paginator = Paginator(users_list, 3)
+        users = paginator.get_page(users_page)
+
+        categories_page = self.request.GET.get('categories_page')
+        categories_list = ProductCategory.objects.all()
+        paginator = Paginator(categories_list, 3)
+        categories = paginator.get_page(categories_page)
+
+        context.update({
+            'users_list': users,
+            'categories_list': categories,
+        })
+        return context
+
+
+class UsersList(IsSuperUserMixin, ListView):
     model = ShopUser
     template_name = 'adminapp/users.html'
 
@@ -24,7 +50,7 @@ class UsersList(IsSuperUserView, ListView):
         return ShopUser.objects.order_by('-is_active').all()
 
 
-class UserCreate(IsSuperUserView, CreateView):
+class UserCreate(IsSuperUserMixin, CreateView):
     model = ShopUser
     form_class = CreateForm
     template_name = 'adminapp/update_user.html'
@@ -36,7 +62,7 @@ class UserCreate(IsSuperUserView, CreateView):
         return context
 
 
-class UserUpdate(IsSuperUserView, UpdateView):
+class UserUpdate(IsSuperUserMixin, UpdateView):
     model = ShopUser
     fields = ('username', 'firstname', 'lastname',
               'email', 'gender', 'age', 'avatar',
@@ -53,7 +79,7 @@ class UserUpdate(IsSuperUserView, UpdateView):
         return context
 
 
-class UserDelete(IsSuperUserView, DeleteView):
+class UserDelete(IsSuperUserMixin, DeleteView):
     model = ShopUser
     template_name = 'adminapp/delete_user.html'
     success_url = reverse_lazy('adminapp:users')
@@ -70,7 +96,7 @@ class UserDelete(IsSuperUserView, DeleteView):
         return super(UserDelete, self).delete(request, *args, **kwargs)
 
 
-class ProductCategoriesList(IsSuperUserView, ListView):
+class ProductCategoriesList(IsSuperUserMixin, ListView):
     model = ProductCategory
     template_name = 'adminapp/categories.html'
 
@@ -78,7 +104,7 @@ class ProductCategoriesList(IsSuperUserView, ListView):
         return ProductCategory.objects.order_by('-is_active').all()
 
 
-class ProductCategoryCreate(IsSuperUserView, CreateView):
+class ProductCategoryCreate(IsSuperUserMixin, CreateView):
     model = ProductCategory
     fields = '__all__'
     template_name = 'adminapp/update_category.html'
@@ -90,7 +116,7 @@ class ProductCategoryCreate(IsSuperUserView, CreateView):
         return context
 
 
-class ProductCategoryUpdate(IsSuperUserView, UpdateView):
+class ProductCategoryUpdate(IsSuperUserMixin, UpdateView):
     model = ProductCategory
     fields = '__all__'
     template_name = 'adminapp/update_category.html'
@@ -105,7 +131,7 @@ class ProductCategoryUpdate(IsSuperUserView, UpdateView):
         return context
 
 
-class ProductCategoryDelete(IsSuperUserView, DeleteView):
+class ProductCategoryDelete(IsSuperUserMixin, DeleteView):
     model = ProductCategory
     template_name = 'adminapp/delete_category.html'
     success_url = reverse_lazy('adminapp:categories')

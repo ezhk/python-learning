@@ -1,0 +1,180 @@
+{% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
+{% load admin_extras %}
+
+{% block content %}
+    <a class="menu-list-a active-menu-list-a" href="{% url 'adminapp:users' %}">
+        <h3>Пользователи</h3>
+    </a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="cart-text cart-text-head">Пользователь</th>
+            <th scope="col" class="cart-text cart-text-head">Имя</th>
+            <th scope="col" class="cart-text cart-text-head">Фамилия</th>
+            <th scope="col" class="cart-text cart-text-head">Возраст</th>
+            <th scope="col" class="cart-text cart-text-head">Пол</th>
+            <th scope="col">
+                <div class="text-right">
+                    <a class="without-decoration-a" href="{% url 'adminapp:user_create' %}">
+                        <button class="group-buttons btn btn-outline-success" type="submit">
+                            Создать нового пользователя
+                        </button>
+                    </a>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in users_list %}
+            <tr>
+                <td scope="row" class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.username|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.firstname|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.lastname|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.age|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object|explain_gender|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td group-buttons">
+                    <div class="d-flex justify-content-between">
+                        <a class="without-decoration-a" href="{% url 'adminapp:user_update' pk=object.pk %}">
+                            <button class="btn btn-outline-secondary" type="submit">
+                                Редактировать
+                            </button>
+                        </a>
+                        <a class="without-decoration-a" href="{% url 'adminapp:user_delete' pk=object.pk %}">
+                            <button class="btn btn-outline-danger" type="submit">
+                                Удалить
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="">
+        {% if users_list.has_previous %}
+            <div class="btn-group" role="group" aria-label="">
+                <a href="?users_page=1">
+                    <button type="button" class="btn btn-outline-secondary mr-2">
+                        &laquo; first
+                    </button>
+                </a>
+                <a href="?users_page={{ users_list.previous_page_number }}">
+                    <button type="button" class="btn btn-outline-secondary mr-3">
+                        previous
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+        <div class="text-center mr-3 cart-text">
+            Страница {{ users_list.number }} из {{ users_list.paginator.num_pages }}
+        </div>
+        {% if users_list.has_next %}
+            <div class="btn-group mr-2" role="group" aria-label="">
+                <a href="?users_page={{ users_list.next_page_number }}">
+                    <button type="button" class="btn btn-outline-secondary mr-2">
+                        next
+                    </button>
+                </a>
+                <a href="?users_page={{ users_list.paginator.num_pages }}">
+                    <button type="button" class="btn btn-outline-secondary">
+                        last &raquo;
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <hr class="mt-4 mb-4">
+
+    <a class="menu-list-a active-menu-list-a" href="{% url 'adminapp:categories' %}">
+        <h3>Категории</h3>
+    </a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="cart-text cart-text-head">Имя категории</th>
+            <th scope="col" class="cart-text cart-text-head">Описание</th>
+            <th scope="col">
+                <div class="text-right">
+                    <a class="without-decoration-a" href="{% url 'adminapp:category_create' %}">
+                        <button class="group-buttons btn btn-outline-success" type="submit">
+                            Создать новую категорию
+                        </button>
+                    </a>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in categories_list %}
+            <tr>
+                <td scope="row"
+                    class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.name|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.description|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td group-buttons">
+                    <div class="d-flex justify-content-between">
+                        <a class="without-decoration-a" href="{% url 'adminapp:category_update' pk=object.pk %}">
+                            <button class="btn btn-outline-secondary mr-3" type="submit">
+                                Редактировать
+                            </button>
+                        </a>
+                        <a class="without-decoration-a" href="{% url 'adminapp:category_delete' pk=object.pk %}">
+                            <button class="btn btn-outline-danger" type="submit">
+                                Удалить
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="">
+        {% if categories_list.has_previous %}
+            <div class="btn-group" role="group" aria-label="">
+                <a href="?categories_page=1">
+                    <button type="button" class="btn btn-outline-secondary mr-2">
+                        &laquo; first
+                    </button>
+                </a>
+                <a href="?categories_page={{ categories_list.previous_page_number }}">
+                    <button type="button" class="btn btn-outline-secondary mr-3">
+                        previous
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+        <div class="text-center mr-3 cart-text">
+            Страница {{ categories_list.number }} из {{ categories_list.paginator.num_pages }}
+        </div>
+        {% if categories_list.has_next %}
+            <div class="btn-group mr-2" role="group" aria-label="">
+                <a href="?categories_page={{ categories_list.next_page_number }}">
+                    <button type="button" class="btn btn-outline-secondary mr-2">
+                        next
+                    </button>
+                </a>
+                <a href="?categories_page={{ categories_list.paginator.num_pages }}">
+                    <button type="button" class="btn btn-outline-secondary">
+                        last &raquo;
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
