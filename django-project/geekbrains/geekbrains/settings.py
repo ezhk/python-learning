@@ -151,7 +151,9 @@ DATA_DUMP_DIR = os.path.join(BASE_DIR, 'data-dump')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# UAuth settings
+# OAuth settings
 SOCIAL_AUTH_VK_OAUTH2_KEY = config.getint('DEFAULT', 'SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config.get('DEFAULT', 'SOCIAL_AUTH_VK_OAUTH2_SECRET')
 LOGIN_REDIRECT_URL = '/'
+# auth url: localhost:8000/social/login/vk-oauth2/
+# redirect app url: http://localhost:8000/social/complete/vk-oauth2/
