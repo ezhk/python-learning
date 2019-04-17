@@ -9,7 +9,7 @@ from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 
 from authapp.models import ShopUser
-from mainapp.models import ProductCategory
+from mainapp.models import Products, ProductCategory
 
 from authapp.forms import CreateForm
 
@@ -35,9 +35,15 @@ class IndexList(IsSuperUserMixin, TemplateView):
         paginator = Paginator(categories_list, 3)
         categories = paginator.get_page(categories_page)
 
+        products_page = self.request.GET.get('products_page')
+        products_list = Products.objects.all()
+        paginator = Paginator(products_list, 3)
+        products = paginator.get_page(products_page)
+
         context.update({
             'users_list': users,
             'categories_list': categories,
+            'products_list': products,
         })
         return context
 
@@ -146,3 +152,55 @@ class ProductCategoryDelete(IsSuperUserMixin, DeleteView):
 
         # second time we remove category
         return super(ProductCategoryDelete, self).delete(request, *args, **kwargs)
+
+
+class ProductsList(IsSuperUserMixin, ListView):
+    model = Products
+    template_name = 'adminapp/products.html'
+
+    def get_queryset(self):
+        return Products.objects.select_related('category').order_by('-is_active').all()
+
+
+class ProductCreate(IsSuperUserMixin, CreateView):
+    model = Products
+    fields = '__all__'
+    template_name = 'adminapp/update_product.html'
+    success_url = reverse_lazy('adminapp:products')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreate, self).get_context_data(**kwargs)
+        context.update({'title': 'Создание нового продукта'})
+        return context
+
+
+class ProductUpdate(IsSuperUserMixin, UpdateView):
+    model = Products
+    fields = '__all__'
+    template_name = 'adminapp/update_product.html'
+
+    def get_success_url(self):
+        return reverse_lazy('adminapp:product_update',
+                            kwargs={'pk': self.kwargs.get('pk')})
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductUpdate, self).get_context_data(**kwargs)
+        context.update({'title': f"Изменение продукта {context.get('object').name}"})
+        return context
+
+
+class ProductDelete(IsSuperUserMixin, DeleteView):
+    model = Products
+    template_name = 'adminapp/delete_product.html'
+    success_url = reverse_lazy('adminapp:products')
+
+    def delete(self, request, *args, **kwargs):
+        # first time we only disable category
+        category = Products.objects.get(pk=self.kwargs.get('pk'))
+        if category.is_active:
+            category.is_active = False
+            category.save()
+            return HttpResponseRedirect(reverse_lazy('adminapp:products'))
+
+        # second time we remove category
+        return super(ProductDelete, self).delete(request, *args, **kwargs)

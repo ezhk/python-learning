@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="{% static 'mainapp/css/styles.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.min.css">
 </head>
 <body>
 <div class="container">
@@ -47,9 +52,11 @@
                                    href="{% url 'cart:index' %}">
                                     <img src="{% static 'mainapp/img/shopping-bag.svg' %}"
                                          class="cart-img" alt="cart">
-                                    {% if user.cart.count > 0 %}
-                                        ({{ user.cart.count }})
-                                    {% endif %}
+                                    {% with user.cart.count as user_cart_count %}
+                                        {% if user_cart_count > 0 %}
+                                            ({{ user_cart_count }})
+                                        {% endif %}
+                                    {% endwith %}
                                 </a>
                             </li>
                             <li class="menu-list-li">
@@ -61,6 +68,12 @@
                             </li>
                             <li class="menu-list-li">
                                 <a class="menu-list-a" href="{% url 'auth:create' %}">Зарегистрироваться</a>
+                            </li>
+                            <li class="menu-list-li">
+                                <a class="btn btn-social-icon btn-xs btn-vk social-button-override"
+                                   href="{% url 'social:begin' 'vk-oauth2' %}">
+                                    <i class="fab fa-vk social-button-description-override"></i>
+                                </a>
                             </li>
                         {% endif %}
                     </ul>

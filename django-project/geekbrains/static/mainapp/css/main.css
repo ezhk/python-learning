@@ -176,6 +176,16 @@ h1, h2, h3 {
     width: 260px;
 }
 
+.social-button-override {
+    display: block !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.social-button-description-override {
+    font-size: 1rem !important;
+}
+
 .inactive-color {
     color: darkgray;
 }

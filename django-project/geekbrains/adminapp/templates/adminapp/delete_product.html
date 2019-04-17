@@ -2,14 +2,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <h1>Вы действительно хотите удалить категорию &laquo;{{ object.name|lower }}&raquo;?</h1>
+    <h1>Вы действительно хотите удалить товар &laquo;{{ object.name|lower }}&raquo;?</h1>
     <div class="d-flex justify-content-left contacts-appeal">
-        <a class="without-decoration-a" href="{% url 'adminapp:categories' %}">
+        <a class="without-decoration-a" href="{% url 'adminapp:products' %}">
             <button class="btn btn-outline-secondary mr-3" type="submit">
                 Отменить
             </button>
         </a>
-        <form method="POST" action="{% url 'admin:category_delete' pk=object.pk %}">
+        <form method="POST" action="{% url 'admin:product_delete' pk=object.pk %}">
             {% csrf_token %}
             <button class="btn btn-outline-danger" type="submit" value="DELETE">
                 Удалить

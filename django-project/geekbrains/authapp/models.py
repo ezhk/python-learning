@@ -13,7 +13,7 @@ class ShopUser(AbstractUser):
     lastname = models.CharField(verbose_name='Фамилия', max_length=128, blank=True)
 
     gender = models.SmallIntegerField(verbose_name='Пол', choices=GENDER_TYPE_CHOICES, default=-1)
-    age = models.PositiveIntegerField(verbose_name='Возраст')
+    age = models.PositiveIntegerField(verbose_name='Возраст', null=True)
 
     avatar = models.ImageField(verbose_name='Аватар', upload_to='avatars', blank=True)
     is_active = models.BooleanField(verbose_name='Активный пользователь', default=True)

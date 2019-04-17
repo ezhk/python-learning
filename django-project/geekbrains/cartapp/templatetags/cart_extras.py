@@ -1,5 +1,4 @@
 from django import template
-from mainapp.models import Products
 
 register = template.Library()
 
@@ -7,8 +6,8 @@ register = template.Library()
 @register.filter
 def summary_price(cart):
     summary_price = 0
-    for card_id in cart:
-        summary_price += card_id.quantity * card_id.product.price
+    for cart_id in cart:
+        summary_price += cart_id.quantity * cart_id.product.price
     return summary_price
 
 

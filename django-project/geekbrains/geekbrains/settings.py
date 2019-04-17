@@ -11,20 +11,30 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import configparser
+import glob
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Include configs
+INCLUDE_CONFIGS = os.path.join(BASE_DIR, 'confs', '*.ini')
+
+# parse configs
+config = configparser.RawConfigParser()
+config.read(glob.glob(INCLUDE_CONFIGS))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'f0%fln67l9g%37m0*sm1@fodcqj7pbpo=u0hl#(k63u!6m#kph'
+SECRET_KEY = config.get('DEFAULT', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+INTERNAL_IPS = ['127.0.0.1']
 
 # Application definition
 
@@ -39,6 +49,8 @@ INSTALLED_APPS = [
     'authapp.apps.AuthappConfig',
     'cartapp.apps.CartappConfig',
     'adminapp.apps.AdminappConfig',
+    'social_django',
+    'debug_toolbar',
     'crispy_forms',
 ]
 
@@ -50,7 +62,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'social_django.middleware.SocialAuthExceptionMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 ROOT_URLCONF = 'geekbrains.urls'
 
@@ -65,6 +84,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -128,3 +150,8 @@ AUTH_USER_MODEL = 'authapp.ShopUser'
 DATA_DUMP_DIR = os.path.join(BASE_DIR, 'data-dump')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# UAuth settings
+SOCIAL_AUTH_VK_OAUTH2_KEY = config.getint('DEFAULT', 'SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = config.get('DEFAULT', 'SOCIAL_AUTH_VK_OAUTH2_SECRET')
+LOGIN_REDIRECT_URL = '/'

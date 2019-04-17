@@ -1,0 +1,19 @@
+{% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>{{ title|capfirst }}</h1>
+    <div class="contacts-appeal">
+        <form method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+
+            <br>
+            <div class="text-center">
+                <div class="col-sm-4 btn-group">
+                    <button class="btn btn-outline-secondary" type="submit" value="Update">Сохранить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

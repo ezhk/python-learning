@@ -24,9 +24,10 @@ class Products(models.Model):
     short_description = models.CharField(verbose_name='short comment of product', max_length=512)
     full_description = models.TextField(verbose_name='large protuct description', blank=True)
     overview = models.TextField(verbose_name='large product review', blank=True)
-    image_preview = models.ImageField(upload_to='product-img', blank=True)
+    image_preview = models.ImageField(upload_to='product-img', blank=True, default='product-img/blank-product.svg')
     price = models.DecimalField(verbose_name='product price', max_digits=8, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(verbose_name='stock quantity', default=0)
+    is_active = models.BooleanField(verbose_name='active', default=True)
 
     def __str__(self):
         return f"{self.name} ({self.category.name}, {self.price})"

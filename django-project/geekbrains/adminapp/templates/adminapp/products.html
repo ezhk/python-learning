@@ -1,0 +1,58 @@
+{% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
+{% load admin_extras %}
+
+{% block content %}
+    <h1>Товары</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="cart-text cart-text-head">Товар</th>
+            <th scope="col" class="cart-text cart-text-head">Категория</th>
+            <th scope="col" class="cart-text cart-text-head">Количество</th>
+            <th scope="col" class="cart-text cart-text-head">Стоимость</th>
+            <th scope="col">
+                <div class="text-right">
+                    <a class="without-decoration-a" href="{% url 'adminapp:product_create' %}">
+                        <button class="group-buttons btn btn-outline-success" type="submit">
+                            Создать новый товар
+                        </button>
+                    </a>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr>
+                <td scope="row" class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.name|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.category.name|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.quantity|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td {% if not object.is_active %}inactive-color{% endif %}">
+                    {{ object.price|default:"&mdash;" }}
+                </td>
+                <td class="cart-text cart-table-td group-buttons">
+                    <div class="d-flex justify-content-between">
+                        <a class="without-decoration-a" href="{% url 'adminapp:product_update' pk=object.pk %}">
+                            <button class="btn btn-outline-secondary mr-3" type="submit">
+                                Редактировать
+                            </button>
+                        </a>
+                        <a class="without-decoration-a" href="{% url 'adminapp:product_delete' pk=object.pk %}">
+                            <button class="btn btn-outline-danger" type="submit">
+                                Удалить
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

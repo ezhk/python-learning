@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <h1>Вы действительно хотите удалить {{ object.username|lower }}?</h1>
+    <h1>Вы действительно хотите удалить &laquo;{{ object.username|lower }}&raquo;?</h1>
     <div class="d-flex justify-content-left contacts-appeal">
         <a class="without-decoration-a" href="{% url 'adminapp:users' %}">
             <button class="btn btn-outline-secondary mr-3" type="submit">

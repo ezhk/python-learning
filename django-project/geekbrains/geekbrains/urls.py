@@ -32,9 +32,15 @@ urlpatterns = [
     re_path(r'^products/', include('mainapp.urls', namespace='products')),
     re_path(r'^auth/', include('authapp.urls', namespace='auth')),
     re_path(r'^cart/', include('cartapp.urls', namespace='cart')),
-    re_path(r'^admin/', include('adminapp.urls', namespace='admin'))
+
+    re_path(r'^social/', include('social_django.urls', namespace='social')),
+
+    re_path(r'^admin/', include('adminapp.urls', namespace='admin')),
     # re_path(r'^admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += re_path(r'^__debug__/', include(debug_toolbar.urls)),
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

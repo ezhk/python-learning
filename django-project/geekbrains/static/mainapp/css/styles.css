@@ -75,6 +75,8 @@
 }
 
 .product-view-img {
+    min-width: 60px;
+    min-height: 90px;
     max-width: 120px;
     max-height: 180px;
 
