@@ -3,6 +3,9 @@ from django.contrib import auth
 from django.urls import reverse
 
 from authapp.forms import LoginForm, CreateForm, EditForm
+from authapp.models import ShopUser
+
+from authapp.utils import send_verify_mail
 
 
 def login(request):
@@ -39,8 +42,23 @@ def create(request):
         create_form = CreateForm(request.POST, request.FILES)
 
         if create_form.is_valid():
-            create_form.save()
-            return HttpResponseRedirect(reverse('auth:login'))
+            user = create_form.save()
+            try:
+                if not send_verify_mail(user):
+                    raise RuntimeError("Cannot send mail with verify code")
+            except Exception as e:
+                return render(request, 'authapp/verify-notification.html',
+                              {
+                                  'header': "Ошибка отправки email",
+                                  'message': f"Письмо не было отправлено: {e}"
+                              })
+            return render(request, 'authapp/verify-notification.html',
+                          {
+                              'header': "Подтверждение email",
+                              'message': "Подтвердите свой электронный адрес по ссылке," + \
+                                         f"отправленной на адрес {user.email}",
+                          })
+            # return HttpResponseRedirect(reverse('auth:login'))
     else:
         create_form = CreateForm()
 
@@ -61,3 +79,28 @@ def edit(request):
 
     return render(request, 'authapp/edit.html', {'title': title,
                                                  'edit_form': edit_form})
+
+
+def verify(request, email, activation_key):
+    try:
+        user = ShopUser.objects.get(email=email)
+        key_object = user.activationkey_set.filter(activation_key=activation_key).first()
+        if key_object and key_object.is_active():
+            user.is_active = True
+            user.save()
+            key_object.delete()
+
+            auth.login(request, user)
+            return render(request, 'authapp/verify-successful.html')
+
+        return render(request, 'authapp/verify-notification.html',
+                      {
+                          'header': "Ошибка проверки email",
+                          'message': "Не удалось проверить корректность email."
+                      })
+    except Exception as e:
+        return render(request, 'authapp/verify-notification.html',
+                      {
+                          'header': "Проверка email завершена с ошибкой",
+                          'message': f"Возникло исключение {e}"
+                      })

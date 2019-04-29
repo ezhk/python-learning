@@ -1,0 +1,11 @@
+{% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1 class="text-center">Спасибо за регистрацию</h1>
+    <div class="text-center">
+        <a href="{% url 'mainapp:index' %}" class="col-sm-8">
+            <button class="btn btn-outline-secondary">Перейти на главную страницу</button>
+        </a>
+    </div>
+{% endblock %}

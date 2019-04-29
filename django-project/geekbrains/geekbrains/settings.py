@@ -67,7 +67,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',
+    # 'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -87,6 +87,7 @@ TEMPLATES = [
                 #
                 # 'social_django.context_processors.backends',
                 # 'social_django.context_processors.login_redirect',
+                'cartapp.context_processors.cart',
             ],
         },
     },
@@ -152,8 +153,23 @@ DATA_DUMP_DIR = os.path.join(BASE_DIR, 'data-dump')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # OAuth settings
-SOCIAL_AUTH_VK_OAUTH2_KEY = config.getint('DEFAULT', 'SOCIAL_AUTH_VK_OAUTH2_KEY')
-SOCIAL_AUTH_VK_OAUTH2_SECRET = config.get('DEFAULT', 'SOCIAL_AUTH_VK_OAUTH2_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_KEY = config.getint('OAuth', 'SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = config.get('OAuth', 'SOCIAL_AUTH_VK_OAUTH2_SECRET')
 LOGIN_REDIRECT_URL = '/'
 # auth url: localhost:8000/social/login/vk-oauth2/
 # redirect app url: http://localhost:8000/social/complete/vk-oauth2/
+
+DOMAIN_NAME = 'http://localhost:8000'
+
+# Debug email settings:
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = 'tmp/email-messages/'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
