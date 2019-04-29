@@ -47,16 +47,16 @@ def create(request):
                 if not send_verify_mail(user):
                     raise RuntimeError("Cannot send mail with verify code")
             except Exception as e:
-                return render(request, 'authapp/verify-notification.html',
+                return render(request, 'authapp/verify.html',
                               {
                                   'header': "Ошибка отправки email",
-                                  'message': f"Письмо не было отправлено: {e}"
+                                  'error': f"Письмо не было отправлено: {e}"
                               })
-            return render(request, 'authapp/verify-notification.html',
+            return render(request, 'authapp/verify.html',
                           {
                               'header': "Подтверждение email",
-                              'message': "Подтвердите свой электронный адрес по ссылке," + \
-                                         f"отправленной на адрес {user.email}",
+                              'error': "Подтвердите свой электронный адрес по ссылке," + \
+                                       f"отправленной на адрес {user.email}",
                           })
             # return HttpResponseRedirect(reverse('auth:login'))
     else:
@@ -91,16 +91,16 @@ def verify(request, email, activation_key):
             key_object.delete()
 
             auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return render(request, 'authapp/verify-successful.html')
+            return render(request, 'authapp/verify.html')
 
-        return render(request, 'authapp/verify-notification.html',
+        return render(request, 'authapp/verify.html',
                       {
                           'header': "Ошибка проверки email",
-                          'message': "Не удалось проверить корректность ключа верификации."
+                          'error': "Не удалось проверить корректность ключа верификации."
                       })
     except Exception as e:
-        return render(request, 'authapp/verify-notification.html',
+        return render(request, 'authapp/verify.html',
                       {
                           'header': "Проверка email завершена с ошибкой",
-                          'message': f"Возникло исключение {e}"
+                          'error': f"Возникло исключение {e}"
                       })
