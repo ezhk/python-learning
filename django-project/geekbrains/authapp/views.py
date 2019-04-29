@@ -90,13 +90,13 @@ def verify(request, email, activation_key):
             user.save()
             key_object.delete()
 
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return render(request, 'authapp/verify-successful.html')
 
         return render(request, 'authapp/verify-notification.html',
                       {
                           'header': "Ошибка проверки email",
-                          'message': "Не удалось проверить корректность email."
+                          'message': "Не удалось проверить корректность ключа верификации."
                       })
     except Exception as e:
         return render(request, 'authapp/verify-notification.html',

@@ -67,7 +67,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    # 'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -155,6 +155,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # OAuth settings
 SOCIAL_AUTH_VK_OAUTH2_KEY = config.getint('OAuth', 'SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config.get('OAuth', 'SOCIAL_AUTH_VK_OAUTH2_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 LOGIN_REDIRECT_URL = '/'
 # auth url: localhost:8000/social/login/vk-oauth2/
 # redirect app url: http://localhost:8000/social/complete/vk-oauth2/
