@@ -176,10 +176,18 @@ h1, h2, h3 {
     width: 260px;
 }
 
+.social-buttons {
+    display: flex;
+}
+
 .social-button-override {
     display: block !important;
     width: 20px !important;
     height: 20px !important;
+    margin-right: 5px;
+}
+.social-button-override:last-child {
+    margin-right: 0;
 }
 
 .social-button-description-override {

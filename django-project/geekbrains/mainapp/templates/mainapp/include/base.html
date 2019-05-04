@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 {% load static %}
+{% load main_extras %}
 
 <head>
     <meta charset="UTF-8">
@@ -41,8 +42,9 @@
                         {% if user.is_authenticated %}
                             <li class="menu-list-li">
                                 <a class="menu-list-a active-menu-list-a" href="{% url 'auth:edit' %}">
-                                    {% if user.avatar %}
-                                        <img class="avatar-login" src="/media/{{ user.avatar }}" alt="avatar">
+                                    {% if user.shopuserextended.userpic %}
+                                        <img class="avatar-login" alt="avatar"
+                                             src="/media/{{ user.shopuserextended.userpic }}">
                                     {% endif %}
                                     {{ user.username | capfirst }}
                                 </a>
@@ -52,7 +54,8 @@
                                    href="{% url 'cart:index' %}">
                                     <img src="{% static 'mainapp/img/shopping-bag.svg' %}"
                                          class="cart-img" alt="cart">
-                                    {% with user.cart.count as user_cart_count %}
+                                    {# {% with user.cart.count as user_cart_count %} #}
+                                    {% with cart|products_quantity as user_cart_count %}
                                         {% if user_cart_count > 0 %}
                                             ({{ user_cart_count }})
                                         {% endif %}
@@ -69,10 +72,14 @@
                             <li class="menu-list-li">
                                 <a class="menu-list-a" href="{% url 'auth:create' %}">Зарегистрироваться</a>
                             </li>
-                            <li class="menu-list-li">
+                            <li class="menu-list-li social-buttons">
                                 <a class="btn btn-social-icon btn-xs btn-vk social-button-override"
                                    href="{% url 'social:begin' 'vk-oauth2' %}">
                                     <i class="fab fa-vk social-button-description-override"></i>
+                                </a>
+                                <a class="btn btn-social-icon btn-xs btn-google social-button-override"
+                                   href="{% url 'social:begin' 'google-oauth2' %}">
+                                    <i class="fab fa-google social-button-description-override"></i>
                                 </a>
                             </li>
                         {% endif %}
