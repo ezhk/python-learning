@@ -1,0 +1,27 @@
+{% extends 'mainapp/include/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    {% if error %}
+        {# Ошибка при валидации почтового адреса #}
+        <h1>{{ header }}</h1>
+        <div class="contacts-appeal">
+            <p>
+                {{ error }}
+            </p>
+            <div class="text-left">
+                <a href="{% url 'authapp:create' %}" class="col-sm-8">
+                    <button class="btn btn-outline-secondary">Повторно зарегестрироваться</button>
+                </a>
+            </div>
+        </div>
+    {% else %}
+        {# Успешная валидация почтового адреса #}
+        <h1 class="text-center">Спасибо за регистрацию</h1>
+        <div class="text-center">
+            <a href="{% url 'mainapp:index' %}" class="col-sm-8">
+                <button class="btn btn-outline-secondary">Перейти на главную страницу</button>
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: 
+ =?utf-8?b?0J/QvtC00YLQstC10YDQttC00LXQvdC40LUg0YPRh9C10YLQvdC+0Lkg0LfQsNC/?=
+ =?utf-8?b?0LjRgdC4IGRqYW5nbw==?=
+From: webmaster@localhost
+To: django@localhost
+Date: Mon, 29 Apr 2019 13:07:53 -0000
+Message-ID: 
+ <155654327394.43941.3282520460357734749@5.45.239.133-red.dhcp.yndx.net>
+
+Для подтверждения учетной записи django на портале
+http://localhost:8000 перейдите по ссылке:
+http://localhost:8000/auth/verify/django@localhost/8040bdac2adf0da66ada8d0d78b3d08761b7ea7468fe00e32d33a1a5279fc3e4
+-------------------------------------------------------------------------------
