@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 import logging
 import os
 import requests
@@ -33,6 +33,37 @@ class ShopUser(AbstractUser):
     age = models.PositiveIntegerField(verbose_name='Возраст', null=True)
 
     is_active = models.BooleanField(verbose_name='Активный пользователь', default=True)
+
+    def validate_age(self, user_about_url=None):
+        if self.age:
+            return False if (self.age < 18) else True
+        if user_about_url is None:
+            return None
+
+        try:
+            r = requests.get(user_about_url)
+            if r.status_code != 200:
+                raise ValueError(f"{user_about_url} returned {r.status_code} status code")
+            response = r.json().get('response', [])
+            if not response:
+                return None
+
+            response = response.pop()
+            if not response.get('bdate', None):
+                return None
+            age = datetime.now() - datetime.strptime(response.get('bdate'), '%d.%m.%Y')
+            age = age.days // 365.25
+
+            if age < 18:
+                return False
+
+            self.age = age
+            self.save()
+        except Exception as e:
+            logger.error(f"validate_age exception {e}")
+            return None
+
+        return True
 
 
 class ShopUserExtended(models.Model):
