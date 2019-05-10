@@ -71,6 +71,8 @@ def contacts(request):
                 subject=feedback_form.data.get('subject', None),
                 body=feedback_form.data.get('body')
             ).save()
+    elif request.user.is_authenticated and request.user.email:
+        feedback_form = FeedBackForm({'email': request.user.email})
 
     return render(request, 'mainapp/contacts.html',
                   {'title': title,

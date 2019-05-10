@@ -18,10 +18,14 @@ logger = logging.getLogger(__name__)
 
 
 class ShopUser(AbstractUser):
+    GENDER_TYPE_UNKNOWN = -1
+    GENDER_TYPE_FEMALE = 0
+    GENDER_TYPE_MALE = 1
+
     GENDER_TYPE_CHOICES = (
-        (-1, 'Не указан'),
-        (0, 'Женский'),
-        (1, 'Мужской')
+        (GENDER_TYPE_UNKNOWN, 'Не указан'),
+        (GENDER_TYPE_FEMALE, 'Женский'),
+        (GENDER_TYPE_MALE, 'Мужской')
     )
 
     email = models.EmailField(verbose_name='email', max_length=256, unique=True)
@@ -29,7 +33,9 @@ class ShopUser(AbstractUser):
     firstname = models.CharField(verbose_name='Имя', max_length=64, null=True)
     lastname = models.CharField(verbose_name='Фамилия', max_length=128, blank=True)
 
-    gender = models.SmallIntegerField(verbose_name='Пол', choices=GENDER_TYPE_CHOICES, default=-1)
+    gender = models.SmallIntegerField(verbose_name='Пол',
+                                      choices=GENDER_TYPE_CHOICES,
+                                      default=GENDER_TYPE_UNKNOWN)
     age = models.PositiveIntegerField(verbose_name='Возраст', null=True)
 
     is_active = models.BooleanField(verbose_name='Активный пользователь', default=True)
