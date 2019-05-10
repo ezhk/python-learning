@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
 
-from authapp.forms import LoginForm, CreateForm, EditForm
+from authapp.forms import LoginForm, CreateForm, EditForm, ShopUserExtendedForm
 from authapp.models import ShopUser
 
 from authapp.utils import send_verify_mail
@@ -15,7 +15,7 @@ def login(request):
     if request.user and request.user.is_active:
         return HttpResponseRedirect(reverse('index'))
 
-    login_form = LoginForm(data=request.POST)
+    login_form = LoginForm(data=request.POST or None)
     if login_form.is_valid():
         user = auth.authenticate(username=request.POST.get('username', None),
                                  password=request.POST.get('password', None))
@@ -71,14 +71,18 @@ def edit(request):
 
     if request.method == 'POST':
         edit_form = EditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
+        extended_form = ShopUserExtendedForm(request.POST, request.FILES,
+                                             instance=request.user.shopuserextended)
+        if edit_form.is_valid() and extended_form.is_valid():
             edit_form.save()
             return HttpResponseRedirect(reverse('auth:edit'))
     else:
         edit_form = EditForm(instance=request.user)
+        extended_form = ShopUserExtendedForm(instance=request.user.shopuserextended)
 
     return render(request, 'authapp/edit.html', {'title': title,
-                                                 'edit_form': edit_form})
+                                                 'edit_form': edit_form,
+                                                 'extended_form': extended_form, })
 
 
 def verify(request, email, activation_key):

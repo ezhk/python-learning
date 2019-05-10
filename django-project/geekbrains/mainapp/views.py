@@ -1,3 +1,5 @@
+import sys
+
 from django.shortcuts import render, \
     get_object_or_404
 from django.http import HttpResponseNotFound
@@ -83,4 +85,9 @@ def page404(request, exception):
 
 
 def page500(request):
-    return render(request, 'mainapp/page500.html', status=500)
+    (_type, value, traceback) = sys.exc_info()
+    exception = value
+    if hasattr(value, 'backend'):
+        exception = value.backend
+    return render(request, 'mainapp/page500.html',
+                  context={'exception': exception}, status=500)

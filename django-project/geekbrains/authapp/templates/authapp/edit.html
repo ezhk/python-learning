@@ -7,7 +7,7 @@
         <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ edit_form | crispy }}
-
+            {{ extended_form | crispy }}
             <br>
             <div class="text-center">
                 <div class="col-sm-4 btn-group">

@@ -71,8 +71,7 @@ class UserCreate(IsSuperUserMixin, CreateView):
 class UserUpdate(IsSuperUserMixin, UpdateView):
     model = ShopUser
     fields = ('username', 'firstname', 'lastname',
-              'email', 'gender', 'age', 'avatar',
-              'is_active')
+              'email', 'gender', 'age', 'is_active')
     template_name = 'adminapp/update_user.html'
 
     def get_success_url(self):
