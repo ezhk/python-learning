@@ -26,7 +26,6 @@
             {% for item in items %}
                 <tr>
                     <td scope="row" class="cart-table-td">
-                        {{ self.sett }}
                         <img class="product-image-order" src="{{ MEDIA_URL }}{{ item.product.image_preview }}"
                              alt="image {{ item.product.name }}">
                         <a class="menu-list-a cart-text" href="{% url 'products:detail' item.product.id %}">
