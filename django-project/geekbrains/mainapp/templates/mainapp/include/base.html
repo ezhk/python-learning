@@ -44,7 +44,7 @@
                                 <a class="menu-list-a active-menu-list-a" href="{% url 'auth:edit' %}">
                                     {% if user.shopuserextended.userpic %}
                                         <img class="avatar-login" alt="avatar"
-                                             src="/media/{{ user.shopuserextended.userpic }}">
+                                             src="{{ MEDIA_URL }}{{ user.shopuserextended.userpic }}">
                                     {% endif %}
                                     {{ user.username | capfirst }}
                                 </a>
