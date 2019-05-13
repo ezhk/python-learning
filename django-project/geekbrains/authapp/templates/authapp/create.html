@@ -6,7 +6,7 @@
     <div class="contacts-appeal">
         <form class="form-horizontal" action="{% url 'auth:create' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ create_form | crispy }}
+            {{ form | crispy }}
 
             <br>
             <div class="text-center">
