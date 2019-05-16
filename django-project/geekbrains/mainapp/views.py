@@ -20,10 +20,11 @@ def main(request):
 def products(request, pk=None):
     def hot_deals():
         """Logic hot deals: get first random element"""
-        return Products.objects.order_by('?').all()[:1]
+        return Products.objects.filter(is_active=True,
+                                       category__is_active=True).order_by('?').all()[:1]
 
     title = 'Все товары | Каталог'
-    categories = ProductCategory.objects.all()
+    categories = ProductCategory.objects.filter(is_active=True).all()
 
     discount_products = hot_deals()
     if pk is None:
@@ -31,9 +32,12 @@ def products(request, pk=None):
         products = discount_products
     elif not pk:
         # 0 os "All" category
-        products = Products.objects.all()
+        products = Products.objects.filter(is_active=True,
+                                           category__is_active=True).all()
     elif get_object_or_404(ProductCategory, pk=pk):
-        products = Products.objects.filter(category=pk).all()
+        products = Products.objects.filter(is_active=True,
+                                           category=pk,
+                                           category__is_active=True).all()
 
     return render(request, 'mainapp/products.html',
                   {
@@ -71,6 +75,8 @@ def contacts(request):
                 subject=feedback_form.data.get('subject', None),
                 body=feedback_form.data.get('body')
             ).save()
+    elif request.user.is_authenticated and request.user.email:
+        feedback_form = FeedBackForm({'email': request.user.email})
 
     return render(request, 'mainapp/contacts.html',
                   {'title': title,

@@ -2,7 +2,16 @@
 {% load static %}
 
 {% block content %}
-    <h1>Корзина</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center">
+        <h1>Корзина</h1>
+        <div>
+            <a class="without-decoration-a" href="{% url 'order:create' %}">
+                <button class="group-buttons btn btn-outline-secondary" type="submit">
+                    Создать заказ из корзины
+                </button>
+            </a>
+        </div>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>

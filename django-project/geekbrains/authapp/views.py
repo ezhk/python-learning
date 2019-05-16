@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
+from django.views.generic.edit import CreateView
 
 from authapp.forms import LoginForm, CreateForm, EditForm, ShopUserExtendedForm
 from authapp.models import ShopUser
@@ -35,35 +36,67 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-def create(request):
-    title = 'Все товары | Регистрация'
+class CreateShopUser(CreateView):
+    model = ShopUser
+    form_class = CreateForm
+    template_name = 'authapp/create.html'
 
-    if request.method == 'POST':
-        create_form = CreateForm(request.POST, request.FILES)
+    def get_context_data(self, **kwargs):
+        context = super(CreateShopUser, self).get_context_data(**kwargs)
+        context.update({'title': 'Все товары | Регистрация'})
+        return context
 
-        if create_form.is_valid():
-            user = create_form.save()
+    def form_valid(self, form):
+        if form.is_valid:
             try:
+                user = form.save()
                 if not send_verify_mail(user):
                     raise RuntimeError("Cannot send mail with verify code")
             except Exception as e:
-                return render(request, 'authapp/verify.html',
-                              {
-                                  'header': "Ошибка отправки email",
-                                  'error': f"Письмо не было отправлено: {e}"
-                              })
-            return render(request, 'authapp/verify.html',
-                          {
-                              'header': "Подтверждение email",
-                              'error': "Подтвердите свой электронный адрес по ссылке," + \
-                                       f"отправленной на адрес {user.email}",
-                          })
-            # return HttpResponseRedirect(reverse('auth:login'))
-    else:
-        create_form = CreateForm()
+                return render(self.request, 'authapp/verify.html',
+                              {'header': "Ошибка отправки email",
+                               'error': f"Письмо не было отправлено: {e}", })
 
-    return render(request, 'authapp/create.html', {'title': title,
-                                                   'create_form': create_form})
+            return render(self.request, 'authapp/verify.html',
+                          {'header': "Подтверждение email",
+                           'error': "Подтвердите свой электронный адрес по ссылке," + \
+                                    f"отправленной на адрес {user.email}", })
+
+        return super(CreateShopUser, self).form_valid(form)
+
+
+###
+# > Function create switched on CBV CreateShopUser
+# def create(request):
+#     title = 'Все товары | Регистрация'
+#
+#     if request.method == 'POST':
+#         create_form = CreateForm(request.POST, request.FILES)
+#
+#         if create_form.is_valid():
+#             user = create_form.save()
+#             try:
+#                 if not send_verify_mail(user):
+#                     raise RuntimeError("Cannot send mail with verify code")
+#             except Exception as e:
+#                 return render(request, 'authapp/verify.html',
+#                               {
+#                                   'header': "Ошибка отправки email",
+#                                   'error': f"Письмо не было отправлено: {e}"
+#                               })
+#             return render(request, 'authapp/verify.html',
+#                           {
+#                               'header': "Подтверждение email",
+#                               'error': "Подтвердите свой электронный адрес по ссылке," + \
+#                                        f"отправленной на адрес {user.email}",
+#                           })
+#             # return HttpResponseRedirect(reverse('auth:login'))
+#     else:
+#         create_form = CreateForm()
+#
+#     return render(request, 'authapp/create.html', {'title': title,
+#                                                    'create_form': create_form})
+###
 
 
 def edit(request):

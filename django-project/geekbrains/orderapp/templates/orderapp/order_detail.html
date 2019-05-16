@@ -1,0 +1,81 @@
+{% extends 'mainapp/include/base.html' %}
+{% load static %}
+{% load cart_extras %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center">
+        <h1>Заказ №{{ object.pk }}</h1>
+        <div>
+            <a class="without-decoration-a" href="{% url 'order:index' %}">
+                <button class="group-buttons btn btn-outline-secondary" type="submit">
+                    К списку заказов
+                </button>
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="cart-text cart-text-head">Товар</th>
+            <th scope="col" class="cart-text cart-text-head">Количество</th>
+            <th scope="col" class="cart-text cart-text-head">Cумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% with object.order.select_related as items %}
+            {% for item in items %}
+                <tr>
+                    <td scope="row" class="cart-table-td">
+                        <img class="product-image-order" src="{{ MEDIA_URL }}{{ item.product.image_preview }}"
+                             alt="image {{ item.product.name }}">
+                        <a class="menu-list-a cart-text" href="{% url 'products:detail' item.product.id %}">
+                            {{ item.product.name }}
+                        </a>
+                    </td>
+                    <td class="cart-text cart-table-td" id="quantity">
+                        <div class="mr-1 cart-input-quantity" type="number"
+                             name="{{ item.product.pk }}" value="{{ item.quantity }}">
+                            {{ item.quantity }}
+                        </div>
+                    </td>
+                    <td class="cart-text cart-table-td">
+                        {% widthratio item.product.price 1 item.quantity %}
+                        ({{ item.quantity }} x {{ item.product.price }})
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cart-table-td"><span class="cart-text cart-text-head">Итоговая сумма</span></td>
+                <td class="cart-table-td">
+                    <span class="cart-text cart-text-head">{{ items | summary_count }}</span>
+                </td>
+                <td class="cart-table-td">
+                    <span class="cart-text cart-text-head">{{ items| summary_price }}</span>
+                </td>
+            </tr>
+        {% endwith %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        {% if object.status == object.ORDER_STATUS_NEW %}
+            <a class="without-decoration-a"
+               href="{% url 'order:update_status' object.pk object.ORDER_STATUS_PROCESSING %}">
+                <button class="btn btn-outline-success mr-2" type="submit">
+                    Совершить покупку
+                </button>
+            </a>
+            <a class="without-decoration-a" href="{% url 'order:delete' object.pk %}">
+                <button class="btn btn-outline-danger" type="submit">
+                    Удалить заказ
+                </button>
+            </a>
+        {% endif %}
+    </div>
+
+{% endblock %}
