@@ -1,3 +1,4 @@
+from django.forms import inlineformset_factory
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -12,6 +13,8 @@ from authapp.models import ShopUser
 from mainapp.models import Products, ProductCategory
 
 from authapp.forms import CreateForm
+from orderapp.forms import OrderForm, OrderItemForm
+from orderapp.models import Order, OrderItem
 
 
 class IsSuperUserMixin(UserPassesTestMixin):
@@ -203,3 +206,29 @@ class ProductDelete(IsSuperUserMixin, DeleteView):
 
         # second time we remove category
         return super(ProductDelete, self).delete(request, *args, **kwargs)
+
+
+class OrderStatus(IsSuperUserMixin, UpdateView):
+    model = Order
+    fields = '__all__'
+    template_name = 'adminapp/order_update.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_formset = inlineformset_factory(Order, OrderItem, form=OrderForm, extra=0)
+
+        context['formset'] = order_formset(self.request.POST or None, instance=self.object)
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('admin:order_update', kwargs={'pk': self.kwargs.get('pk'), })
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+
+        if formset.is_valid():
+            formset.instance = form.save()
+            formset.save()
+
+        return super().form_valid(form)

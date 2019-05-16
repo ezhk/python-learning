@@ -32,9 +32,30 @@ class Order(models.Model):
                               choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_NEW)
     is_active = models.BooleanField(verbose_name='Активен', default=True)
 
+    def delete(self, using=None, keep_parents=False):
+        for item in self.order.select_related():
+            item.product.quantity += item.quantity
+            item.product.save()
+        return super().delete(using, keep_parents)
+
+
+class OrderItemQuerySet(models.QuerySet):
+    def delete(self):
+        for order_item_object in self:
+            order_item_object.product.quantity += order_item_object.quantity
+            order_item_object.product.save()
+        return super().delete()
+
 
 class OrderItem(models.Model):
+    object = OrderItemQuerySet.as_manager()
     order = models.ForeignKey(Order, related_name='order', on_delete=models.CASCADE)
     product = models.ForeignKey(Products, related_name='product',
                                 verbose_name='Продукт', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='Количество', default=0)
+
+    def delete(self, using=None, keep_parents=False):
+        self.product.quantity += self.quantity
+        self.product.save()
+
+        return super().delete(using, keep_parents)

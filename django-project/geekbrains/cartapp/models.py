@@ -4,7 +4,18 @@ from django.conf import settings
 from mainapp.models import Products
 
 
+class ShopCartQuerySet(models.QuerySet):
+    def delete(self):
+        for cart_object in self:
+            cart_object.product.quantity += cart_object.quantity
+            cart_object.product.save()
+        return super().delete()
+
+
 class ShopCart(models.Model):
+    object = ShopCartQuerySet.as_manager()
+    objects = models.Manager()
+
     class Meta:
         unique_together = ('user', 'product')
         verbose_name = 'Корзина'
@@ -26,3 +37,18 @@ class ShopCart(models.Model):
         for cart_object in ShopCart.objects.filter(user=self.user).all():
             products_count += cart_object.quantity
         return products_count
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            changed_quantity = self.quantity - self.__class__.objects.get(pk=self.pk).quantity
+            self.product.quantity -= changed_quantity
+        else:
+            self.product.quantity -= self.quantity
+        self.product.save()
+        return super().save(*args, **kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        self.product.quantity += self.quantity
+        self.product.save()
+
+        return super().delete(using, keep_parents)
