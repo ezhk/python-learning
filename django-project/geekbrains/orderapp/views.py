@@ -48,6 +48,7 @@ class OrderCreate(CreateView):
                 form.initial.update({
                     'product': cart[id].product,
                     'quantity': cart[id].quantity,
+                    'price': cart[id].product.price,
                 })
 
         context['confirm_button'] = 'Оформить заказ'
@@ -82,8 +83,11 @@ class OrderUpdate(UpdateView):
                                              form=OrderItemForm, extra=1)
 
         context['confirm_button'] = 'Сохранить изменения'
-        context['formset'] = OrderFormSet(data=self.request.POST or None,
-                                          instance=self.object)
+        formset = OrderFormSet(data=self.request.POST or None, instance=self.object)
+        for form in formset.forms:
+            if form.instance.pk:
+                form.initial.update({'price': form.instance.product.price})
+        context['formset'] = formset
         return context
 
     def form_valid(self, form):
