@@ -138,6 +138,17 @@ h1, h2, h3 {
     opacity: 0.5;
 }
 
+.add-row,
+.delete-row {
+    text-decoration: none;
+    color: darkgray;
+}
+
+.add-row:hover,
+.delete-row:hover {
+    text-decoration: underline;
+}
+
 .cart-link:hover,
 .cart-link-active {
     opacity: 1;
