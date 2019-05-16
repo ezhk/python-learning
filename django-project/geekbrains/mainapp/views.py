@@ -2,7 +2,7 @@ import sys
 
 from django.shortcuts import render, \
     get_object_or_404
-from django.http import HttpResponseNotFound, JsonResponse
+from django.http import HttpResponseNotFound, HttpResponse
 from django.core import serializers
 
 from mainapp.models import Products, \
@@ -51,17 +51,16 @@ def products(request, pk=None):
 
 def products_details(request, pk=None):
     title = 'Все товары | Описание'
-    if pk is not None:
+    if pk is None:
         HttpResponseNotFound("product ID not found")
 
-    product = Products.objects.get(pk=pk)
+    product = get_object_or_404(Products, pk=pk)
     properties = ProductAndProperty.objects.select_related(
         'property'
     ).filter(product=pk).all()
 
-    if request.META.get('CONTENT_TYPE', None) in ('text/json', 'application/json', ):
-        return JsonResponse({'product': serializers.serialize("json", (product, )),
-                             'properties': serializers.serialize("json", properties), })
+    if request.META.get('CONTENT_TYPE', None) in ('text/json', 'application/json',):
+        return HttpResponse(serializers.serialize("json", (product,)))
 
     return render(request, 'mainapp/product-detail.html',
                   {'title': title,

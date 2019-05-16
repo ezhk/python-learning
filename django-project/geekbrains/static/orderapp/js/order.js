@@ -23,7 +23,7 @@ window.onload = function () {
 
     function priceUpdate() {
         let productId = $(this).val();
-        let classId = '#' + $(this)[0].id.replace('product', 'price');
+        let updatingId = '#' + $(this)[0].id.replace('product', 'price');
 
         $.ajax(
             "/products/detail/" + productId,
@@ -35,14 +35,14 @@ window.onload = function () {
                     // process json
                     let price = 0;
                     try {
-                        let product = JSON.parse(data['product']);
+                        let product = JSON.parse(data);
                         price = product[0]['fields']['price'];
                     } catch (e) {
-                        console.log("cannot get product price, " + e.message);
+                        console.error("cannot get product price, " + e.message);
                     }
 
                     // store and update data
-                    $(classId).html(price.toString());
+                    $(updatingId).html(price.toString());
                     orderUpdate();
                 }
             }
