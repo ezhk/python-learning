@@ -85,7 +85,15 @@
         </div>
         <br>
         <div class="text-center">
-            <button class="btn btn-outline-secondary" type="submit" value="create">{{ confirm_button }}</button>
+            <button class="btn btn-outline-secondary mr-2" type="submit" value="create">{{ confirm_button }}</button>
+            {% if object.status == object.ORDER_STATUS_NEW %}
+                <a class="without-decoration-a"
+                   href="{% url 'order:read' object.pk %}">
+                    <div class="btn btn-outline-secondary" type="submit">
+                        Оформить покупку на странице заказа
+                    </div>
+                </a>
+            {% endif %}
         </div>
     </form>
 {% endblock %}
