@@ -59,8 +59,9 @@ def products_details(request, pk=None):
         'property'
     ).filter(product=pk).all()
 
-    if request.META.get('CONTENT_TYPE', None) in ('text/json', 'application/json',):
-        return HttpResponse(serializers.serialize("json", (product,)))
+    if request.is_ajax():
+        return HttpResponse(serializers.serialize("json", (product,),
+                                                  fields=('name', 'price', 'quantity',)))
 
     return render(request, 'mainapp/product-detail.html',
                   {'title': title,

@@ -28,9 +28,6 @@ window.onload = function () {
         $.ajax(
             "/products/detail/" + productId,
             {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 success: function (data) {
                     // process json
                     let price = 0;
