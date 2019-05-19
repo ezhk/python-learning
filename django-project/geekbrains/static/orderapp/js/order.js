@@ -1,3 +1,4 @@
+"use strict";
 window.onload = function () {
     $('.content').on('change', 'input[type="number"], input[type="checkbox"]', orderUpdate);
     $('.content').on('change', 'select', priceUpdate);
@@ -32,8 +33,11 @@ window.onload = function () {
                     // process json
                     let price = 0;
                     try {
-                        let product = JSON.parse(data);
-                        price = product[0]['fields']['price'];
+                        /*
+                            let product = JSON.parse(data);
+                            price = product[0]['fields']['price'];
+                         */
+                        price = data['price'];
                     } catch (e) {
                         console.error("cannot get product price, " + e.message);
                     }

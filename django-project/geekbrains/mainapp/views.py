@@ -2,8 +2,7 @@ import sys
 
 from django.shortcuts import render, \
     get_object_or_404
-from django.http import HttpResponseNotFound, HttpResponse
-from django.core import serializers
+from django.http import HttpResponseNotFound, JsonResponse
 
 from mainapp.models import Products, \
     ProductCategory, \
@@ -60,8 +59,11 @@ def products_details(request, pk=None):
     ).filter(product=pk).all()
 
     if request.is_ajax():
-        return HttpResponse(serializers.serialize("json", (product,),
-                                                  fields=('name', 'price', 'quantity',)))
+        return JsonResponse({'name': product.name,
+                             'price': product.price,
+                             'quantity': product.quantity})
+        # return HttpResponse(serializers.serialize("json", (product,),
+        #                                           fields=('name', 'price', 'quantity',)))
 
     return render(request, 'mainapp/product-detail.html',
                   {'title': title,
