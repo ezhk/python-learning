@@ -32,9 +32,49 @@ class Order(models.Model):
                               choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_NEW)
     is_active = models.BooleanField(verbose_name='Активен', default=True)
 
+    def get_quantity(self):
+        items = self.order.select_related()
+        return sum([item.quantity for item in items])
+
+    def get_cost(self):
+        items = self.order.select_related()
+        return sum([item.quantity * item.product.price for item in items])
+
+    # def delete(self, using=None, keep_parents=False):
+    #     for item in self.order.select_related():
+    #         item.product.quantity += item.quantity
+    #         item.product.save()
+    #     return super().delete(using, keep_parents)
+
+
+# class OrderItemQuerySet(models.QuerySet):
+#     def delete(self):
+#         for order_item_object in self:
+#             order_item_object.product.quantity += order_item_object.quantity
+#             order_item_object.product.save()
+#         return super().delete()
+
 
 class OrderItem(models.Model):
+    # object = OrderItemQuerySet.as_manager()
+    objects = models.Manager()
+
     order = models.ForeignKey(Order, related_name='order', on_delete=models.CASCADE)
     product = models.ForeignKey(Products, related_name='product',
                                 verbose_name='Продукт', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='Количество', default=0)
+
+    # def save(self, *args, **kwargs):
+    #     if self.pk:
+    #         changed_quantity = self.quantity - self.__class__.objects.get(pk=self.pk).quantity
+    #         self.product.quantity -= changed_quantity
+    #     else:
+    #         self.product.quantity -= self.quantity
+    #     self.product.save()
+    #     return super().save(*args, **kwargs)
+    #
+    # def delete(self, using=None, keep_parents=False):
+    #     self.product.quantity += self.quantity
+    #     self.product.save()
+    #
+    #     return super().delete(using, keep_parents)
