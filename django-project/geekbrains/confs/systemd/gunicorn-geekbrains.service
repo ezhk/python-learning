@@ -1,0 +1,22 @@
+[Unit]
+Description=Gunicorn geekbrains backend
+After=network.target auditd.service
+Before=nginx.service
+
+[Service]
+Environment=GEEKBRAINS_VENV=/opt/venvs/geekbrains
+Environment=GEEKBRAINS_DATA_DIR=/var/www/geekbrains
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/geekbrains
+ExecStart=/opt/venvs/geekbrains/bin/gunicorn --chdir=${GEEKBRAINS_DATA_DIR}                     \
+                                             --pythonpath=${GEEKBRAINS_VENV}/bin/python3        \
+                                             --workers 3                                        \
+                                             --bind unix:${GEEKBRAINS_DATA_DIR}/geekbrains.sock \
+                                             geekbrains.wsgi
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+Alias=geekbrains.service
