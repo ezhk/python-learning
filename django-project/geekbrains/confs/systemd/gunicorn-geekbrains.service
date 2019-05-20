@@ -13,6 +13,8 @@ ExecStart=/opt/venvs/geekbrains/bin/gunicorn --chdir=${GEEKBRAINS_DATA_DIR}     
                                              --pythonpath=${GEEKBRAINS_VENV}/bin/python3        \
                                              --workers 3                                        \
                                              --bind unix:${GEEKBRAINS_DATA_DIR}/geekbrains.sock \
+                                             --access-logfile gunicorn-access.log               \
+                                             --error-logfile gunicorn-error.log                 \
                                              geekbrains.wsgi
 Restart=on-failure
 RestartSec=5s

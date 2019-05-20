@@ -31,7 +31,7 @@ config.read(glob.glob(INCLUDE_CONFIGS))
 SECRET_KEY = config.get('DEFAULT', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ['127.0.0.1']

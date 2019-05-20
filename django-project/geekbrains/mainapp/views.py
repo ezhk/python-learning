@@ -92,10 +92,11 @@ def contacts(request):
 
 
 def page404(request, exception):
-    paths = [arg.get('path')
-             for arg in exception.args if arg.get('path', None) is not None]
+    # if hasattr(exception.args, 'get'):
+    #     paths = [arg.get('path')
+    #              for arg in exception.args if arg.get('path', None) is not None]
     return render(request, 'mainapp/page404.html',
-                  context={'exception_path': paths}, status=404)
+                  context={'exception': exception.args}, status=404)
 
 
 def page500(request):
