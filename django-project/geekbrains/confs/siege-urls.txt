@@ -1,0 +1,17 @@
+http://10.211.55.3/auth/ POST username=USER&password=PASSWORD
+http://10.211.55.3/
+http://10.211.55.3/admin/
+http://10.211.55.3/admin/products
+http://10.211.55.3/admin/users
+http://10.211.55.3/auth/edit
+http://10.211.55.3/cart/
+http://10.211.55.3/cart/update/1/quantity/10
+http://10.211.55.3/contacts/
+http://10.211.55.3/order/
+http://10.211.55.3/order/update/1
+http://10.211.55.3/order/update/2
+http://10.211.55.3/order/read/1
+http://10.211.55.3/products/
+http://10.211.55.3/products/category/1
+http://10.211.55.3/products/detail/1
+http://10.211.55.3/products/detail/2

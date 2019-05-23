@@ -1,6 +1,13 @@
 django==2.2
 django-crispy-forms==1.7.2
 django-debug-toolbar==1.11
+django-debug-toolbar-template-profiler==1.0.2
+
+# pydotplus & django-extensions (also install python3-graphviz deb package):
+#   manage.py graph_models -a -g -o geekshop_visualized.png
+django-extensions==2.1.7
+pydotplus==2.0.2
+
 pillow==6.0.0
 pip-chill==0.1.8
 psycopg2==2.8.2
