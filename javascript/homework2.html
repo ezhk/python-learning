@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework 1</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    window.onload = function () {
+        // first task
+        firstTask();
+
+        function firstTask() {
+            let a = 1, b = 1, c, d;
+            c = ++a;            // pre increment — make a = 2, and then c = a = 2
+            d = b++;            // post increment — make d = b = 1, then increment b++ => b = 2
+            c = 2 + ++a;        // make a = 3 (pre increment) and 2 + 3 = 5
+            d = 2 + b++;        // 2 + b (=2) = 4, then b = b+1 = 3
+            console.log(a);     // 3 -> look latest "c" operand
+            console.log(b);     // 3 -> look latest "d" operand
+        }
+
+        // second task
+        secondTask();
+
+        function secondTask() {
+            let a = 2;
+            let x = 1 + (a *= 2);   // 1 + (second_a *= 2) => 1 + (second_a = 2 * 2) => 1 + 4 = 5
+            console.log(x, a);       // 5 4
+        }
+
+        // third task
+        thirdTask();
+
+        function thirdTask() {
+            let a = getRandomInt();
+            let b = getRandomInt();
+
+            function getRandomInt() {
+                return Math.floor(Math.random() * 100 - 50);
+            }
+
+            if (a >= 0 && b >= 0) {
+                console.log(`${a} - ${b} = ${a - b}`);
+            } else if (a < 0 && b < 0) {
+                console.log(`${a} * ${b} = ${a * b}`);
+            } else if (a * b < 0) {
+                console.log(`${a} + ${b} = ${a + b}`);
+            }
+        }
+
+        // fourth task
+        fourthTask();
+
+        function fourthTask() {
+            let a = 13, b = 7;
+            console.log(`${a} + ${b} = ${add(a, b)}`);
+            console.log(`${a} - ${b} = ${sub(a, b)}`);
+            console.log(`${a} * ${b} = ${mul(a, b)}`);
+            console.log(`${a} / ${b} = ${div(a, b)}`);
+        }
+
+        function add(a, b) {
+            return a + b;
+        }
+
+        function sub(a, b) {
+            return a - b;
+        }
+
+        function mul(a, b) {
+            return a * b;
+        }
+
+        function div(a, b) {
+            return a / b;
+        }
+
+        // fifth Task
+        fifthTask();
+
+        function fifthTask() {
+            let a = 57, b = -7;
+            console.log(`${a} + ${b} = ${mathOperation(a, b, '+')}`);
+            console.log(`${a} - ${b} = ${mathOperation(a, b, '-')}`);
+            console.log(`${a} * ${b} = ${mathOperation(a, b, '*')}`);
+            console.log(`${a} / ${b} = ${mathOperation(a, b, '/')}`);
+        }
+
+        function mathOperation(arg1, arg2, operation) {
+            switch (operation) {
+                case '+':
+                    return add(arg1, arg2);
+                case '-':
+                    return sub(arg1, arg2);
+                case '*':
+                    return mul(arg1, arg2);
+                case '/':
+                    return div(arg1, arg2);
+            }
+            return NaN;
+        }
+
+        // sixth task
+        sixthTask();
+
+        function sixthTask() {
+            let inputValue = +prompt('Введите целое число');
+            document.writeln(`<h3 style="text-align: center">
+                Ваша сумма в ${inputValue} ${endingWord(inputValue)} успешно зачислена.</h3>`);
+        }
+
+        function endingWord(inputValue) {
+            if (typeof inputValue != 'number') {
+                return NaN;
+            }
+
+            // range x11..x19 — always 'рублей', without exception 'рубль', 'рубля'
+            let modHundred = inputValue % 100;
+            if (modHundred >= 11 && modHundred <= 19) {
+                return 'рублей';
+            }
+
+            let modTen = inputValue % 10;
+            if (modTen === 1)
+                return 'рубль';
+            if (modTen >= 2 && modTen <= 4)
+                return 'рубля';
+
+            return 'рублей';
+        }
+    }
+</script>
+</body>
+</html>
