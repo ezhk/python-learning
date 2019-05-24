@@ -82,12 +82,17 @@ class OrderUpdate(UpdateView):
         OrderFormSet = inlineformset_factory(Order, OrderItem,
                                              form=OrderItemForm, extra=1)
 
-        context['confirm_button'] = 'Сохранить изменения'
         formset = OrderFormSet(data=self.request.POST or None, instance=self.object)
         for form in formset.forms:
             if form.instance.pk:
                 form.initial.update({'price': form.instance.product.price})
-        context['formset'] = formset
+
+        context.update({
+            'confirm_button': 'Сохранить изменения',
+            'formset': formset,
+            'summary_cost': self.object.get_cost(),
+            'summary_quantity': self.object.get_quantity(),
+        })
         return context
 
     def form_valid(self, form):

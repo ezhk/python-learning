@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </a>
-                {% if discount_products|is_discount:product.pk %}
+                {% if product in discount_products %}
                     <div class="product-hot-deal text-center">-50%</div>
                 {% endif %}
             </div>

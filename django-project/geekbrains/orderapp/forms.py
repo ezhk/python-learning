@@ -17,7 +17,11 @@ class OrderItemForm(forms.ModelForm):
         model = OrderItem
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        self.products = Products.objects.filter(is_active=True).select_related()
+        super(OrderItemForm, self).__init__(*args, **kwargs)
+
     def get_initial_for_field(self, field, field_name):
         if field_name == 'product':
-            field.queryset = Products.objects.filter(is_active=True).all()
+            field.queryset = self.products
         return super(OrderItemForm, self).get_initial_for_field(field, field_name)

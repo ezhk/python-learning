@@ -34,7 +34,6 @@ SECRET_KEY = config.get('DEFAULT', 'SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-INTERNAL_IPS = ['127.0.0.1']
 
 # Application definition
 
@@ -52,19 +51,17 @@ INSTALLED_APPS = [
     'orderapp.apps.OrderappConfig',
     'social_django',
     'crispy_forms',
-    # 'debug_toolbar',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -105,9 +102,9 @@ DATABASES = {
     'default': {
         'NAME': 'geekshop',
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'django',
-        'PASSWORD': 'geekbrains',
-        'HOST': 'localhost'
+        'HOST': 'localhost',
+        'USER': config.get('DEFAULT', 'DATABASE_USER'),
+        'PASSWORD': config.get('DEFAULT', 'DATABASE_PASSWORD'),
     },
     'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -149,6 +146,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# prepare for manage.py collectstatic
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -212,3 +212,31 @@ EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+if DEBUG:
+    INTERNAL_IPS = ['127.0.0.1', '::1']
+    INSTALLED_APPS.extend(['debug_toolbar',
+                           'template_profiler_panel',
+                           'django_extensions'])
+    MIDDLEWARE.extend(['debug_toolbar.middleware.DebugToolbarMiddleware'])
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda *args: True,
+    }
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+        'template_profiler_panel.panels.template.TemplateProfilerPanel',
+
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]

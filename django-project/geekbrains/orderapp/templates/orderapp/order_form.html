@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    {% if object.get_quantity %}
+    {% if summary_quantity %}
         <div class="card" style="width: 24rem;">
             <div class="card-header">
                 Детали заказа
@@ -27,11 +27,11 @@
                 </tr>
                 <tr>
                     <td>Количество товара</td>
-                    <td class="order-products-quantity">{{ object.get_quantity }}</td>
+                    <td class="order-products-quantity">{{ summary_quantity }}</td>
                 </tr>
                 <tr>
                     <td>Стоимость товаров</td>
-                    <td class="order-products-cost">{{ object.get_cost }}</td>
+                    <td class="order-products-cost">{{ summary_cost }}</td>
                 </tr>
                 </tbody>
             </table>

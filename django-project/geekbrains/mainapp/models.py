@@ -8,7 +8,7 @@ class ProductCategory(models.Model):
 
     name = models.CharField(verbose_name='name of category', max_length=68, unique=True)
     description = models.CharField(verbose_name='description of category', max_length=128)
-    is_active = models.BooleanField(verbose_name='active', default=True)
+    is_active = models.BooleanField(verbose_name='active', default=True, db_index=True)
 
     def __str__(self):
         return f"{self.name} ({self.description})"
@@ -27,7 +27,7 @@ class Products(models.Model):
     image_preview = models.ImageField(upload_to='product-img', blank=True, default='product-img/blank-product.svg')
     price = models.DecimalField(verbose_name='product price', max_digits=8, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(verbose_name='stock quantity', default=0)
-    is_active = models.BooleanField(verbose_name='active', default=True)
+    is_active = models.BooleanField(verbose_name='active', default=True, db_index=True)
 
     def __str__(self):
         return f"{self.name} ({self.category.name}, {self.price})"
