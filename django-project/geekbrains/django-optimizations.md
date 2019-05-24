@@ -69,9 +69,10 @@ $ ./manage.py show_urls
 $ sudo apt-get install python3-graphviz  
 $ manage.py graph_models -a -g -o geekshop_visualized.png
 
-Результат: screenshots/geekshop_visualized.png
+Результат: [geekshop_visualized.png](screenshots/geekshop_visualized.png)
 
 # Siege
+[siege-urls.txt](confs/siege-urls.txt)  
 $ siege -f siege-urls.txt -d0 -r15 -c250
 
     ** SIEGE 4.0.4
@@ -131,7 +132,7 @@ $ siege -f siege-urls.txt -d0 -r15 -c250
 /order/update/2 — наиболее медленный URL,  
     только, на самом деле, это не очень правильная метрика, точнее она считается от затраченного  
     вренени на количество запросов, а поскольку мы ещё загружаем статику, то создается ощущение,  
-    что это URL работает быстрее /cart/update/1/quantity/10 — что ошибочно.
+    что это URL работает быстрее /cart/update/1/quantity/10 — что ошибочно.  
 
 ## Производительность оптимизаций
 Переключась между бранчами 2.5 и 2.6 может замерить profit от оптимизаций.
@@ -141,4 +142,54 @@ $ siege -f siege-urls.txt -d0 -r15 -c250
 | django-2.5 — до оптимизации   | /order/update/2               | 59992         | 313.55 secs   | 241.36        | 191.33 trans/sec | 1.26 secs      |
 | django-2.6 — после оптимизации| /order/update/2               | 60000         | 213.63 secs   | 238.43        | 280.86 trans/sec | 0.85 secs      |
 
-Также по результатам стрельб видно, что при текущих настройках может обслужить порядка 200 клиентов.
+Осталось определить какое одновременное количество пользователей мы можем обсжуливать с нашими запросами.  
+Отключаем parser: `parser = false`, в противном случае мы также скачиваем статику, как описано выше — на данном этапе это не нужно.  
+
+$ siege -f siege-urls.txt -i -d0 -r20 -c500
+
+    ** SIEGE 4.0.4
+    ** Preparing 500 concurrent users for battle.
+    The server is now under siege...
+    Transactions:		       10969 hits
+    Availability:		       98.68 %
+    Elapsed time:		      219.09 secs
+    Data transferred:	       93.33 MB
+    Response time:		        9.75 secs
+    Transaction rate:	       50.07 trans/sec
+    Throughput:		        0.43 MB/sec
+    Concurrency:		      487.99
+    Successful transactions:       10415
+    Failed transactions:	         147
+    Longest transaction:	       60.02
+    Shortest transaction:	        0.05
+
+siege -f siege-urls.txt -i -d0 -r20 -c450
+
+    ** SIEGE 4.0.4
+    ** Preparing 450 concurrent users for battle.
+    The server is now under siege...
+    Transactions:		        9900 hits
+    Availability:		      100.00 %
+    Elapsed time:		      200.61 secs
+    Data transferred:	       86.24 MB
+    Response time:		        8.96 secs
+    Transaction rate:	       49.35 trans/sec
+    Throughput:		        0.43 MB/sec
+    Concurrency:		      442.22
+    Successful transactions:        9295
+    Failed transactions:	           0
+    Longest transaction:	       56.72
+    Shortest transaction:	        0.40
+
+Ключевых параметра два:
+- Transaction rate: 49.35 trans/sec, то есть мы можем обслужить порядка 50 запросов с секунду (для наших запросов);
+- Concurrency: 442.22 — сколько одновременно пользователей мы можем обслужить (зависит от размера backlog, метрика не очень показательна).
+
+Оптимизация с индексами: `db_index=True`.
+
+$ siege "http://10.211.55.3/products/category/0" -i -d0 -r20 -c200
+
+| migrations/0008_auto_20190523_2259.py | Transaction rate |
+|---------------------------------------|------------------|
+| before                                | 81.22 trans/sec  |
+| after                                 | 101.37 trans/sec |
