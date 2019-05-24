@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework 1</title>
+</head>
+<body>
+<script>
+    "use strict";
+    window.onload = function () {
+        // first task
+        function cToF(celsuisTemp) {
+            let fahrenheitTemp = (9 / 5) * celsuisTemp + 32;
+            return fahrenheitTemp;
+        }
+
+        let inputCelsuisTemp = prompt("Input temperature in celsuius");
+        console.log(cToF(inputCelsuisTemp));
+
+        // second task
+        let name = 'Василий', admin;
+        admin = name;
+        console.log(admin);
+
+        // third task
+        console.log(10 + 10 + "10");    // 20 + "10" -> string -> "2010"
+        console.log(10 + "10" + 10);    // like a previous, but 10 + "10" + 10 -> "1010" + 10 -> "101010"
+        console.log(10 + 10 + +"10");   // 20 + +"10" -> convert +"10" to 10 -> 20 + 10 -> 30
+        console.log(10 / -"");          // "" with - or + converted to Int -0 or 0;
+                                        // Number/0 -> Infinite; 10 / -0 -> -Infinite
+        console.log(10 / +"2,5");       // +"2,5" -> Not a number, because float must be contain dot -> +"2.5";
+                                        // Number/Nan -> Nan
+
+        // fourth task
+        // async - processing DOM and download JS in parallel, but execute script WHEN DOWNLOAD this script
+        // defer - processing DOM and download JS in parallel, but execute script AFTER PARSE HTML (DOM has built)
+
+        // fifth task
+        let inputNumber = prompt('Input ticket number (6 digits)');
+        let firstSum = 0, secondSum = 0;
+        let skipCount = 0;
+        for (let i = 0; i < inputNumber.length; i++) {
+            let currentInt = parseInt(inputNumber.charAt(i));
+            // skip not a number value
+            if (isNaN(currentInt)) {
+                skipCount++;
+                continue;
+            }
+
+            if (i < 3 + skipCount) {
+                firstSum += parseInt(inputNumber.charAt(i));
+            } else if (i < 6 + skipCount) {
+                secondSum += parseInt(inputNumber.charAt(i));
+            }
+        }
+        if (firstSum === secondSum) {
+            console.log("Счастливый билет, сумма его половин из первых 6 чисел одинакова");
+        }
+        console.debug(`firstSum = ${firstSum}, secondSum = ${secondSum}`);
+    }
+</script>
+</body>
+</html>
