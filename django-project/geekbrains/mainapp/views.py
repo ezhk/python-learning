@@ -2,8 +2,7 @@ import sys
 
 from django.shortcuts import render, \
     get_object_or_404
-from django.http import HttpResponseNotFound, HttpResponse
-from django.core import serializers
+from django.http import HttpResponseNotFound, JsonResponse
 
 from mainapp.models import Products, \
     ProductCategory, \
@@ -59,8 +58,12 @@ def products_details(request, pk=None):
         'property'
     ).filter(product=pk).all()
 
-    if request.META.get('CONTENT_TYPE', None) in ('text/json', 'application/json',):
-        return HttpResponse(serializers.serialize("json", (product,)))
+    if request.is_ajax():
+        return JsonResponse({'name': product.name,
+                             'price': product.price,
+                             'quantity': product.quantity})
+        # return HttpResponse(serializers.serialize("json", (product,),
+        #                                           fields=('name', 'price', 'quantity',)))
 
     return render(request, 'mainapp/product-detail.html',
                   {'title': title,
@@ -89,10 +92,11 @@ def contacts(request):
 
 
 def page404(request, exception):
-    paths = [arg.get('path')
-             for arg in exception.args if arg.get('path', None) is not None]
+    # if hasattr(exception.args, 'get'):
+    #     paths = [arg.get('path')
+    #              for arg in exception.args if arg.get('path', None) is not None]
     return render(request, 'mainapp/page404.html',
-                  context={'exception_path': paths}, status=404)
+                  context={'exception': exception.args}, status=404)
 
 
 def page500(request):

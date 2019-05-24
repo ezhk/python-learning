@@ -31,7 +31,7 @@ config.read(glob.glob(INCLUDE_CONFIGS))
 SECRET_KEY = config.get('DEFAULT', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ['127.0.0.1']
@@ -103,6 +103,13 @@ WSGI_APPLICATION = 'geekbrains.wsgi.application'
 
 DATABASES = {
     'default': {
+        'NAME': 'geekshop',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'django',
+        'PASSWORD': 'geekbrains',
+        'HOST': 'localhost'
+    },
+    'sqlite3': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
