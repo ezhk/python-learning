@@ -1,5 +1,6 @@
 import sys
 
+from django.core.cache import cache
 from django.shortcuts import render, \
     get_object_or_404
 from django.http import HttpResponseNotFound, JsonResponse
@@ -18,13 +19,30 @@ def main(request):
 
 
 def products(request, pk=None):
+    def get_menu_categories():
+        key = 'menu-categories'
+        return cache.get_or_set(key,
+                                ProductCategory.objects.filter(
+                                    is_active=True
+                                ).all(),
+                                timeout=1800)
+
+    def get_all_products():
+        key = 'all-products'
+        return cache.get_or_set(key,
+                                Products.objects.filter(
+                                    is_active=True,
+                                    category__is_active=True
+                                ).select_related('category'),
+                                timeout=120)
+
     def hot_deals():
         """Logic hot deals: get first random element"""
         return Products.objects.filter(is_active=True,
                                        category__is_active=True).order_by('?').all()[:1]
 
     title = 'Все товары | Каталог'
-    categories = ProductCategory.objects.filter(is_active=True).all()
+    # categories = ProductCategory.objects.filter(is_active=True).all()
 
     discount_products = hot_deals()
     if pk is None:
@@ -32,8 +50,7 @@ def products(request, pk=None):
         products = discount_products
     elif not pk:
         # 0 os "All" category
-        products = Products.objects.filter(is_active=True,
-                                           category__is_active=True).all()
+        products = get_all_products()
     elif get_object_or_404(ProductCategory, pk=pk):
         products = Products.objects.filter(is_active=True,
                                            category=pk,
@@ -44,16 +61,22 @@ def products(request, pk=None):
                       'title': title,
                       'products': products,
                       'discount_products': discount_products,
-                      'categories': categories
+                      'categories': get_menu_categories()
                   })
 
 
 def products_details(request, pk=None):
+    def get_product(pk):
+        key = f'product-{pk}'
+        return cache.get_or_set(key,
+                                get_object_or_404(Products, pk=pk),
+                                timeout=3600)
+
     title = 'Все товары | Описание'
     if pk is None:
         HttpResponseNotFound("product ID not found")
 
-    product = get_object_or_404(Products, pk=pk)
+    product = get_product(pk)
     properties = ProductAndProperty.objects.select_related(
         'property'
     ).filter(product=pk).all()
