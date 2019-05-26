@@ -1,6 +1,8 @@
 from django.db import models
 
 from django.conf import settings
+from django.utils.functional import cached_property
+
 from mainapp.models import Products
 
 
@@ -32,27 +34,15 @@ class Order(models.Model):
                               choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_NEW)
     is_active = models.BooleanField(verbose_name='Активен', default=True)
 
+    @cached_property
+    def get_order(self):
+        return self.order.select_related()
+
     def get_cost(self):
-        items = self.order.select_related()
-        return sum([item.quantity * item.product.price for item in items])
+        return sum([item.quantity * item.product.price for item in self.get_order])
 
     def get_quantity(self):
-        items = self.order.select_related()
-        return sum([item.quantity for item in items])
-
-    # def delete(self, using=None, keep_parents=False):
-    #     for item in self.order.select_related():
-    #         item.product.quantity += item.quantity
-    #         item.product.save()
-    #     return super().delete(using, keep_parents)
-
-
-# class OrderItemQuerySet(models.QuerySet):
-#     def delete(self):
-#         for order_item_object in self:
-#             order_item_object.product.quantity += order_item_object.quantity
-#             order_item_object.product.save()
-#         return super().delete()
+        return sum([item.quantity for item in self.get_order])
 
 
 class OrderItem(models.Model):
