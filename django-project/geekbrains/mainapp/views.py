@@ -4,6 +4,7 @@ from django.core.cache import cache
 from django.shortcuts import render, \
     get_object_or_404
 from django.http import HttpResponseNotFound, JsonResponse
+from django.template.loader import render_to_string
 
 from mainapp.models import Products, \
     ProductCategory, \
@@ -21,20 +22,25 @@ def main(request):
 def products(request, pk=None):
     def get_menu_categories():
         key = 'menu-categories'
-        return cache.get_or_set(key,
-                                ProductCategory.objects.filter(
-                                    is_active=True
-                                ).all(),
-                                timeout=1800)
+        # radis API couldn't support get_or_set :/
+        if not cache.get(key):
+            cache.set(key,
+                      ProductCategory.objects.filter(
+                          is_active=True
+                      ).all(),
+                      timeout=1800)
+        return cache.get(key)
 
     def get_all_products():
         key = 'all-products'
-        return cache.get_or_set(key,
-                                Products.objects.filter(
-                                    is_active=True,
-                                    category__is_active=True
-                                ).select_related('category'),
-                                timeout=120)
+        if not cache.get(key):
+            cache.set(key,
+                      Products.objects.filter(
+                          is_active=True,
+                          category__is_active=True
+                      ).select_related('category').all(),
+                      timeout=120)
+        return cache.get(key)
 
     def hot_deals():
         """Logic hot deals: get first random element"""
@@ -55,6 +61,17 @@ def products(request, pk=None):
         products = Products.objects.filter(is_active=True,
                                            category=pk,
                                            category__is_active=True).all()
+
+    if request.is_ajax():
+        return JsonResponse({'result': render_to_string('mainapp/include/product-list.html',
+                                                        request=request,
+                                                        context={
+                                                            'title': title,
+                                                            'products': products,
+                                                            'discount_products': discount_products,
+                                                            'categories': get_menu_categories(),
+                                                            'active_category_pk': pk,
+                                                        })})
 
     return render(request, 'mainapp/products.html',
                   {
