@@ -243,7 +243,7 @@ if DEBUG:
 
 CACHES = {
     'default': {
-        # radis API couldn't support get_or_set :/
+        # redis API couldn't support get_or_set :/
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': '127.0.0.1:6379',
         'OPTIONS': {

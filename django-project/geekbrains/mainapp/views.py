@@ -56,7 +56,6 @@ def products(request, pk=None):
                   [random.choice(get_all_products())],
                   timeout=120)
         return cache.get(key)
-        # more slower case
         # return Products.objects.filter(is_active=True,
         #                                category__is_active=True).order_by('?').all()[:1]
 
@@ -91,9 +90,13 @@ def products(request, pk=None):
 def products_details(request, pk=None):
     def get_product(pk):
         key = f'product-{pk}'
-        return cache.get_or_set(key,
-                                get_object_or_404(Products, pk=pk),
-                                timeout=3600)
+        cached_value = cache.get(key, None)
+        if cached_value is not None:
+            return cached_value
+        cache.set(key,
+                  get_object_or_404(Products, pk=pk),
+                  timeout=3600)
+        return cache.get(key)
 
     title = 'Все товары | Описание'
     if pk is None:
