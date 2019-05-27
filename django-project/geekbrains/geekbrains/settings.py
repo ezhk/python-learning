@@ -31,7 +31,7 @@ config.read(glob.glob(INCLUDE_CONFIGS))
 SECRET_KEY = config.get('DEFAULT', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -243,6 +243,7 @@ if DEBUG:
 
 CACHES = {
     'default': {
+        # radis API couldn't support get_or_set :/
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': '127.0.0.1:6379',
         'OPTIONS': {

@@ -6,8 +6,8 @@
                 <li class="menu-subcategories-li">
                     <a href="{% url 'products:category' pk=category.pk %}"
                        class="menu-subcategories-a
-                {% if request.resolver_match.view_name == 'products:category' and request.resolver_match.kwargs.pk == category.pk %} active-subcategory
-                {% elif active_category_pk == category.pk %} active-subcategory
+                {% if 'products:category' in request.resolver_match.view_name and request.resolver_match.kwargs.pk == category.pk %}
+                    active-subcategory
                 {% endif %}">
                         {{ category.name | upper }}
                     </a>
