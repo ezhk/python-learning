@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework 3</title>
+</head>
+<body>
+<script>
+    "use strict;"
+
+    firstTask();
+    secondTask();
+    thirdTask();
+    fourthTask();
+    fifthTask();
+
+    /**
+     * С помощью цикла do…while написать алгоритм для вывода чисел от 0 до 10 включительно,
+     * чтобы результат выглядел так:
+     *  0 – это ноль
+     *  1 – нечетное число
+     *  2 – четное число
+     *  3 – нечетное число
+     *  ...
+     *  10 – четное число
+     */
+    function firstTask() {
+        console.log('\nПервое задание:');
+        let i = 0;
+        do {
+            if (i === 0) {
+                description = 'это ноль';
+            } else if (i % 2 === 0) {
+                description = 'четное число';
+            } else {
+                description = 'нечетное число';
+            }
+            console.log(`${i} - ${description}`);
+            i++;
+        } while (i <= 10);
+    }
+
+    /**
+     * Вывести с помощью цикла for числа от 0 до 9, НЕ используя тело цикла.
+     * То есть выглядеть должно вот так:
+     *  for(...) {empty;}
+     */
+    function secondTask() {
+        console.log('\nВторое задание:');
+        for (let i = 0; i < 10; console.log(`for: ${i}`), i++) ;
+        {
+            // empty;
+        }
+    }
+
+    /**
+     * Нарисовать горку с помощью console.log (используя цикл for),
+     * как показано на рисунке (20 рядов):
+     * x
+     * xxx
+     * xxxxx
+     * xxxxxxx
+     * ...
+     */
+    function thirdTask() {
+        console.log('\nТретье задание:');
+        for (let i = 1; i <= 20; i++) {
+            console.log('x'.repeat(i * 2 - 1));
+        }
+    }
+
+
+    /**
+     * С помощью цикла while вывести все простые числа в промежутке от 0 до 100.
+     * Сложность: n * log(n)
+     */
+    function fourthTask() {
+        console.log('\nЧетвертое задание:');
+        const maxValue = 100;
+        let arrWithNumbers = [];
+
+        let smallestFactor = getSmallestFactors(maxValue);
+        for (let i = 2; i <= maxValue; i++) {
+            if (!isElementHasFactor(i, smallestFactor))
+                arrWithNumbers.push(i);
+        }
+
+        console.log(smallestFactor.concat(arrWithNumbers).join(' '));
+    }
+
+    /**
+     * Функция ищет простые множители для диапазона чисел в пределах maxValue
+     * @param {number} maxValue
+     * @returns {number[]} набор простых множителей
+     */
+    function getSmallestFactors(maxValue) {
+        let innerArrWithSimpleNumbers = [];
+
+        // ноль — составное число, его не учитываем
+        // 1 — не простое число, у него только один делитель — не учитываем
+        for (let i = 2; i <= Math.floor(Math.sqrt(maxValue)); i++) {
+            if (!isElementHasFactor(i, innerArrWithSimpleNumbers))
+                innerArrWithSimpleNumbers.push(i);
+        }
+
+        return innerArrWithSimpleNumbers;
+    }
+
+    /**
+     * Функция проверяет если ли множитель для числа element из массива чисел factorArray
+     * @param {number} element
+     * @param {number[]} factorArray
+     * @return {boolean} возвращает true, если множитель найден, и false в противном случае
+     */
+    function isElementHasFactor(element, factorArray) {
+        for (const value of factorArray) {
+            if (element % value === 0)
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * const arr = [
+     *     [2, 4, 6],
+     *     [1, 5, 10],
+     *     [7, 4, 1],
+     * ];
+     * Задания:
+     * 1 Найти массив, у которого сумма всех чисел максимальна, вывести в console.log
+     * индекс этого массива.
+     * 2 Получить и вывести в console.log минимальное значение найденное в массиве,
+     * который мы получили в первом пункте.
+     */
+    function fifthTask() {
+        console.log('\nПятое задание:');
+        const arr = [
+            [2, 4, 6],
+            [1, 5, 10],
+            [7, 4, 1],
+        ];
+
+        let resultHashmap = {
+            'max_value': null,
+            'max_array': [],
+            'max_value_index': null,
+            'min_value': null,
+            'min_array': [],
+            'min_value_index': null,
+        };
+
+        for (const idx in arr) {
+            const sumElements = arr[idx].reduce((previousValue, currentValue) => previousValue + currentValue);
+            if (resultHashmap.max_value === null || sumElements > resultHashmap.max_value) {
+                resultHashmap.max_value = sumElements;
+                resultHashmap.max_array = arr[idx];
+                resultHashmap.max_value_index = idx;
+            } else if (resultHashmap.min_value === null || sumElements < resultHashmap.min_value) {
+                resultHashmap.min_value = sumElements;
+                resultHashmap.min_array = arr[idx];
+                resultHashmap.min_value_index = idx;
+            }
+        }
+
+        if (resultHashmap.max_value !== null) {
+            console.log(`Максимальная сумма элеметнов массива: ${resultHashmap.max_value}
+            массив: [${resultHashmap.max_array.join(', ')}]
+            индекс массива: ${resultHashmap.max_value_index}`);
+        }
+
+        if (resultHashmap.min_value !== null) {
+            console.log(`Минимальная сумма элеметнов массива: ${resultHashmap.min_value}
+            массив: [${resultHashmap.min_array.join(', ')}]
+            индекса массив: ${resultHashmap.min_value_index}`);
+        }
+    }
+</script>
+</body>
+</html>
