@@ -1,8 +1,11 @@
 import sys
 
+from django.core.cache import cache
 from django.shortcuts import render, \
     get_object_or_404
 from django.http import HttpResponseNotFound, JsonResponse
+from django.template.loader import render_to_string
+from django.utils.crypto import random
 
 from mainapp.models import Products, \
     ProductCategory, \
@@ -18,42 +21,88 @@ def main(request):
 
 
 def products(request, pk=None):
+    def get_menu_categories():
+        key = 'menu-categories'
+        cached_value = cache.get(key, None)
+        if cached_value is not None:
+            return cached_value
+        cache.set(key,
+                  ProductCategory.objects.filter(
+                      is_active=True
+                  ).all(),
+                  timeout=1800)
+        return cache.get(key)
+
+    def get_all_products():
+        key = 'all-products'
+        cached_value = cache.get(key, None)
+        if cached_value is not None:
+            return cached_value
+        cache.set(key,
+                  Products.objects.filter(
+                      is_active=True,
+                      category__is_active=True
+                  ).select_related('category').all(),
+                  timeout=120)
+        return cache.get(key)
+
     def hot_deals():
         """Logic hot deals: get first random element"""
-        return Products.objects.filter(is_active=True,
-                                       category__is_active=True).order_by('?').all()[:1]
+        key = 'products-hot-deals'
+        cached_value = cache.get(key, None)
+        if cached_value is not None:
+            return cached_value
+        cache.set(key,
+                  [random.choice(get_all_products())],
+                  timeout=120)
+        return cache.get(key)
+        # return Products.objects.filter(is_active=True,
+        #                                category__is_active=True).order_by('?').all()[:1]
 
     title = 'Все товары | Каталог'
-    categories = ProductCategory.objects.filter(is_active=True).all()
+    # categories = ProductCategory.objects.filter(is_active=True).all()
 
     discount_products = hot_deals()
     if pk is None:
         # welcome products page — hot deal will be here
         products = discount_products
     elif not pk:
-        # 0 os "All" category
-        products = Products.objects.filter(is_active=True,
-                                           category__is_active=True).all()
+        # 0 as "All" category
+        products = get_all_products()
     elif get_object_or_404(ProductCategory, pk=pk):
-        products = Products.objects.filter(is_active=True,
-                                           category=pk,
-                                           category__is_active=True).all()
+        products = get_all_products().filter(category=pk)
+
+    context = {
+        'title': title,
+        'products': products,
+        'discount_products': discount_products,
+        'categories': get_menu_categories(),
+    }
+    if request.is_ajax():
+        return JsonResponse({'result': render_to_string('mainapp/include/product-list.html',
+                                                        request=request,
+                                                        context=context)})
 
     return render(request, 'mainapp/products.html',
-                  {
-                      'title': title,
-                      'products': products,
-                      'discount_products': discount_products,
-                      'categories': categories
-                  })
+                  context=context)
 
 
 def products_details(request, pk=None):
+    def get_product(pk):
+        key = f'product-{pk}'
+        cached_value = cache.get(key, None)
+        if cached_value is not None:
+            return cached_value
+        cache.set(key,
+                  get_object_or_404(Products, pk=pk),
+                  timeout=3600)
+        return cache.get(key)
+
     title = 'Все товары | Описание'
     if pk is None:
         HttpResponseNotFound("product ID not found")
 
-    product = get_object_or_404(Products, pk=pk)
+    product = get_product(pk)
     properties = ProductAndProperty.objects.select_related(
         'property'
     ).filter(product=pk).all()

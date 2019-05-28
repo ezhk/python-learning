@@ -1,6 +1,7 @@
 {% extends 'mainapp/include/base.html' %}
 {% load static %}
 {% load cart_extras %}
+{% load cache %}
 
 {% block content %}
     <div style="display: flex; justify-content: space-between; align-items: center">
@@ -65,9 +66,11 @@
                                         {{ hidden }}
                                     {% endfor %}
                                 {% endif %}
-                                {% if field.name != 'price' %}
-                                    {{ field }}
-                                {% else %}
+                                {% if field.name == 'product' %}
+                                    {% cache 1800 orderform-product field.value %}
+                                        {{ field }}
+                                    {% endcache %}
+                                {% elif field.name == 'price' %}
                                     <div id="{{ field.id_for_label }}"
                                          name="{{ field.html_name }}">
                                         {% if field.value %}
@@ -76,6 +79,8 @@
                                             0
                                         {% endif %}
                                     </div>
+                                {% else %}
+                                    {{ field }}
                                 {% endif %}
                             </td>
                         {% endfor %}

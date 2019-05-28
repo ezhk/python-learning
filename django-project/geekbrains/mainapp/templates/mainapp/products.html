@@ -3,41 +3,10 @@
 {% load main_extras %}
 
 {% block content %}
-    <div class="products-header">
-        <h1>Каталог</h1>
-        <ul class="menu-subcategories">
-            {% for category in categories %}
-                <li class="menu-subcategories-li">
-                    <a class="menu-subcategories-a
-                {% if request.resolver_match.view_name == 'products:category' and request.resolver_match.kwargs.pk == category.pk %}
-                    active-subcategory
-                {% endif %}"
-                       href="{% url 'products:category' pk=category.pk %}">
-                        {{ category.name | upper }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'mainapp/include/product-list.html' %}
+{% endblock %}
 
-    <div class="products">
-        {% for product in products %}
-            <div class="product-container">
-                <a class="product-view" style="text-decoration: none; color: black"
-                   href="{% url 'products:detail' pk=product.pk %}">
-                    <div class="product-view-a">
-                        <div class="product-view-img">
-                            <img class="product-view-img" src="{{ product.image_preview.url }}" alt="Dyson V7">
-                        </div>
-                        <div class="product-view-desc">
-                            {{ product.name }}
-                        </div>
-                    </div>
-                </a>
-                {% if product in discount_products %}
-                    <div class="product-hot-deal text-center">-50%</div>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
+{% block js %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'mainapp/js/products.js' %}"></script>
 {% endblock %}

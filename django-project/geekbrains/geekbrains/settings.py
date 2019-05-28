@@ -240,3 +240,25 @@ if DEBUG:
         'debug_toolbar.panels.logging.LoggingPanel',
         'debug_toolbar.panels.redirects.RedirectsPanel',
     ]
+
+CACHES = {
+    'default': {
+        # redis API couldn't support get_or_set :/
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': '127.0.0.1:6379',
+        'OPTIONS': {
+            'SOCKET_TIMEOUT': 5,
+            'SOCKET_CONNECT_TIMEOUT': 5,
+            'DB': 1,
+
+            'COMPRESSOR_CLASS': 'redis_cache.compressors.BZip2Compressor',
+            'COMPRESSOR_CLASS_KWARGS': {
+                'compresslevel': 5,
+            },
+
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'PICKLE_VERSION': -1,
+        },
+    },
+}

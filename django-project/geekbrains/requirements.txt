@@ -1,4 +1,8 @@
 django==2.2
+
+django-redis-cache==2.0.0
+hiredis==1.0.0
+
 django-crispy-forms==1.7.2
 django-debug-toolbar==1.11
 django-debug-toolbar-template-profiler==1.0.2
