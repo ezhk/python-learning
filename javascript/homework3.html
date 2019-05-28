@@ -25,7 +25,7 @@
      *  10 – четное число
      */
     function firstTask() {
-        console.log('\nПервое задание:');
+        console.log(`Первое задание — ${arguments.callee.name}:`);
         let i = 0;
         do {
             if (i === 0) {
@@ -46,7 +46,7 @@
      *  for(...) {empty;}
      */
     function secondTask() {
-        console.log('\nВторое задание:');
+        console.log(`\nВторое задание — ${arguments.callee.name}:`);
         for (let i = 0; i < 10; console.log(`for: ${i}`), i++) ;
         {
             // empty;
@@ -63,7 +63,7 @@
      * ...
      */
     function thirdTask() {
-        console.log('\nТретье задание:');
+        console.log(`\nТретье задание — ${arguments.callee.name}:`);
         for (let i = 1; i <= 20; i++) {
             console.log('x'.repeat(i * 2 - 1));
         }
@@ -75,7 +75,7 @@
      * Сложность: n * log(n)
      */
     function fourthTask() {
-        console.log('\nЧетвертое задание:');
+        console.log(`\nЧетвертое задание — ${arguments.callee.name}:`);
         const maxValue = 100;
         let arrWithNumbers = [];
 
@@ -133,7 +133,7 @@
      * который мы получили в первом пункте.
      */
     function fifthTask() {
-        console.log('\nПятое задание:');
+        console.log(`\nПятое задание — ${arguments.callee.name}:`);
         const arr = [
             [2, 4, 6],
             [1, 5, 10],
@@ -163,15 +163,15 @@
         }
 
         if (resultHashmap.max_value !== null) {
-            console.log(`Максимальная сумма элеметнов массива: ${resultHashmap.max_value}
-            массив: [${resultHashmap.max_array.join(', ')}]
-            индекс массива: ${resultHashmap.max_value_index}`);
+            console.log(`Максимальная сумма элеметнов массива: ${resultHashmap.max_value}`
+                        + `\n\tмассив: [${resultHashmap.max_array.join(', ')}]`
+                        + `\n\tиндекс массива: ${resultHashmap.max_value_index}`);
         }
 
         if (resultHashmap.min_value !== null) {
-            console.log(`Минимальная сумма элеметнов массива: ${resultHashmap.min_value}
-            массив: [${resultHashmap.min_array.join(', ')}]
-            индекса массив: ${resultHashmap.min_value_index}`);
+            console.log(`Минимальная сумма элеметнов массива: ${resultHashmap.min_value}`
+                        + `\n\tмассив: [${resultHashmap.min_array.join(', ')}]`
+                        + `\n\tиндекса массив: ${resultHashmap.min_value_index}`);
         }
     }
 </script>
