@@ -6,7 +6,7 @@
 </head>
 <body>
 <script>
-    "use strict;"
+    "use strict";
 
     firstTask();
     secondTask();
@@ -25,9 +25,10 @@
      *  10 – четное число
      */
     function firstTask() {
-        console.log(`Первое задание — ${arguments.callee.name}:`);
+        console.log(`Первое задание:`);
         let i = 0;
         do {
+            let description;
             if (i === 0) {
                 description = 'это ноль';
             } else if (i % 2 === 0) {
@@ -46,7 +47,7 @@
      *  for(...) {empty;}
      */
     function secondTask() {
-        console.log(`\nВторое задание — ${arguments.callee.name}:`);
+        console.log(`\nВторое задание:`);
         for (let i = 0; i < 10; console.log(`for: ${i}`), i++) ;
         {
             // empty;
@@ -63,7 +64,7 @@
      * ...
      */
     function thirdTask() {
-        console.log(`\nТретье задание — ${arguments.callee.name}:`);
+        console.log(`\nТретье задание:`);
         for (let i = 1; i <= 20; i++) {
             console.log('x'.repeat(i * 2 - 1));
         }
@@ -75,7 +76,7 @@
      * Сложность: n * log(n)
      */
     function fourthTask() {
-        console.log(`\nЧетвертое задание — ${arguments.callee.name}:`);
+        console.log(`\nЧетвертое задание:`);
         const maxValue = 100;
         let arrWithNumbers = [];
 
@@ -133,7 +134,7 @@
      * который мы получили в первом пункте.
      */
     function fifthTask() {
-        console.log(`\nПятое задание — ${arguments.callee.name}:`);
+        console.log(`\nПятое задание:`);
         const arr = [
             [2, 4, 6],
             [1, 5, 10],
@@ -141,37 +142,43 @@
         ];
 
         let resultHashmap = {
-            'max_value': null,
-            'max_array': [],
-            'max_value_index': null,
-            'min_value': null,
-            'min_array': [],
-            'min_value_index': null,
+            'maxValue': null,
+            'maxArray': [],
+            'maxFirstArrayIndex': null,
+            'maxAlternativeArrays': [],
         };
 
         for (const idx in arr) {
             const sumElements = arr[idx].reduce((previousValue, currentValue) => previousValue + currentValue);
-            if (resultHashmap.max_value === null || sumElements > resultHashmap.max_value) {
-                resultHashmap.max_value = sumElements;
-                resultHashmap.max_array = arr[idx];
-                resultHashmap.max_value_index = idx;
-            } else if (resultHashmap.min_value === null || sumElements < resultHashmap.min_value) {
-                resultHashmap.min_value = sumElements;
-                resultHashmap.min_array = arr[idx];
-                resultHashmap.min_value_index = idx;
+            if (resultHashmap.maxValue !== null && sumElements < resultHashmap.maxValue) {
+                continue;
             }
+
+            if (sumElements === resultHashmap.maxValue) {
+                resultHashmap.maxAlternativeArrays.push(arr[idx]);
+                continue;
+            }
+
+            resultHashmap.maxValue = sumElements;
+            resultHashmap.maxArray = arr[idx];
+            resultHashmap.maxFirstArrayIndex = idx;
+            resultHashmap.maxAlternativeArrays = [];
         }
 
-        if (resultHashmap.max_value !== null) {
-            console.log(`Максимальная сумма элеметнов массива: ${resultHashmap.max_value}`
-                + `\n\tмассив: [${resultHashmap.max_array.join(', ')}]`
-                + `\n\tиндекс массива: ${resultHashmap.max_value_index}`);
+        if (resultHashmap.maxValue !== null) {
+            console.log(`Максимальная сумма элеметнов массива: ${resultHashmap.maxValue}`
+                + `\n\tмассив: [${resultHashmap.maxArray.join(', ')}]`
+                + `\n\tиндекс массива: ${resultHashmap.maxFirstArrayIndex}`
+                + `\n\tминимальное значение в массиве: ${resultHashmap.maxArray.sort()[0]}`);
         }
 
-        if (resultHashmap.min_value !== null) {
-            console.log(`Минимальная сумма элеметнов массива: ${resultHashmap.min_value}`
-                + `\n\tмассив: [${resultHashmap.min_array.join(', ')}]`
-                + `\n\tиндекса массив: ${resultHashmap.min_value_index}`);
+        if (resultHashmap.maxAlternativeArrays.length) {
+            console.log('Найдены другие массивы с такой же суммой элеметов:');
+            for (const alternativeArray of resultHashmap.maxAlternativeArrays) {
+                console.log(`\t[${alternativeArray.join(', ')}]`);
+            }
+            const concatArray = resultHashmap.maxAlternativeArrays.concat(resultHashmap.maxArray).flat(1);
+            console.log(`Минимальное число во всех массивах: ${concatArray.sort()[0]}`);
         }
     }
 </script>
