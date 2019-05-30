@@ -82,8 +82,9 @@
 
         let smallestFactor = getSmallestFactors(maxValue);
         for (let i = 2; i <= maxValue; i++) {
-            if (!isElementHasFactor(i, smallestFactor))
+            if (!isElementHasFactor(i, smallestFactor)) {
                 arrWithNumbers.push(i);
+            }
         }
 
         console.log(smallestFactor.concat(arrWithNumbers).join(' '));
@@ -100,8 +101,9 @@
         // ноль — составное число, его не учитываем
         // 1 — не простое число, у него только один делитель — не учитываем
         for (let i = 2; i <= Math.floor(Math.sqrt(maxValue)); i++) {
-            if (!isElementHasFactor(i, innerArrWithSimpleNumbers))
+            if (!isElementHasFactor(i, innerArrWithSimpleNumbers)) {
                 innerArrWithSimpleNumbers.push(i);
+            }
         }
 
         return innerArrWithSimpleNumbers;
