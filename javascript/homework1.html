@@ -8,14 +8,18 @@
 <script>
     "use strict";
     window.onload = function () {
-        // first task
-        function cToF(celsuisTemp) {
+        /**
+         * Convert temperature Celsius to Farenheit
+         * @param {number} celsuis temperature
+         * @returns {number} farenheit temperature
+         */
+        function celsiusToFarenheit(celsuisTemp) {
             let fahrenheitTemp = (9 / 5) * celsuisTemp + 32;
             return fahrenheitTemp;
         }
 
         let inputCelsuisTemp = prompt("Input temperature in celsuius");
-        console.log(cToF(inputCelsuisTemp));
+        console.log(celsiusToFarenheit(inputCelsuisTemp));
 
         // second task
         let name = 'Василий', admin;
