@@ -29,7 +29,7 @@ def products(request, pk=None):
         cache.set(key,
                   ProductCategory.objects.filter(
                       is_active=True
-                  ).all(),
+                  ).order_by('pk').all(),
                   timeout=1800)
         return cache.get(key)
 
