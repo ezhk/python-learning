@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 output_field=DecimalField()
             )
         ).filter(
-            ~Q(total_price=None)
+            ~Q(total_price=None) & ~Q(discount=None)
         ).order_by(
             'order_id', 'total_price'
         ).select_related()
