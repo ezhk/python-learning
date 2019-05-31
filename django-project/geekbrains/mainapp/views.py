@@ -52,8 +52,13 @@ def products(request, pk=None):
         cached_value = cache.get(key, None)
         if cached_value is not None:
             return cached_value
+
+        _products = get_all_products()
+        if not _products.count():
+            return Products.objects.none()
+
         cache.set(key,
-                  [random.choice(get_all_products())],
+                  [random.choice(_products)],
                   timeout=120)
         return cache.get(key)
         # return Products.objects.filter(is_active=True,
