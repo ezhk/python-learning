@@ -311,17 +311,17 @@
             run() {
                 this.init();
                 for (const question of this.questions) {
-                    const answer = this.getAnswer(question);
+                    const answerIndex = this.getAnswerIndex(question);
 
                     // Игрок хочет выйти
-                    if (answer < 0) {
+                    if (answerIndex < 0) {
                         alert(`Количество правильных ответов: ${this.correctAnswersCounter}.\n`
                             + 'До свидания.');
                         return;
                     }
 
                     // Проверка по индексу (варианты ответа предлагаем с 1), поэтому декрементируем
-                    if (question.isTrueIndex(answer)) {
+                    if (question.isTrueIndex(answerIndex)) {
                         alert("Поздравляем, это правильный ответ!");
                         this.correctAnswersCounter++;
                     } else {
@@ -342,7 +342,7 @@
             /**
              * Ждем от пользователя ответ
              */
-            getAnswer(question) {
+            getAnswerIndex(question) {
                 // Доступные значения ввода.
                 const possibleAnswers = [1, 2, 3, 4, -1];
 
