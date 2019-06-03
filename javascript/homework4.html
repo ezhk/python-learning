@@ -26,23 +26,27 @@
      *  }
      */
     function firstTask() {
-        let value = {
-            firstDigit: 0,
-            secondDigit: 0,
-            thirdDigit: 0,
+        function convertDigitsToObject(initValue) {
+            let value = {
+                firstDigit: 0,
+                secondDigit: 0,
+                thirdDigit: 0,
 
-            init(initValue) {
-                if (Number.isInteger(initValue) && initValue < 999 && initValue > 0) {
-                    this.firstDigit = initValue % 10;
-                    this.secondDigit = Math.floor(initValue / 10) % 10;
-                    this.thirdDigit = Math.floor(initValue / 100) % 10;
+                init(initValue) {
+                    if (Number.isInteger(initValue) && initValue < 999 && initValue > 0) {
+                        this.firstDigit = initValue % 10;
+                        this.secondDigit = Math.floor(initValue / 10) % 10;
+                        this.thirdDigit = Math.floor(initValue / 100) % 10;
+                    }
                 }
-            }
-        };
+            };
+
+            value.init(parseInt(initValue));
+            return value;
+        }
 
         for (const testValue of [43, 598, 75, 161]) {
-            value.init(testValue);
-            console.log(value);
+            console.log(convertDigitsToObject(testValue));
         }
     }
 
