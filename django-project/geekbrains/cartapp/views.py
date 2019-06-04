@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.shortcuts import render, \
     get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, \
@@ -33,6 +34,8 @@ def add(request, pk):
     if not cart:
         cart = ShopCart(user=request.user,
                         product=product)
+    # object might be empty when add product into order
+    # cart.quantity = F('quantity') + 1
     cart.quantity += 1
     cart.save()
 
@@ -56,7 +59,7 @@ def delete(request, pk):
     if cart.quantity <= 1:
         cart.delete()
     else:
-        cart.quantity -= 1
+        cart.quantity = F('quantity') - 1
         cart.save()
 
     if request.META.get('HTTP_REFERER', None) is not None and \

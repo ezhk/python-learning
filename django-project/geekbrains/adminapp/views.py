@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.forms import inlineformset_factory
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -9,6 +10,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 
+from adminapp.forms import ProductCategoryForm
 from authapp.models import ShopUser
 from mainapp.models import Products, ProductCategory
 
@@ -126,8 +128,8 @@ class ProductCategoryCreate(IsSuperUserMixin, CreateView):
 
 class ProductCategoryUpdate(IsSuperUserMixin, UpdateView):
     model = ProductCategory
-    fields = '__all__'
     template_name = 'adminapp/update_category.html'
+    form_class = ProductCategoryForm
 
     def get_success_url(self):
         return reverse_lazy('adminapp:category_update',
@@ -137,6 +139,14 @@ class ProductCategoryUpdate(IsSuperUserMixin, UpdateView):
         context = super(ProductCategoryUpdate, self).get_context_data(**kwargs)
         context.update({'title': f"Изменение категории {context.get('object').name}"})
         return context
+
+    def form_valid(self, form):
+        discount = form.cleaned_data.get('discount', 0)
+        if discount > 0:
+            self.object.products_set.update(
+                price=F('price') * (1 - discount / 100)
+            )
+        return super(ProductCategoryUpdate, self).form_valid(form)
 
 
 class ProductCategoryDelete(IsSuperUserMixin, DeleteView):
