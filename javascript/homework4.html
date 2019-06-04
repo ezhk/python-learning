@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework 4</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    firstTask();
+    secondTask();
+    thirdTask();
+
+    /**
+     * Функцию, преобразующая число в объект. Передавая на вход число в диапазоне [0, 999],
+     * На выходе объект, в котором в соответствующих свойствах описаны разряды числа:
+     * - единицы (в свойстве firstDigit)
+     * - десятки (в свойстве secondDigit)
+     * - сотни (в свойстве thirdDigit)
+     * Например, для числа 45 мы должны получить следующий объект:
+     *  {
+     *      firstDigit: 5,
+     *      secondDigit: 4,
+     *      thirdDigit: 0,
+     *  }
+     */
+    function firstTask() {
+        function convertDigitsToObject(initValue) {
+            let value = {
+                firstDigit: 0,
+                secondDigit: 0,
+                thirdDigit: 0,
+
+                init(initValue) {
+                    if (Number.isInteger(initValue) && initValue < 999 && initValue > 0) {
+                        this.firstDigit = initValue % 10;
+                        this.secondDigit = Math.floor(initValue / 10) % 10;
+                        this.thirdDigit = Math.floor(initValue / 100) % 10;
+                    }
+                }
+            };
+
+            value.init(parseInt(initValue));
+            return value;
+        }
+
+        for (const testValue of [43, 598, 75, 161]) {
+            console.log(convertDigitsToObject(testValue));
+        }
+    }
+
+    /**
+     * Для игры, реализованной на уроке (бродилка),
+     * добавить возможность ходить по диагонали цифрами 1, 3, 7, 9
+     * Также необходимо сделать так, чтобы пользователь не мог совершить шаг в стенку,
+     * т.е. при направлении в стенку игрок оставался на том же месте где стоял.
+     */
+    function secondTask() {
+        /**
+         * Объект с настройками игры.
+         * @property {int} rowsCount Количество строк в карте.
+         * @property {int} colsCount Количество колонок в карте.
+         * @property {int} startPositionX Начальная позиция игрока по X координате.
+         * @property {int} startPositionY Начальная позиция игрока по Y координате.
+         */
+        const settings = {
+            rowsCount: 10,
+            colsCount: 10,
+            startPositionX: 0,
+            startPositionY: 0,
+        };
+
+        /**
+         * Объект игрока, здесь будут все методы и свойства связанные с ним.
+         * @property {int} x Позиция по X-координате.
+         * @property {int} y Позиция по Y-координате.
+         */
+        const player = {
+            x: null,
+            y: null,
+
+            /**
+             * Инициализация игрока и его метоположения.
+             */
+            init(startX, startY) {
+                this.x = startX;
+                this.y = startY;
+            },
+
+            /**
+             * Двигает игрока по переданному направлению.
+             * @param {int} direction Направление, в котором будет движение.
+             */
+            move(direction) {
+                // Определяем направление и обновляем местоположение игрока в зависимости от направления.
+                switch (direction) {
+                    // Конечно можно в case 1,3,7,9 обойтись без break и изменения y,
+                    // но кто потом разберется в этом коде?
+                    // Порядок оставил таким, чтобы можно было легко сделать без break и y++ || y--.
+                    case 1:
+                        this.x--;
+                        this.y++;
+                        break;
+                    case 3:
+                        this.x++;
+                        this.y++;
+                        break;
+                    case 2:
+                        this.y++;
+                        break;
+
+                    case 4:
+                        this.x--;
+                        break;
+                    case 6:
+                        this.x++;
+                        break;
+
+                    case 7:
+                        this.x--;
+                        this.y--;
+                        break;
+                    case 9:
+                        this.x++;
+                        this.y--;
+                        break;
+                    case 8:
+                        this.y--;
+                        break;
+                }
+            },
+        };
+
+        /**
+         * Объект игры, здесь будут все методы и свойства связанные с самой игрой в общем.
+         * @property {settings} settings Настройки игры.
+         * @property {player} player Игрок, участвующий в игре.
+         */
+        const game = {
+            settings,
+            player,
+
+            /**
+             * Запускает игру.
+             */
+            run() {
+                // Инициализируем игрока, ставим его начальное местоположение
+                this.player.init(this.settings.startPositionX, this.settings.startPositionY);
+                // Бесконечный цикл
+                while (true) {
+                    // Отображаем нашу игру.
+                    this.render();
+
+                    // Получаем направление от игрока.
+                    const direction = this.getDirection();
+
+                    // Если игрок сказал что хочет выйти (набрал -1), значит выходим.
+                    if (direction === -1) {
+                        alert('До свидания.');
+                        return;
+                    }
+
+                    // Двигаем игрока и проверяем вышел ли он за границы поля,
+                    // проверка выхода за границы — метод игры, потому что поле может меняться.
+                    this.player.move(direction);
+                    this.checkOutOfBorder();
+                }
+            },
+
+            /**
+             * Отображает игру в консоли.
+             */
+            render() {
+                // Сюда запишем все что надо отобразить.
+                let map = "";
+
+                // Цикл перебирает все строки, которые надо отобразить.
+                for (let row = 0; row < this.settings.rowsCount; row++) {
+                    // В каждой строке отображаем для каждой колонки (x - клетка, o - игрок).
+                    for (let col = 0; col < this.settings.colsCount; col++) {
+                        // Проверяем, если на данной позиции должен быть и игрок, отображаем игрока, если нет - клетку.
+                        if (this.player.y === row && this.player.x === col) {
+                            map += 'o ';
+                        } else {
+                            map += 'x ';
+                        }
+                    }
+                    // После того как отобразили всю строку делаем переход на следующую строку.
+                    map += '\n';
+                }
+
+                // Чистим консоль.
+                console.clear();
+                // Выводим все что надо отобразить в игре.
+                console.log(map);
+            },
+
+            /**
+             * Получает и отдает направление от пользователя.
+             * @returns {int} Возвращаем направление, введенное пользователем.
+             */
+            getDirection() {
+                // Доступные значения ввода.
+                const availableDirections = [-1, 1, 2, 3, 4, 6, 7, 8, 9];
+
+                while (true) {
+                    // Получаем от пользователя направление.
+                    const direction = parseInt(prompt('Введите число, куда вы хотите переместиться, -1 для выхода.'));
+
+                    // Если направление не одно из доступных, то сообщаем что надо ввести корректные данные
+                    // и начинаем новую итерацию.
+                    if (!availableDirections.includes(direction)) {
+                        alert(`Для перемещения необходимо ввести одно из чисел: ${availableDirections.join(', ')}.`);
+                        continue;
+                    }
+
+                    // Если пользователь ввел корректное значение - отдаем его.
+                    return direction;
+                }
+            },
+
+            // Проверяем выход за пределы поля
+            checkOutOfBorder() {
+                if (this.player.x < 0) {
+                    this.player.x = 0;
+                } else if (this.player.x >= this.settings.colsCount) {
+                    this.player.x = this.settings.colsCount - 1;
+                }
+
+                if (this.player.y < 0) {
+                    this.player.y = 0;
+                } else if (this.player.y >= this.settings.rowsCount) {
+                    this.player.y = this.settings.rowsCount - 1;
+                }
+            },
+        };
+
+        // Запускаем игру.
+        game.run();
+    }
+
+    /**
+     * Who wants to be millionaire?
+     */
+    function thirdTask() {
+
+        /**
+         * questionObject — базовый объект для каждого вопроса.
+         * @property {name} Описание вопроса
+         * @property {variants} Список ответов на вопрос
+         * @property {correctAnswerIndex} Индекс правильного ответа
+         */
+        let questionObject = {
+            name: null,
+            variants: [],
+            correctAnswerIndex: null,
+
+            /**
+             * Метод создает копию объекта questionObject с объявленными свойствами
+             * @param {string} name - вопрос
+             * @param {string[]} variants — список вариантов ответа
+             * @param {string} answer - правильный ответ
+             * @return {questionObject}
+             */
+            create(name, variants, answer) {
+                this.name = name;
+                this.variants = variants;
+                this.correctAnswerIndex = variants.indexOf(answer);
+
+                return Object.assign({}, this);
+            },
+
+            /**
+             * Функция проверяет, что переданный индекс — индекс правильного ответа
+             * @param {number} index
+             * @return {boolean}
+             */
+            isTrueIndex(index) {
+                return this.correctAnswerIndex === index;
+            },
+        };
+
+        /**
+         * Игровая логика
+         * @property {correctAnswersCounter} Количество правильных ответов на вопросы
+         * @property {questions} Список объектов questionObject
+         */
+        let game = {
+            correctAnswersCounter: 0,
+            questions: [],
+
+            /**
+             * Метод инициалищирует стартовые значения на вопросы
+             * (в дальшейшем можно на вход принимать questionObject).
+             * Устанавливает начальный счетчик правильных ответов.
+             */
+            init() {
+                this.correctAnswersCounter = 0;
+                this.questions.push(questionObject.create(
+                    'Самая высокая гора в мире?',
+                    ['Эльбрус', 'Ушба', 'Аннапурна', 'Эверест'],
+                    'Эверест'));
+                this.questions.push(questionObject.create(
+                    'Швейцарский часовой бренд?',
+                    ['Ракета', 'Rolex', 'Casio', 'Citizen'],
+                    'Rolex'));
+                this.questions.push(questionObject.create(
+                    'Какой из перечисленных брендов не выпускает телефон?',
+                    ['Google', 'Facebook', 'Apple', 'Яндекс'],
+                    'Facebook'));
+            },
+
+            // Запускаем игру
+            run() {
+                this.init();
+                for (const question of this.questions) {
+                    const answerIndex = this.getAnswerIndex(question);
+
+                    // Игрок хочет выйти
+                    if (answerIndex < 0) {
+                        alert(`Количество правильных ответов: ${this.correctAnswersCounter}.\n`
+                            + 'До свидания.');
+                        return;
+                    }
+
+                    // Проверка по индексу (варианты ответа предлагаем с 1), поэтому декрементируем
+                    if (question.isTrueIndex(answerIndex)) {
+                        alert("Поздравляем, это правильный ответ!");
+                        this.correctAnswersCounter++;
+                    } else {
+                        alert("Это неправильный ответ.");
+                    }
+
+                    if (!confirm("Хоите сыграть ещё?")) {
+                        alert(`Количество правильных ответов: ${this.correctAnswersCounter}.\n`
+                            + 'До свидания.');
+                        return;
+                    }
+                }
+
+                alert(`Количество правильных ответов: ${this.correctAnswersCounter}.\n`
+                    + 'Вопросы закончились. Спасибо за игру.');
+            },
+
+            /**
+             * Ждем от пользователя ответ
+             */
+            getAnswerIndex(question) {
+                // Доступные значения ввода.
+                const possibleAnswers = [1, 2, 3, 4, -1];
+
+                while (true) {
+                    // Получаем от пользователя направление.
+                    let questionPrompt = question.name + '\n';
+                    for (const idx in question.variants) {
+                        // Не забываем увеличить индекс на единицу — людям удобнее считать с 1
+                        questionPrompt += `\t${(+idx + 1)}. ${question.variants[idx]}\n`;
+                    }
+                    questionPrompt += 'Введите вариант ответа или -1 — для выхода.';
+                    const answer = parseInt(prompt(questionPrompt));
+
+                    // Если неправильный ответ, то спрашиваем до бесконечности
+                    if (!possibleAnswers.includes(answer)) {
+                        alert(`Варианты ответа: ${possibleAnswers.join(', ')}.`);
+                        continue;
+                    }
+
+                    // Если пользователь ввел корректное значение - отдаем его.
+                    // Тут не забываем, что выше инкрементировали индекс.
+                    if (answer < 1) {
+                        return answer;
+                    }
+                    return answer - 1;
+                }
+            },
+        };
+
+        game.run();
+    }
+</script>
+</body>
+</html>
