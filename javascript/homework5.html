@@ -258,7 +258,7 @@
      * Валидация полей формы по клику отправки
      */
     function thirdTask() {
-        let button = document.getElementById('submitButton');
+        const button = document.getElementById('submitButton');
         button.addEventListener('click', validateForm, false);
 
         /**
@@ -269,7 +269,7 @@
          * @param event — event объект
          */
         function validateForm(event) {
-            let form = document.getElementById('form');
+            const form = document.getElementById('form');
             cleanForm(form);
 
             for (let element of form.children) {
