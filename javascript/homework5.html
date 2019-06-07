@@ -13,6 +13,12 @@
             font-size: 16px;
         }
 
+        fieldset {
+            width: 0;
+            border: 1px solid darkgray;
+            border-radius: 5px;
+        }
+
         #chess-desk {
             width: 500px;
             height: 500px;
@@ -43,12 +49,6 @@
 
         .dark-field {
             background: darkgray;
-        }
-
-        fieldset {
-            width: 0;
-            border: 1px solid darkgray;
-            border-radius: 5px;
         }
 
         .form-block {
@@ -358,6 +358,7 @@
             let suggest = document.createElement('span');
             suggest.textContent = text;
             suggest.className = 'error-suggest';
+
             element.after(suggest);
             element.className = 'error-input';
 
