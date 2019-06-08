@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework 6</title>
+    <style type="text/css">
+        .catalog {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            /*flex-direction: row;*/
+        }
+
+        .product {
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+            align-items: center;
+        }
+
+        .button {
+            align-self: center;
+            height: 2rem;
+            width: 160px;
+            font-size: 0.8rem;
+            border-radius: 3px;
+            border: 1px solid darkgray;
+            outline: none;
+        }
+
+        .button:hover {
+            border-color: darkslategray;
+            /*font-weight: 600;*/
+        }
+
+        .button:active {
+            box-shadow: inset 1px 1px 1px darkgray;
+        }
+
+        table {
+            border: 1px solid darkgray;
+            outline: none;
+            border-radius: 3px;
+            width: 160px;
+            margin: 5px;
+        }
+
+        .price,
+        .count,
+        .summary-count,
+        .summary-price {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="preview">
+        <table style="width: 500px;">
+            <tr>
+                <td>Общее количество товара</td>
+                <td class="summary-count">0</td>
+            </tr>
+            <tr>
+                <td>Суммарная стоимость покупок</td>
+                <td class="summary-price">0</td>
+            </tr>
+        </table>
+    </div>
+    <div class="catalog">
+        <div class="product">
+            <img class="product-image" src="gallery/images/min/1.jpg" alt="">
+            <table>
+                <tr>
+                    <td>Количество</td>
+                    <td class="count">0</td>
+                </tr>
+                <tr>
+                    <td>Цена</td>
+                    <td class="price">55</td>
+                </tr>
+            </table>
+            <button class="button">Купить</button>
+        </div>
+        <div class="product">
+            <img class="product-image" src="gallery/images/min/2.jpg" alt="">
+            <table>
+                <tr>
+                    <td>Количество</td>
+                    <td class="count">0</td>
+                </tr>
+                <tr>
+                    <td>Цена</td>
+                    <td class="price">1099.99</td>
+                </tr>
+            </table>
+            <button class="button">Купить</button>
+        </div>
+        <div class="product">
+            <img class="product-image" src="gallery/images/min/3.jpg" alt="">
+            <table>
+                <tr>
+                    <td>Количество</td>
+                    <td class="count">0</td>
+                </tr>
+                <tr>
+                    <td>Цена</td>
+                    <td class="price">100</td>
+                </tr>
+            </table>
+            <button class="button">Купить</button>
+        </div>
+        <div class="product">
+            <img class="product-image" src="gallery/images/min/4.jpg" alt="">
+            <table>
+                <tr>
+                    <td>Количество</td>
+                    <td class="count">0</td>
+                </tr>
+                <tr>
+                    <td>Цена</td>
+                    <td class="price">123.3</td>
+                </tr>
+            </table>
+            <button class="button">Купить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    "use strict";
+
+    secondTask();
+
+    function secondTask() {
+        const catalog = document.querySelector('.catalog');
+        catalog.addEventListener('click', (event) => addItemToCart(event));
+
+        function addItemToCart(event) {
+            if (!buttonClickEvent(event)) {
+                return;
+            }
+
+            updateProductCount(event);
+            updateSummary();
+        }
+
+        function buttonClickEvent(event) {
+            return (event.target.tagName === 'BUTTON') ? true : false;
+        }
+
+        function updateProductCount(event) {
+            const quantityField = event.target.parentElement
+                .querySelector('.count');
+            let quantity = parseInt(quantityField.textContent);
+            console.log(quantity);
+            quantityField.textContent = ++quantity;
+        }
+
+        function updateSummary() {
+            const summaryDetails = getSummaryCartValues();
+
+            document.querySelector('.summary-price').textContent = summaryDetails.price;
+            document.querySelector('.summary-count').textContent = summaryDetails.quantity;
+        }
+
+        function getSummaryCartValues() {
+            const summaryDetails = {
+                price: 0,
+                quantity: 0,
+            };
+
+            for (const product of document.querySelectorAll('.product')) {
+                const quantity = parseInt(product.querySelector('.count').textContent);
+                const price = parseFloat(product.querySelector('.price').textContent);
+
+                summaryDetails.price += price * quantity;
+                summaryDetails.quantity += quantity;
+            }
+
+            return summaryDetails;
+        }
+    }
+</script>
+</body>
+</html>
