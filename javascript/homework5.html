@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework 5</title>
+    <style type="text/css">
+        * {
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        body {
+            font-size: 16px;
+        }
+
+        fieldset {
+            width: 0;
+            border: 1px solid darkgray;
+            border-radius: 5px;
+        }
+
+        #chess-desk {
+            width: 500px;
+            height: 500px;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 2.5rem;
+        }
+
+        #chess-desk td {
+            width: 10%;
+            height: 10%;
+            text-align: center;
+            border: 1px solid darkgray;
+        }
+
+        .td-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .td-rotate {
+            transform: rotate(180deg);
+        }
+
+        .light-field {
+            background-color: white;
+        }
+
+        .dark-field {
+            background: darkgray;
+        }
+
+        .form-block {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-block input {
+            width: 300px;
+            height: 2rem;
+            outline: none;
+            border: 1px solid darkgray;
+            border-radius: 3px;
+
+            margin: 10px 10px 0 10px;
+            padding-left: 5px;
+        }
+
+        .buttons {
+            margin: 15px 0 15px;
+            width: 100%;
+            display: flex;
+        }
+
+        .button {
+            height: 2rem;
+            width: 140px;
+            font-size: 0.8rem;
+            border-radius: 3px;
+            border: 1px solid darkgray;
+            outline: none;
+        }
+
+        .button:hover {
+            border-color: darkslategray;
+            /*font-weight: 600;*/
+        }
+
+        .button:active {
+            box-shadow: inset 1px 1px 1px darkgray;
+        }
+
+        .error-input {
+            border: 1.5px solid darkred !important;
+        }
+
+        .error-suggest {
+            color: darkred;
+            text-align: left;
+            font-size: 0.8rem;
+            margin: 0 12px;
+            text-transform: lowercase;
+        }
+    </style>
+</head>
+<body>
+<table id="chess-desk"></table>
+<br>
+<fieldset>
+    <legend>Form validation</legend>
+    <form id="form" class="form-block" name="auth" method="get">
+        <input id="name" type="text" name="username" placeholder="Имя">
+        <input id="phone" type="text" name="phone" placeholder="Телефон">
+        <input id="password1" type="password" name="password" placeholder="Пароль">
+        <input id="password2" type="password" placeholder="Повторите пароль">
+        <div class="buttons">
+            <button id="resetButton" class="button" type="reset" value="clean">Очистить</button>
+            <button id="submitButton" class="button" type="submit" value="submit">Отправить</button>
+        </div>
+    </form>
+</fieldset>
+
+<script>
+    "use strict";
+
+    firstAndSecondTask();
+    thirdTask();
+
+    /*
+     * Рисуем шахматную доску и делаем ход Остапа Бендера: E2 > E4
+     */
+    function firstAndSecondTask() {
+        chessDesk();
+
+        function chessDesk() {
+            let chessFigures = {
+                whiteKing: createElementObject('E1', '&#9812;'),
+                whiteQueen: createElementObject('D1', '&#9813;'),
+                // ладьи
+                whiteRook1: createElementObject('A1', '&#9814;'),
+                whiteRook2: createElementObject('H1', '&#9814;'),
+                // слоны
+                whiteBishop1: createElementObject('C1', '&#9815;'),
+                whiteBishop2: createElementObject('F1', '&#9815;'),
+                // кони
+                whiteKnight1: createElementObject('B1', '&#9816;'),
+                whiteKnight2: createElementObject('G1', '&#9816;'),
+                // пешки
+                whitePawn1: createElementObject('A2', '&#x2659;'),
+                whitePawn2: createElementObject('B2', '&#x2659;'),
+                whitePawn3: createElementObject('C2', '&#x2659;'),
+                whitePawn4: createElementObject('D2', '&#x2659;'),
+                whitePawn5: createElementObject('E2', '&#x2659;'),
+                whitePawn6: createElementObject('F2', '&#x2659;'),
+                whitePawn7: createElementObject('G2', '&#x2659;'),
+                whitePawn8: createElementObject('H2', '&#x2659;'),
+
+                // черные
+                blackKing: createElementObject('E8', '&#9818;'),
+                blackQueen: createElementObject('D8', '&#9819;'),
+                blackRook1: createElementObject('A8', '&#9820;'),
+                blackRook2: createElementObject('H8', '&#9820;'),
+                blackBishop1: createElementObject('C8', '&#9821;'),
+                blackBishop2: createElementObject('F8', '&#9821;'),
+                blackKnight1: createElementObject('B8', '&#9822;'),
+                blackKnight2: createElementObject('G8', '&#9822;'),
+                blackPawn1: createElementObject('A7', '&#9823;'),
+                blackPawn2: createElementObject('B7', '&#9823;'),
+                blackPawn3: createElementObject('C7', '&#9823;'),
+                blackPawn4: createElementObject('D7', '&#9823;'),
+                blackPawn5: createElementObject('E7', '&#9823;'),
+                blackPawn6: createElementObject('F7', '&#9823;'),
+                blackPawn7: createElementObject('G7', '&#9823;'),
+                blackPawn8: createElementObject('H7', '&#9823;'),
+            };
+
+            function createElementObject(position, unicodeSymbol) {
+                return {
+                    position,
+                    unicodeSymbol,
+                };
+            }
+
+            function searchFigureByPos(rowDigit, columnSymbol) {
+                for (let figure in chessFigures) {
+                    if (chessFigures[figure].position === rowDigit + columnSymbol) {
+                        return chessFigures[figure];
+                    }
+                }
+            }
+
+            let desk = {
+                rows: [8, 7, 6, 5, 4, 3, 2, 1],
+                colums: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+
+                draw() {
+                    let tbl = document.getElementById('chess-desk');
+                    tbl.textContent = null;
+
+                    for (let row = 0; row < 10; row++) {
+                        let tr = document.createElement('tr');
+                        tbl.appendChild(tr);
+
+                        for (let column = 0; column < 10; column++) {
+                            let td = document.createElement('td');
+                            tr.appendChild(td);
+
+                            // Symbols header
+                            if (row < 1 || row > 8) {
+                                if (this.colums[column - 1] !== undefined) {
+                                    td.textContent = this.colums[column - 1];
+                                }
+                                td.className = (row < 1) ? 'td-rotate td-header' : 'td-header';
+                                continue;
+                            }
+
+                            // Digits header
+                            if (column < 1 || column > 8) {
+                                if (this.rows[row - 1] !== undefined) {
+                                    td.textContent = this.rows[row - 1];
+                                }
+                                td.className = (column > 8) ? 'td-rotate td-header' : 'td-header';
+                                continue;
+                            }
+
+                            // default field class
+                            if (column % 2 === row % 2) {
+                                td.className = 'light-field';
+                            } else {
+                                td.className = 'dark-field';
+                            }
+
+                            // display chess figure
+                            let figure = searchFigureByPos(this.colums[column - 1], this.rows[row - 1]);
+                            if (figure !== undefined) {
+                                td.innerHTML = figure.unicodeSymbol;
+                            }
+                        }
+                    }
+                },
+            };
+
+            // draw default desk
+            desk.draw();
+
+            // сделаем ход Остапа Бендера
+            setTimeout(function () {
+                chessFigures.whitePawn5.position = 'E4';
+                desk.draw();
+            }, 1000);
+        }
+    }
+
+
+    /*
+     * Валидация полей формы по клику отправки
+     */
+    function thirdTask() {
+        const button = document.getElementById('submitButton');
+        button.addEventListener('click', validateForm, false);
+
+        /**
+         * Валидация формы, вешается на событие клика мышки и проверяет
+         *   корректность введенных данных. Использутеся встроенное
+         *   API JS — setCustomValidity, и для примера сам написал
+         *   showErrorSuggest — которая менее красиво, но тоже выводит подсказки
+         * @param event — event объект
+         */
+        function validateForm(event) {
+            const form = document.getElementById('form');
+            cleanForm(form);
+
+            for (let element of form.children) {
+                // Для каждого id элемента формы делаем проверку.
+                // Почему switch, мне показалось это удобнее, чем поток if-ов
+                switch (element.id) {
+                    case 'name':
+                        if (element.value.length < 1 || element.value.length > 50) {
+                            showErrorSuggest(event, element,
+                                "Имя должно содержать как минимум 1 символ, не более 50 символов.");
+                            // usernameInput.setCustomValidity("Имя должно содержать как минимум 1 символ, не более 50 символов.");
+                            element.focus();
+                            return false;
+                        }
+                        break;
+
+                    case 'phone':
+                        let phoneNumber = parseInt(element.value);
+                        if (phoneNumber.toString().length !== 11) {
+                            // showErrorSuggest(event, element,
+                            //     "Номер телефона должен содержать 11 цифр, не больше и не меньше.");
+                            element.setCustomValidity("Номер телефона должен содержать 11 цифр, не больше и не меньше.");
+                            element.focus();
+                            return false;
+                        }
+                        break;
+
+                    case 'password1':
+                        if (element.value.length < 5 || element.value.length > 50) {
+                            // showErrorSuggest(event, element, "Пароль - минимум 5 символов, максимум 50");
+                            element.setCustomValidity("Пароль - минимум 5 символов, максимум 50");
+                            element.focus();
+                            return false;
+                        }
+                        break;
+
+                    case 'password2':
+                        if (document.getElementById('password1').value !== element.value) {
+                            // showErrorSuggest(event, element, "Пароли не совпадают.");
+                            element.setCustomValidity("Пароли не совпадают.");
+                            element.focus();
+                            return false;
+                        }
+                        break;
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         * Функция очищает данные формы, удаляя подсказки
+         * @param {Element} form — HTML объект формы
+         */
+        function cleanForm(form) {
+            for (let element of form.children) {
+                // тут можно примерить toLowerCase(),
+                // но тогда теряется наглядность HTML тегов в case
+                switch (element.tagName) {
+                    case 'INPUT':
+                        element.setCustomValidity('');
+                        element.className = '';
+                        break;
+                    case 'SPAN':
+                        element.remove();
+                        break;
+                }
+            }
+        }
+
+        /**
+         *
+         * @param event — event объект, по нему вызываем preventDefault,
+         *                чтобы не отправлять даныне формы без валидации
+         * @param {Element} element — элемент, для которого делаем suggest
+         * @param {string} text — текст подсказки
+         * @return {boolean} - возвращает false, есть уже есть подсказки для документа,
+         *                     иначе всё будет пестрить
+         */
+        function showErrorSuggest(event, element, text) {
+            event.preventDefault();
+            if (document.querySelectorAll('.error-suggest').length > 0) {
+                return false;
+            }
+
+            let suggest = document.createElement('span');
+            suggest.textContent = text;
+            suggest.className = 'error-suggest';
+
+            element.after(suggest);
+            element.className = 'error-input';
+
+            return true;
+        }
+    }
+</script>
+</body>
+</html>
