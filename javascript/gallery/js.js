@@ -16,11 +16,16 @@ const gallery = {
         openedImageBlock: 'galleryWrapper__block',
         openedImageClass: 'galleryWrapper__image',
         openedImageArrow: 'galleryWrapper__arrows',
+        openedImageArrowRotate: 'galleryWrapper__arrowsRotate',
         openedImageScreenClass: 'galleryWrapper__screen',
         openedImageCloseBtnClass: 'galleryWrapper__close',
         openedImageCloseBtnSrc: 'images/gallery/close.png',
         leftArrowImage: 'images/left-arrow.svg',
-        rightArrowImage: 'images/right-arrow.svg',
+        /*
+         * rightArrowImage не используется, вместо него используется стрелка влево с rotate()
+         * rightArrowImage: 'images/right-arrow.svg',
+         */
+        unknownImage: 'images/unknown-image.svg',
     },
 
     /**
@@ -65,19 +70,24 @@ const gallery = {
         if (this.imageExist(src)) {
             return imageSelector.src = src;
         }
-        imageSelector.src = this.settings.leftArrowImage;
+        imageSelector.src = this.settings.unknownImage;
 
         // Получаем контейнер для открытой картинки, в нем находим тег img и ставим ему нужный src.
         // this.getScreenContainer().querySelector(`.${this.settings.openedImageClass}`).src = src;
     },
 
+    /**
+     * Проверяет, что изображение доступно по указанному атрибуту src=""
+     * @param {string} imageLocation — путь к изображение
+     * @return {boolean} — если 200 статус код, то картинка доступна
+     */
     imageExist(imageLocation) {
         console.log(imageLocation);
         const httpRequest = new XMLHttpRequest();
         httpRequest.open("HEAD", imageLocation, false);
         httpRequest.send();
 
-        return httpRequest.status === 200 ? true : false;
+        return httpRequest.status === 200;
     },
 
     /**
@@ -111,34 +121,16 @@ const gallery = {
         galleryWrapperElement.appendChild(galleryScreenElement);
 
         // Создаем картинку для кнопки закрыть, ставим класс, src и добавляем ее в контейнер-обертку.
-        const closeImageElement = new Image();
-        closeImageElement.classList.add(this.settings.openedImageCloseBtnClass);
-        closeImageElement.src = this.settings.openedImageCloseBtnSrc;
-        closeImageElement.addEventListener('click', () => this.close());
-        galleryWrapperElement.appendChild(closeImageElement);
+        galleryWrapperElement.appendChild(this.createCloseElement());
 
-        // Создаем контейнер для стрелок и изображения, ставим класс и добавляем обработчик
-        const imageArrows = document.createElement('div');
-        imageArrows.classList.add(this.settings.openedImageBlock);
-        imageArrows.addEventListener('click', event => this.imageSwitcherContainer(event));
-        galleryWrapperElement.appendChild(imageArrows);
+        // Создаем контейнер для стрелок и изображения
+        const imageContainer = this.createImageContainer();
+        galleryWrapperElement.appendChild(imageContainer);
 
-        // создаем стрелку влево
-        const leftArrow = new Image();
-        leftArrow.classList.add(this.settings.openedImageArrow);
-        leftArrow.src = this.settings.leftArrowImage;
-        imageArrows.appendChild(leftArrow);
-
-        // Создаем картинку, которую хотим открыть и добавляем ее в контейнер-обертку.
-        const image = new Image();
-        image.classList.add(this.settings.openedImageClass);
-        imageArrows.appendChild(image);
-
-        // создаем стрелку вправо
-        const rightArrow = new Image();
-        rightArrow.classList.add(this.settings.openedImageArrow);
-        rightArrow.src = this.settings.rightArrowImage;
-        imageArrows.appendChild(rightArrow);
+        // создаем стрелку влево, место для картинки и стрелку вправо
+        imageContainer.appendChild(this.createArrow('left'));
+        imageContainer.appendChild(this.createImagePlace());
+        imageContainer.appendChild(this.createArrow('right'));
 
         // Добавляем контейнер-обертку в тег body.
         document.body.appendChild(galleryWrapperElement);
@@ -148,12 +140,76 @@ const gallery = {
     },
 
     /**
+     * Создает элемент стрелку и возвращает его
+     * @return {HTMLImageElement}
+     */
+    createCloseElement() {
+        const closeImageElement = new Image();
+        closeImageElement.classList.add(this.settings.openedImageCloseBtnClass);
+        closeImageElement.src = this.settings.openedImageCloseBtnSrc;
+        closeImageElement.addEventListener('click', () => this.close());
+
+        return closeImageElement;
+    },
+
+    /**
+     * Создает контейнер для изображения, ставим класс и добавляем обработчик
+     * @param {MouseEvent} event — событие клика мышкой
+     * @return {HTMLElement} — div контейнер для стрелок и изображения
+     */
+    createImageContainer() {
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add(this.settings.openedImageBlock);
+        imageContainer.addEventListener('click',
+            event => this.imageSwitcherContainer(event));
+
+        return imageContainer;
+    },
+
+    /**
+     * Создает стрелку
+     * @param {string} type — тип стрелки: left (влево) или right (вправо)
+     * @return {HTMLImageElement} — изображение со стрелкой
+     */
+    createArrow(type) {
+        const arrow = new Image();
+        arrow.classList.add(this.settings.openedImageArrow);
+        switch (type) {
+            case 'left':
+                arrow.src = this.settings.leftArrowImage;
+                break;
+            case 'right':
+                // Немного оптимизации, чтобы не грузить стрелку "вправо", мы поворачиваем стрелку "влево"
+                arrow.src = this.settings.leftArrowImage;
+                arrow.classList.add(this.settings.openedImageArrowRotate);
+                break;
+        }
+
+        return arrow;
+    },
+
+    /**
+     * Создает место для изображения и добавляет класс
+     * @return {HTMLImageElement} — возвражение <img> тега
+     */
+    createImagePlace() {
+        const image = new Image();
+        image.classList.add(this.settings.openedImageClass);
+
+        return image;
+    },
+
+    /**
      * Закрывает (удаляет) контейнер для открытой картинки.
      */
     close() {
         document.querySelector(`.${this.settings.openedImageWrapperClass}`).remove();
     },
 
+    /**
+     * Event событие по клику мышки на левую или правую часть изображения/экрана
+     * @param {MouseEvent} event — событие по клику мышки
+     */
     imageSwitcherContainer(event) {
         event.stopPropagation();
 
@@ -165,10 +221,23 @@ const gallery = {
         this.openImage(image);
     },
 
+    /**
+     * Опредеояет в какую часть экрана кликнул пользователь;
+     * если в правую, то следующая картинка; если в левую, то предыдущая
+     * @param {MouseEvent} event — берет полочение курсора при клике
+     * @return {string} — какую картинку показать next или prev
+     */
     getImageDirection(event) {
         return window.innerWidth / event.layerX < 2 ? 'next' : 'prev';
     },
 
+    /**
+     * Берет все изображения и в зависимости от того, где был клик мышки
+     *   возвращает соответствующую картинку
+     * @param {Node} imageSelector — селектор изображения
+     * @param {string} direction — prev/next
+     * @return {string} — ссылка на картинку
+     */
     getImageByDirection(imageSelector, direction) {
         const images = this.getAllImages();
         switch (direction) {
@@ -179,6 +248,10 @@ const gallery = {
         }
     },
 
+    /**
+     * Получает все изображения по атрибуту data-full_image_url
+     * @return {string[]} — список со строками ссылок к изображениям
+     */
     getAllImages() {
         const images = [];
         for (let element of document
@@ -192,18 +265,30 @@ const gallery = {
         return images;
     },
 
+    /**
+     * Выбирает следующую картинку из списка ихображений, производя поиск индекса
+     * @param {Node} imageSelector — текущее изображение
+     * @param {string[]}  images — список изображений
+     * @return {string} ссылку на картинку
+     */
     getNextImageSource(imageSelector, images) {
         let nextIdx = images.indexOf(imageSelector.dataset.rawSource);
         if (nextIdx++ < 0) {
-            return;
+            return this.settings.unknownImage;
         }
         return images[nextIdx % images.length];
     },
 
+    /**
+     * Выбирает предыдущую картинку из списка ихображений, производя поиск индекса
+     * @param {Node} imageSelector — текущее изображение
+     * @param {string[]}  images — список изображений
+     * @return {string} ссылку на картинку
+     */
     getPrevImageSource(imageSelector, images) {
         let prevIdx = images.indexOf(imageSelector.dataset.rawSource);
         if (prevIdx-- < 0) {
-            return;
+            return this.settings.unknownImage;
         }
         while (prevIdx < 0) {
             prevIdx += images.length;
