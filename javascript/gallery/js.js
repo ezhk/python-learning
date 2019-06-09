@@ -82,7 +82,6 @@ const gallery = {
      * @return {boolean} — если 200 статус код, то картинка доступна
      */
     imageExist(imageLocation) {
-        console.log(imageLocation);
         const httpRequest = new XMLHttpRequest();
         httpRequest.open("HEAD", imageLocation, false);
         httpRequest.send();
@@ -148,7 +147,6 @@ const gallery = {
         closeImageElement.classList.add(this.settings.openedImageCloseBtnClass);
         closeImageElement.src = this.settings.openedImageCloseBtnSrc;
         closeImageElement.addEventListener('click', () => this.close());
-
         return closeImageElement;
     },
 
