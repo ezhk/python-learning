@@ -37,6 +37,10 @@
             box-shadow: inset 1px 1px 1px darkgray;
         }
 
+        img {
+            border-radius: 3px;
+        }
+
         table {
             border: 1px solid darkgray;
             outline: none;
@@ -56,7 +60,7 @@
 <body>
 <div class="wrapper">
     <div class="preview">
-        <table style="width: 500px;">
+        <table style="min-width: 300px;">
             <tr>
                 <td>Общее количество товара</td>
                 <td class="summary-count">0</td>
@@ -137,16 +141,16 @@
         catalog.addEventListener('click', (event) => addItemToCart(event));
 
         function addItemToCart(event) {
-            if (!buttonClickEvent(event)) {
+            if (!isButtonClickEvent(event)) {
                 return;
             }
 
             updateProductCount(event);
-            updateSummary();
+            updateCart();
         }
 
-        function buttonClickEvent(event) {
-            return (event.target.tagName === 'BUTTON') ? true : false;
+        function isButtonClickEvent(event) {
+            return event.target.tagName === 'BUTTON';
         }
 
         function updateProductCount(event) {
@@ -157,10 +161,10 @@
             quantityField.textContent = ++quantity;
         }
 
-        function updateSummary() {
+        function updateCart() {
             const summaryDetails = getSummaryCartValues();
 
-            document.querySelector('.summary-price').textContent = summaryDetails.price;
+            document.querySelector('.summary-price').textContent = summaryDetails.price.toFixed(2);
             document.querySelector('.summary-count').textContent = summaryDetails.quantity;
         }
 
