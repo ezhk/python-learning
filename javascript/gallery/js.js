@@ -226,7 +226,7 @@ const gallery = {
      * @return {string} — какую картинку показать next или prev
      */
     getImageDirection(event) {
-        return window.innerWidth / event.layerX < 2 ? 'next' : 'prev';
+        return window.innerWidth / event.clientX < 2 ? 'next' : 'prev';
     },
 
     /**
