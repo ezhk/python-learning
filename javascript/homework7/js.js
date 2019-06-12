@@ -173,13 +173,25 @@ const map = {
     },
 };
 
+/**
+ * Объект для очков.
+ * @property {number} value Значение очков.
+ */
 const score = {
     value: 0,
 
+    /**
+     * Возвращает количество очков.
+     * @return {number} value - количество очков.
+     */
     getValue() {
         return this.value;
     },
 
+    /*
+     * Увеличивает количество очков на 1.
+     * @return {number} value - увеличенное на 1 количество очков.
+     */
     incrementValue() {
         return ++this.value;
     }
