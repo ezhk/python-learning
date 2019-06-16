@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homework8</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    firstTask();
+    secondTask();
+    thirdTask();
+
+    function firstTask() {
+        console.log(`
+        Замыкания в предыдущей задаче со змейкой можно применить по отношению в объекту game,
+        потому что во всей игре мы лишь вызываем один раз init при событии window.onload.
+
+        С другими объектами это смысла не имеет, поскольку мы используем разный
+        набор методов для config, map, snake, food, score и status.
+        `);
+    }
+
+
+    function secondTask() {
+        if (!("firstA" in window)) {
+            var firstA = 1;
+        }
+        alert(firstA);
+        /*
+            Undefined за пределами функции (и один в данном случае, так как
+            область видимости становится функция, а не window, и условаие становится True).
+            Почему:
+                var a создает объект в контексте window.
+                ("a" in window) = True => !("a" in window) = False
+                Поэтому переменная будет создана, но ей не будет присвоено значение.
+        */
+
+        // var secondB = function secondA(x) {
+        //     x && secondA(--x);
+        // };
+        // alert(secondA);
+        /*
+            Ошибка вызова, функции не существует.
+            Почему:
+                функиця a() существует только на этапе её объявления,
+                то есть её можно использовать внутри тела функции для
+                рекурсивных вызовов. Но вне пределов тела финкции она
+                определена не будет.
+        */
+
+
+        function thirdA(x) {
+            return x * 2;
+        }
+        var thirdA;
+        alert(thirdA);
+        /*
+            Функция.
+            Почему:
+                var name лишь определяет объект в пространстве имен
+                (например, window), но в данном случае он уже определен
+                как функиця и поскольку присвоения не происходит,
+                то получаем функцию.
+                Если было бы var thirdA = 1;, то была бы единица.
+        */
+
+
+        function fourthB(x, y, fourthA) {
+            arguments[2] = 10;
+            alert(fourthA);
+        }
+        fourthB(1, 2, 3);
+        /*
+            10 в глобальном пространстве имен.
+            Почему в пределах функции = 3?
+            Почему:
+                в arguments попадают наши данные на входе,
+                точнее ссылки на них.
+        */
+
+        function fifthA() {
+            alert(this);
+        }
+        fifthA.call(null);
+        /*
+            window.
+            Почему в функции null, а не функция thirdTask?
+            Почему:
+                область видимости у нас привязывается в null,
+                который по умолчанию = window.
+         */
+    }
+
+
+    function thirdTask() {
+        var arr = [];
+        /*
+            for (var i = 0; i < 3; i++) {
+                arr.push(function () {
+                    console.log(i)
+                });
+            }
+            arr[0](); // 3
+            arr[1](); // 3
+            arr[2](); // 3
+        */
+
+        /*
+            Как исправить просто:
+            поменять области видимости i, заменив var на let.
+         */
+        arr = [];
+        for (let i = 0; i < 3; i++) {
+            arr.push(function () {
+                console.log(i)
+            });
+        }
+        arr[0](); // 0
+        arr[1](); // 1
+        arr[2](); // 2
+
+        /*
+            Как исправить сложно:
+            вместо i выводить this и изменить контекст.
+            Очень плохое решение, которое я бы не стал
+            использовать в production, исключительно как
+            академический интерес.
+         */
+        arr = [];
+        for (var i = 0; i < 3; i++) {
+            arr.push((function () {
+                console.log(this)
+            }).bind(i));
+        }
+        arr[0](); // 0
+        arr[1](); // 1
+        arr[2](); // 2
+
+        /*
+            Можно вызвать функцию сразу, но кажется это не,
+            что требуется в задаче.
+         */
+        arr = [];
+        for (var i = 0; i < 3; i++) {
+            arr.push((function () {
+                console.log(i);
+            })());
+        }
+        arr[0]; // 0
+        arr[1]; // 1
+        arr[2]; // 2
+    }
+</script>
+
+</body>
+</html>
