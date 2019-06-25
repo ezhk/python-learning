@@ -54,8 +54,10 @@
         function thirdA(x) {
             return x * 2;
         }
+
         var thirdA;
         alert(thirdA);
+
         /*
             Функция.
             Почему:
@@ -71,7 +73,9 @@
             arguments[2] = 10;
             alert(fourthA);
         }
+
         fourthB(1, 2, 3);
+
         /*
             10 в глобальном пространстве имен.
             Почему в пределах функции = 3?
@@ -83,6 +87,7 @@
         function fifthA() {
             alert(this);
         }
+
         fifthA.call(null);
         /*
             window.
