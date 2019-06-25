@@ -4,9 +4,10 @@ const products = [
     {id: 3, title: 'Mouse', price: 46},
     {id: 4, title: 'Gamepad', price: 68},
     {id: 5, title: 'Chair', price: 168},
+    {id:6},
 ];
 
-const renderProduct = (title, price) => {
+const renderProduct = (title="Empty product", price=0) => {
     return `<div class="product-item">
                 <img src="" alt="Product image" class="product-image"/>
                 <h5>${title}</h5>
@@ -15,14 +16,14 @@ const renderProduct = (title, price) => {
             </div>`
 };
 
-const renderPage = list => {
+const renderPage = (list=[]) => {
     const productList = list.map(item => renderProduct(item.title, item.price));
     document.querySelector(`.products`).innerHTML = productList.join('\n');
 };
 
 /* Как бы сделал я без innerHTML */
 /*
-const renderProduct = (title, price) => {
+const renderProduct = (title="Empty product", price=0) => {
     let itemBlock = document.createElement('div');
     itemBlock.classList.add('product-item');
 
@@ -50,10 +51,11 @@ const renderProduct = (title, price) => {
     return itemBlock;
 };
 
-const renderPage = list => {
-    const productList = list.map(item => renderProduct(item.title, item.price));
+const renderPage = (list=[]) => {
     let qsProducts = document.querySelector(`.products`);
-    productList.forEach(el => { qsProducts.appendChild(el); });
+    list.forEach(item => {
+        qsProducts.appendChild(renderProduct(item.title, item.price));
+    });
 };
 */
 
