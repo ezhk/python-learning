@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    // ES5
+
+    // function Person(name, yearOfBirth) {
+    //     this.name = name;
+    //     this.yearOfBirth = yearOfBirth;
+    //     this.lastName = 'Smith';
+    // }
+    // Person.prototype.calcAge = function(){
+    //     console.log(new Date().getFullYear() - this.yearOfBirth)
+    // };
+    //
+    // function Teacher(name, yearOfBirth, subject) {
+    //     this.subject = subject;
+    //     Person.call(this, name, yearOfBirth)
+    // }
+    //
+    // Teacher.prototype = Object.create(Person.prototype);
+    // Teacher.prototype.constructor = Teacher;
+    //
+    // var john = new Person('John', 1990);
+    // var ann = new Teacher('Ann', 2000, 'math');
+
+    // ES6
+
+    class Person {
+        constructor(name, yearOfBirth){
+            this.name = name;
+            this.yearOfBirth = yearOfBirth;
+        }
+        calcAge(){
+            console.log(new Date().getFullYear() - this.yearOfBirth)
+        }
+        sayHi(){
+            return `${this.name} says hi`
+        }
+
+      static triple(x) {
+        return x * 3
+      }
+    }
+
+    class Teacher extends Person {
+        constructor(name, yearOfBirth, subject) {
+            super(name, yearOfBirth);
+            this.subject = subject;
+        }
+        sayHi(){
+            return `${super.sayHi()} as teacher`
+        }
+    }
+
+    let john = new Person('John', 1980);
+    let ann = new Teacher('Ann', 1999, 'math');
+    console.log(john.sayHi());
+    console.log(ann.sayHi());
+    console.log(Teacher.triple(4));
+
+
+
+</script>
+</body>
+</html>
