@@ -232,7 +232,7 @@ class OneFood extends Foods {
     this.type = type;
     this.additional = additional;
 
-    this.description = super.description();
+    // this.description = super.description();
   }
 
   /**
