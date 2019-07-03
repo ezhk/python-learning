@@ -36,7 +36,7 @@ class Products {
    */
   price() {
     let price = 0;
-    for (let product of this.data) {
+    for (let product of this.allProducts) {
       price += product.price;
     }
 
