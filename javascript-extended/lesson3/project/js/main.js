@@ -29,12 +29,34 @@ let getRequestFetch = (url, cb) => {
     .catch(() => console.log('error fetch catch'))
 };
 
+let getRequestPromise = (url, cb) => {
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.send();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status !== 200) {
+          reject(xhr.status);
+          // console.log('error XML')
+        } else {
+          // cb(xhr.responseText)
+          resolve(xhr.responseText);
+        }
+      }
+    }
+  });
+};
+
 function out(value) {
   console.log('out: ' + value);
 }
 
 getRequestXML(APITest, out);
 getRequestFetch(APITest, out);
+getRequestPromise(APITest, out)
+  .then((result) => out('promise: ' + result))
+  .catch(() => console.log('error Promise'));
 
 class Products {
   constructor(container = '.products') {
@@ -177,6 +199,12 @@ class Cart {
       price += this.products[productId].quantity * this.products[productId].price;
     }
     return price;
+  }
+
+  _render() {
+    for (let product of this.products) {
+      `<li class="product"><li>`
+    }
   }
 }
 
