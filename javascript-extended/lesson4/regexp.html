@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RegExp</title>
+</head>
+<body>
+<script>
+    "use strict";
+
+    class ReplaceText {
+        constructor(regexp, url = 'texttoreplace.txt') {
+            this.text = null;
+            this.regexp = new RegExp(regexp, 'gi');
+            this.textResult = null;
+
+            this.getText(url)
+                .then(result => this.text = result);
+        }
+
+        getText(url) {
+            return fetch(url)
+                .then(result => result.text())
+                .catch(error => console.log(error));
+        }
+
+        replaceTo(resultSymbol) {
+            this.textResult = this.text.replace(this.regexp, resultSymbol);
+            return this.textResult;
+        }
+    }
+
+    // first task: replace ' => "
+    let textFirst = new ReplaceText(/'/);
+    setTimeout(() => console.log(textFirst.replaceTo('"')), 500);
+
+    // second task: ignore ' in expressions isn't and others
+    let textSecond = new ReplaceText(/\B'/);
+    setTimeout(() => console.log(textSecond.replaceTo('"')), 500);
+</script>
+</body>
+</html>
