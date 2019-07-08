@@ -6,8 +6,36 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>RegExp</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
+<!--
+    3. *Создать форму обратной связи с полями: Имя, Телефон, E-mail, текст, кнопка Отправить. При нажатии на кнопку
+    Отправить произвести валидацию полей следующим образом:
+    a. Имя содержит только буквы.
+    b. Телефон имеет вид +7(000)000-0000.
+    c. E-mail имеет вид mymail@mail.ru, или my.mail@mail.ru, или my-mail@mail.ru.
+    d. Текст произвольный.
+-->
+<div class="form-group">
+    <form action="#" method="get" id="feedback-form">
+        <label for="name">Имя</label>
+        <input id="name" type="text" class="form-control col-sm-5" placeholder="name"
+               data-hint="Имя должно содержать только буквы">
+        <label for="phone">Телефон</label>
+        <input id="phone" type="text" class="form-control col-sm-5" placeholder="+7 (000)000-0000"
+               data-hint="Телефон должен быть представлен как +7 (000) 000-0000.">
+        <label for="email">Электронная почта</label>
+        <input id="email" type="text" class="form-control col-sm-5" placeholder="my-mail@mail.ru"
+               data-hint="Почта должна быть в формате my-mail@mail.ru или my.mail@mail.ru">
+        <label for="text">Текст</label>
+        <textarea id="text" type="text" class="form-control col-sm-5" placeholder="name"></textarea>
+        <br>
+        <button id="submitBtn" type="submit" class="btn btn-dark">Отправить</button>
+
+    </form>
+</div>
 <script>
     "use strict";
 
@@ -33,6 +61,77 @@
         }
     }
 
+    class FormValidator {
+        constructor(form, btnSelector = '#submitBtn') {
+            this.form = null;
+            this._init(btnSelector);
+        }
+
+        _init(btnSelector) {
+            document.querySelector(btnSelector).addEventListener('click', (e) => {
+                e.preventDefault();
+                this.form = e.target.parentElement;
+
+                this._validateAll();
+            });
+        }
+
+        nameValidate(name) {
+            return name.search(/^[a-z]+$/i);
+        }
+
+        phoneValidate(phone) {
+            // код страны и городе
+            return phone.search(/^\+\d+\s*\(\d+\)\s*\d{3}-?\d{4}$/i);
+        }
+
+        emailValidate(email) {
+            // [a-z]+([-\.]+[a-z]+)? = mail, mail-test, mail.test
+            // @[a-z]+(\.[a-z]+)+ = @domain.tld, @domain.subdomain.tld
+            return email.search(/^[a-z]+([-\.]+[a-z]+)?@[a-z]+(\.[a-z]+)+$/i);
+        }
+
+
+        _validateAll() {
+            for (let elem of this.form.elements) {
+                if (typeof this[`${elem.id}Validate`] !== "function") {
+                    continue;
+                }
+
+                if (this[`${elem.id}Validate`](elem.value) < 0) {
+                    this.markAsUnvalid(elem);
+                } else {
+                    this.markAsValid(elem);
+                }
+            }
+        }
+
+        markAsUnvalid(elem) {
+            elem.classList.add('border-danger');
+            const hint = document.getElementById(`${elem.id}-hint`);
+            if (hint) {
+                hint.hidden = false;
+                return;
+            }
+
+            elem.insertAdjacentHTML('afterend', `
+                <p id="${elem.id}-hint" class="text-danger hint" style="font-size: 0.7rem;">
+                    ${elem.dataset.hint}
+                </p>
+            `);
+        }
+
+        markAsValid(elem) {
+            elem.classList.remove('border-danger');
+            const hint = document.getElementById(`${elem.id}-hint`);
+            if (hint) {
+                hint.hidden = true;
+                return;
+            }
+        }
+    }
+
+
     // first task: replace ' => "
     let textFirst = new ReplaceText(/'/);
     setTimeout(() => console.log(textFirst.replaceTo('"')), 500);
@@ -40,6 +139,9 @@
     // second task: ignore ' in expressions isn't and others
     let textSecond = new ReplaceText(/\B'/);
     setTimeout(() => console.log(textSecond.replaceTo('"')), 500);
+
+    // third task
+    let formObject = new FormValidator();
 </script>
 </body>
 </html>
