@@ -22,15 +22,16 @@
     <form action="#" method="get" id="feedback-form">
         <label for="name">Имя</label>
         <input id="name" type="text" class="form-control col-sm-5" placeholder="name"
-               data-hint="Имя должно содержать только буквы">
+               name="name" data-hint="Имя должно содержать только буквы">
         <label for="phone">Телефон</label>
         <input id="phone" type="text" class="form-control col-sm-5" placeholder="+7 (000)000-0000"
-               data-hint="Телефон должен быть представлен как +7 (000) 000-0000.">
+               name="phone" data-hint="Телефон должен быть представлен как +7 (000) 000-0000.">
         <label for="email">Электронная почта</label>
         <input id="email" type="text" class="form-control col-sm-5" placeholder="my-mail@mail.ru"
-               data-hint="Почта должна быть в формате my-mail@mail.ru или my.mail@mail.ru">
+               name="email" data-hint="Почта должна быть в формате my-mail@mail.ru или my.mail@mail.ru">
         <label for="text">Текст</label>
-        <textarea id="text" type="text" class="form-control col-sm-5" placeholder="name"></textarea>
+        <textarea id="text" type="text" class="form-control col-sm-5"\
+                  name="text" placeholder="name"></textarea>
         <br>
         <button id="submitBtn" type="submit" class="btn btn-dark">Отправить</button>
 
@@ -64,6 +65,7 @@
     class FormValidator {
         constructor(form, btnSelector = '#submitBtn') {
             this.form = null;
+            this.validateErrors = 0;
             this._init(btnSelector);
         }
 
@@ -73,6 +75,9 @@
                 this.form = e.target.parentElement;
 
                 this._validateAll();
+                if (this.validateErrors === 0) {
+                    this.form.submit();
+                }
             });
         }
 
@@ -93,12 +98,14 @@
 
 
         _validateAll() {
+            this.validateErrors = 0;
             for (let elem of this.form.elements) {
                 if (typeof this[`${elem.id}Validate`] !== "function") {
                     continue;
                 }
 
                 if (this[`${elem.id}Validate`](elem.value) < 0) {
+                    this.validateErrors++;
                     this.markAsUnvalid(elem);
                 } else {
                     this.markAsValid(elem);
