@@ -47,16 +47,16 @@ const app = new Vue({
         },
         searchProducts(event) {
             event.preventDefault();
+            let filteredInnerProducts = [];
 
-            let tmpProducts = [];
             let regexp = new RegExp(this.searchLine, 'i');
             for (let item of this.products) {
                 if (regexp.test(item.product_name)) {
-                    tmpProducts.push(item);
+                    filteredInnerProducts.push(item);
                 }
             }
 
-            this.showedProducts = tmpProducts;
+            this.showedProducts = filteredInnerProducts;
         }
     },
     created() {
