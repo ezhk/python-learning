@@ -7,31 +7,31 @@ Vue.component('products', {
       imgCatalog: "https://placehold.it/200x150",
     }
   },
-  methods: {
-    filter() {
-      let regexp = new RegExp(this.userSearch, 'i');
-      this.filtered = this.products.filter(el => regexp.test(el.product_name));
-    }
-  },
+  // methods: {
+  //   filter() {
+  //     let regexp = new RegExp(this.userSearch, 'i');
+  //     this.filtered = this.products.filter(el => regexp.test(el.product_name));
+  //   }
+  // },
   mounted() {
     this.$parent.getJson(`${API + this.catalogUrl}`)
       .then(data => {
         for (let el of data) {
           this.products.push(el);
-          this.filtered.push(el);
+          // this.filtered.push(el);
         }
       });
     this.$parent.getJson(`getProducts.json`)
       .then(data => {
         for (let el of data) {
           this.products.push(el);
-          this.filtered.push(el);
+          // this.filtered.push(el);
         }
       });
   },
   template: `<div class="products">
          <product 
-         v-for="el of filtered" 
+         v-for="el of $root.$refs.filtered.filtered" 
          :key="el.id_product"
          :product="el"
          :img="imgCatalog"></product>
