@@ -12,18 +12,34 @@
         <div class="logo">E-shop</div>
         <div class="cart">
             <form action="#" method="post" class="search-form">
-                <input type="text" class="search-field">
-                <button class="btn-search" type="submit">
+                <input type="text" class="search-field" v-model="searchLine">
+                <button class="btn-search" type="submit" @click="searchProducts($event)">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
-            <button class="btn-cart" type="button">Корзина</button>
-            <div class="cart-block invisible"></div>
+            <button class="btn-cart" @click="cartIsHidden = !cartIsHidden" type="button">Корзина</button>
+            <div class="cart-block" v-show="!cartIsHidden">
+                <div class="cart-item" v-show="cartIsEmpty" style="justify-content: center;">Корзина пуста</div>
+                <div class="cart-item" v-for="el of cart" :key="el.product_id">
+                    <div class="product-bio">
+                        <img :src="imgCart" alt="Some image">
+                        <div class="product-desc">
+                            <p class="product-title">{{el.product_name}}</p>
+                            <p class="product-quantity">{{el.quantity}}</p>
+                            <p class="product-single-price">${{el.price}} each</p>
+                        </div>
+                    </div>
+                    <div class="right-block">
+                        <p class="product-price">${{el.quantity * el.price}}</p>
+                        <button class="del-btn" @click="delProduct(el)">&times;</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
     <main>
         <div class="products">
-            <div class="product-item" v-for="el of products" :key="el.id_product">
+            <div class="product-item" v-for="el of showedProducts" :key="el.id_product">
                 <img :src="imgCatalog" :alt="el.product_name">
                 <div class="desc">
                     <h3>{{el.product_name}}</h3>

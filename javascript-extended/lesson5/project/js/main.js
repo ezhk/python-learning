@@ -6,7 +6,17 @@ const app = new Vue({
     data: {
         catalogUrl: '/catalogData.json',
         products: [],
-        imgCatalog: "https://placehold.it/200x150"
+        showedProducts: [],
+        imgCatalog: "https://placehold.it/200x150",
+        imgCart: "https://placehold.it/50x100",
+        cart: {},
+        cartIsHidden: true,
+        searchLine: '',
+    },
+    computed: {
+        cartIsEmpty() {
+            return Object.keys(this.cart).length < 1;
+        }
     },
     methods: {
         getJson(url) {
@@ -15,9 +25,43 @@ const app = new Vue({
                 .catch(error => console.log(error));
         },
         addProduct(el) {
-            console.log(el.id_product);
-            console.log(el);
+            if (this.cart.hasOwnProperty(el.id_product)) {
+                return this.cart[el.id_product].quantity++;
+            }
+
+            // make it reactive
+            Vue.set(this.cart, el.id_product, {
+                id_product: el.id_product,
+                price: el.price,
+                product_name: el.product_name,
+                quantity: 1,
+            });
+        },
+        delProduct(el) {
+            if (this.cart.hasOwnProperty(el.id_product)) {
+                this.cart[el.id_product].quantity--;
+                if (this.cart[el.id_product].quantity < 1) {
+                    Vue.delete(this.cart, el.id_product);
+                }
+            }
+        },
+        searchProducts(event) {
+            event.preventDefault();
+            let filteredInnerProducts = [];
+
+            let regexp = new RegExp(this.searchLine, 'i');
+            for (let item of this.products) {
+                if (regexp.test(item.product_name)) {
+                    filteredInnerProducts.push(item);
+                }
+            }
+
+            this.showedProducts = filteredInnerProducts;
         }
+    },
+    created() {
+        // show all products by default
+        this.showedProducts = this.products;
     },
     mounted() {
         this.getJson(`${API + this.catalogUrl}`)
@@ -31,7 +75,7 @@ const app = new Vue({
                 for (let el of data) {
                     this.products.push(el);
                 }
-            })
+            });
     }
 });
 
