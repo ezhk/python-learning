@@ -1,19 +1,62 @@
 const API = `https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses`;
-// let getRequest = (url, cb) => {
-//     let xhr = new XMLHttpRequest();
-//     // window.ActiveXObject -> xhr = new ActiveXObject()
-//     xhr.open('GET', url, true);
-//     xhr.onreadystatechange = () => {
-//         if(xhr.readyState === 4) {
-//             if (xhr.status !== 200){
-//                 console.log('error')
-//             } else {
-//                 cb(xhr.responseText)
-//             }
-//         }
-//     }
-// }
 
+const APITest = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/addToBasket.json';
+let getRequestXML = (url, cb) => {
+  let xhr = new XMLHttpRequest();
+  // window.ActiveXObject -> xhr = new ActiveXObject()
+  xhr.open('GET', url, true);
+  xhr.send();
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status !== 200) {
+        console.log('error XML')
+      } else {
+        cb(xhr.responseText)
+      }
+    }
+  }
+};
+
+let getRequestFetch = (url, cb) => {
+  fetch(url)
+    .then(response => {
+      if (response.status !== 200) {
+        throw Error("error fetch")
+      }
+      return response.text()
+    })
+    .then(response => cb(response))
+    .catch(() => console.log('error fetch catch'))
+};
+
+let getRequestPromise = (url, cb) => {
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.send();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status !== 200) {
+          reject(xhr.status);
+          // console.log('error XML')
+        } else {
+          // cb(xhr.responseText)
+          resolve(xhr.responseText);
+        }
+      }
+    }
+  });
+};
+
+function out(value) {
+  console.log('out: ' + value);
+}
+
+getRequestXML(APITest, out);
+getRequestFetch(APITest, out);
+getRequestPromise(APITest, out)
+  .then((result) => out('promise: ' + result))
+  .catch(() => console.log('error Promise'));
 
 class Products {
   constructor(container = '.products') {
@@ -77,10 +120,92 @@ console.log(products.calcSum());
 
 class Cart {
   constructor() {
-    // this.some здесь будет что-то
+    // products presented as {productId: {title: X, price: Y, quantity: Z}, ...}
+    this.products = {};
   }
 
-  // some(){} - делает что-то
+  /**
+   * Add product from Cart
+   * @param product: object {id: 1, title: 'Notebook', price: 2000}
+   */
+  add(product) {
+    let {id, title, price} = product;
+    if (!this.products.hasOwnProperty(id)) {
+      this.products[id] = {title, price, quantity: 0};
+    }
+    this.products[id].quantity++;
+  }
+
+  /**
+   * Remove product from Cart
+   * @param product: object {id: 1, title: 'Notebook', price: 2000}
+   */
+  del(product) {
+    if (this.products.hasOwnProperty(product.id)) {
+      this.products[product.id].quantity--;
+
+      if (this.products[product.id].quantity < 1) {
+        delete this.products[product.id];
+      }
+    }
+  }
+
+  /**
+   * Clear all items in Cart
+   */
+  clear() {
+    this.products = {};
+  }
+
+  /**
+   * Return object with all products in cart
+   * @return {Object}: {ID: {title: X, price: Y, quantity: Z}, ...}
+   */
+  show() {
+    return this.products;
+  }
+
+  /**
+   * Get product by ID.
+   * @param el: product ID
+   * @return {Object} or null: {title: X, price: Y, quantity: Z}
+   */
+  product(el) {
+    if (this.products.hasOwnProperty(el)) {
+      return this.products[el];
+    }
+    return null;
+  }
+
+  /**
+   * Calculate products count in Cart
+   * @return number: counts
+   */
+  quantity() {
+    let quantity = 0;
+    for (let productId in this.products) {
+      quantity += this.products[productId].quantity;
+    }
+    return quantity;
+  }
+
+  /**
+   * Calculate summary cost of all products in Cart
+   * @return number: summary price
+   */
+  price() {
+    let price = 0;
+    for (let productId in this.products) {
+      price += this.products[productId].quantity * this.products[productId].price;
+    }
+    return price;
+  }
+
+  _render() {
+    for (let product of this.products) {
+      `<li class="product"><li>`
+    }
+  }
 }
 
 //

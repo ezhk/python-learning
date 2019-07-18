@@ -87,3 +87,19 @@ img {
     border-color: #2f2a2d;
     color: #2f2a2d;
 }
+
+
+.product {
+    display: flex;
+    height: 40px;
+    line-height: 40px;
+}
+
+header {
+    position: relative;
+}
+
+#cart {
+    position: relative;
+    z-index: 1;
+}
