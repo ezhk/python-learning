@@ -38,6 +38,9 @@ Vue.component('cart', {
   mounted() {
     this.$parent.getJson(`${API + this.cartUrl}`)
       .then(data => {
+        if (!data.hasOwnProperty('contents')) {
+          return null;
+        }
         for (let el of data.contents) {
           this.cartItems.push(el);
         }
