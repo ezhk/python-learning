@@ -1,0 +1,32 @@
+[
+    {
+        "prod_name": "Gamepad",
+        "action": "change",
+        "time": "July 18th 2019, 8:21:59 pm"
+    },
+    {
+        "prod_name": "Keyboard",
+        "action": "change",
+        "time": "July 18th 2019, 8:22:05 pm"
+    },
+    {
+        "prod_name": "Keyboard",
+        "action": "remove",
+        "time": "July 18th 2019, 8:22:07 pm"
+    },
+    {
+        "prod_name": "Keyboard",
+        "action": "add",
+        "time": "July 18th 2019, 8:22:13 pm"
+    },
+    {
+        "prod_name": "Ноутбук",
+        "action": "change",
+        "time": "July 18th 2019, 10:55:53 pm"
+    },
+    {
+        "prod_name": "Мышка",
+        "action": "add",
+        "time": "July 18th 2019, 10:55:54 pm"
+    }
+]
