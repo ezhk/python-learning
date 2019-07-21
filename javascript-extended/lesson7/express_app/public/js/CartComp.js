@@ -26,32 +26,27 @@ Vue.component('cart', {
             }
           })
       }
-
-
-      // this.$parent.getJson(`${API}/addToBasket.json`)
-      //     .then(data => {
-      //         if(data.result){
-      //             let find = this.cartItems.find(item => item.id_product === product.id_product);
-      //             if(find){
-      //                 find.quantity++;
-      //             } else {
-      //                 let prod = Object.assign({quantity: 1}, product);
-      //                 this.cartItems.push(prod);
-      //             }
-      //         }
-      //     })
     },
     remove(product) {
-      this.$parent.getJson(`${API}/deleteFromBasket.json`)
-        .then(data => {
-          if (data.result) {
-            if (product.quantity > 1) {
-              product.quantity--;
-            } else {
+      let find = this.cartItems.find(item => item.id_product === product.id_product);
+      if (!find) {
+        return false;
+      }
+      if (product.quantity > 1) {
+        this.$parent.putJson(`/api/cart/${find.id_product}`, {quantity: -1})
+          .then(data => {
+            if (data.result) {
+              find.quantity--
+            }
+          });
+      } else {
+        this.$parent.deleteJson(`/api/cart/${find.id_product}`)
+          .then(data => {
+            if (data.result) {
               this.cartItems.splice(this.cartItems.indexOf(product), 1);
             }
-          }
-        })
+          });
+      }
     },
   },
   mounted() {

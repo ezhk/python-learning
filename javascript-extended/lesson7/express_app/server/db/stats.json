@@ -1,0 +1,60 @@
+[
+    {
+        "timestamp": "2019-07-18T10:41:46.944Z",
+        "action": "add",
+        "productName": "Мышка",
+        "body": {
+            "quantity": 1,
+            "id_product": 456,
+            "product_name": "Мышка",
+            "price": 1000
+        },
+        "status": "successful"
+    },
+    {
+        "timestamp": "2019-07-18T10:41:53.731Z",
+        "action": "change",
+        "productName": "Мышка",
+        "body": {
+            "quantity": 1
+        },
+        "status": "successful"
+    },
+    {
+        "timestamp": "2019-07-18T10:42:01.488Z",
+        "action": "change",
+        "productName": "Мышка",
+        "body": {
+            "quantity": 1
+        },
+        "status": "successful"
+    },
+    {
+        "timestamp": "2019-07-18T10:42:04.066Z",
+        "action": "add",
+        "productName": "Ноутбук",
+        "body": {
+            "quantity": 1,
+            "id_product": 123,
+            "product_name": "Ноутбук",
+            "price": 45600
+        },
+        "status": "successful"
+    },
+    {
+        "timestamp": "2019-07-18T10:42:07.642Z",
+        "action": "delete",
+        "productName": "Ноутбук",
+        "body": {},
+        "status": "successful"
+    },
+    {
+        "timestamp": "2019-07-18T10:42:11.039Z",
+        "action": "change",
+        "productName": "Мышка",
+        "body": {
+            "quantity": -1
+        },
+        "status": "successful"
+    }
+]
