@@ -87,11 +87,15 @@
       validateInput() {
         const localRegexp = new RegExp(this.inputRegexp, "gi");
         if (localRegexp.test(this.inputValue)) {
-          document.getElementById('inputNumber').classList.remove('error-input');
           document.querySelectorAll('.mathButtons').forEach(el => el.disabled = false);
+          if (document.getElementById('inputNumber')) {
+            document.getElementById('inputNumber').classList.remove('error-input');
+          }
         } else {
-          document.getElementById('inputNumber').classList.add('error-input');
           document.querySelectorAll('.mathButtons').forEach(el => el.disabled = true);
+          if (document.getElementById('inputNumber')) {
+            document.getElementById('inputNumber').classList.add('error-input');
+          }
         }
       },
 
