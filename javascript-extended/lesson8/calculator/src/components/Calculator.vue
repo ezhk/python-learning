@@ -2,53 +2,27 @@
     <div class="interface">
         <label for="inputNumber">Calculator</label>
         <input type="text" class="form-control" id="inputNumber" v-model="inputValue">
-        <p class="suggest">{{leftOperand}} {{mathOperation}} {{inputValue}}</p>
+        <p class="suggest">{{leftOperand}} {{mathOperationSymbol}} {{inputValue}}</p>
 
         <div class="calculator-buttons">
             <div class="calculator-digests">
-                <div class="calculator-numbers">
-                    <button v-for="item of [1,2,3]" :key="item"
-                            type="button" class="btn btn-outline-secondary"
-                            @click.prevent="inputValue += item.toString()">{{item}}
-                    </button>
-                </div>
-                <div class="calculator-numbers">
-                    <button v-for="item of [4,5,6]" :key="item"
-                            type="button" class="btn btn-outline-secondary"
-                            @click.prevent="inputValue += item.toString()">{{item}}
-                    </button>
-                </div>
-                <div class="calculator-numbers">
-                    <button v-for="item of [7,8,9]" :key="item"
-                            type="button" class="btn btn-outline-secondary"
-                            @click.prevent="inputValue += item.toString()">{{item}}
-                    </button>
-                </div>
-                <div class="calculator-numbers">
-                    <button type="button" class="btn btn-danger"
-                            @click="resetInitData">C
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary"
-                            @click.prevent="inputValue += '0'">0
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary"
-                            @click.prevent="inputValue += '.'">.
-                    </button>
-                </div>
+                <button v-for="item of [1,2,3,4,5,6,7,8,9,0]" :key="item"
+                        type="button" class="btn btn-outline-secondary"
+                        @click.prevent="inputValue += item.toString()">{{item}}
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary"
+                        @click.prevent="inputValue += '.'">.
+                </button>
+                <button type="button" class="btn btn-danger"
+                        @click="resetInitData">C
+                </button>
             </div>
 
             <div class="calculator-operations">
-                <button type="button" class="mathButtons btn btn-secondary"
-                        @click.prevent="mathEventAction('add')">+
-                </button>
-                <button type="button" class="mathButtons btn btn-secondary"
-                        @click.prevent="mathEventAction('sub')">-
-                </button>
-                <button type="button" class="mathButtons btn btn-secondary"
-                        @click.prevent="mathEventAction('mul')">*
-                </button>
-                <button type="button" class="mathButtons btn btn-secondary"
-                        @click.prevent="mathEventAction('div')">/
+                <button v-for="description in Object.keys(mathButtons)" :key="description"
+                        type="button" class="mathButtons btn btn-secondary"
+                        @click.prevent="mathEventAction(description)">{{mathButtons[description]}}
                 </button>
             </div>
         </div>
@@ -72,13 +46,30 @@
          * возможно пользователь просто ещё не ввел данные
          */
         inputRegexp: /^-?(\d+(\.\d+)?)?$/,
+        mathButtons: {
+          add: '+',
+          sub: '-',
+          mul: '*',
+          div: '/',
+        },
       }
     },
+
     watch: {
+      /**
+       * Добавляем watcher для проверки вводимых пользователем данных
+       */
       inputValue: function () {
         this.validateInput();
       },
     },
+
+    computed: {
+      mathOperationSymbol() {
+        return this.mathButtons[this.mathOperation];
+      },
+    },
+
     methods: {
       /**
        * Проверяем вводимые символы по клику, допустимы лишь float.
@@ -256,5 +247,9 @@
     .calculator-operations {
         display: flex;
         flex-direction: column;
+    }
+
+    p {
+        color: darkgrey;
     }
 </style>
