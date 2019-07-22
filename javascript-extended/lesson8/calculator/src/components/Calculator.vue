@@ -1,7 +1,7 @@
 <template>
     <div class="interface">
-        <input type="text" class="form-control" id="inputNumber"
-               @change="validateInput" v-model="inputValue">
+        <label for="inputNumber">Calculator</label>
+        <input type="text" class="form-control" id="inputNumber" v-model="inputValue">
         <p class="suggest">{{leftOperand}} {{mathOperation}} {{inputValue}}</p>
 
         <div class="calculator-buttons">
@@ -66,8 +66,18 @@
         leftOperand: null,
         inputValue: '',
         mathOperation: null,
-        inputRegexp: /^\d+(\.\d+)?$/i,
+
+        /*
+         * в regexp считаем вылидными также пустое значение и унарные знаки;
+         * возможно пользователь просто ещё не ввел данные
+         */
+        inputRegexp: /^-?(\d+(\.\d+)?)?$/,
       }
+    },
+    watch: {
+      inputValue: function () {
+        this.validateInput();
+      },
     },
     methods: {
       /**
@@ -75,12 +85,13 @@
        * Если значение != regexp, делаем неактивными кнопки и подсвечиваем поле ввода.
        */
       validateInput() {
-        if (!this.inputValue.match(this.inputRegexp)) {
-          document.querySelectorAll('.mathButtons').forEach(el => el.disabled = true);
-          document.querySelector('input').classList.add('error-input');
-        } else {
+        const localRegexp = new RegExp(this.inputRegexp, "gi");
+        if (localRegexp.test(this.inputValue)) {
+          document.getElementById('inputNumber').classList.remove('error-input');
           document.querySelectorAll('.mathButtons').forEach(el => el.disabled = false);
-          document.querySelector('input').classList.remove('error-input');
+        } else {
+          document.getElementById('inputNumber').classList.add('error-input');
+          document.querySelectorAll('.mathButtons').forEach(el => el.disabled = true);
         }
       },
 
@@ -145,8 +156,7 @@
           return true;
         }
 
-        if (this.inputValue === '-' &&
-            (action === 'sub' || action === 'add')) {
+        if (this.inputValue === '-' && (action === 'sub' || action === 'add')) {
           this.inputValue = '';
           return true;
         }
