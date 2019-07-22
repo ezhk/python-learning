@@ -122,10 +122,34 @@
        * @param action, string
        */
       mathEventAction(action) {
+        if (this.isUnaryOperator(action)) {
+          return false;
+        }
         this.checkExistsValues();
         this.mathOperation = action;
         this.leftOperand = this.inputValue;
         this.inputValue = '';
+      },
+
+      /**
+       * Функиця определяет является ли операция не математематической,
+       *   а добавлением унарного минуса или плюса:
+       *   минус ставим если пустое число и нажата кнопка -;
+       *   плюс ставим, если уже есть минус и нажат либо +, либо -.
+       */
+      isUnaryOperator(action) {
+        if (this.inputValue === '' && action === 'sub') {
+          this.inputValue += '-';
+          return true;
+        }
+
+        if (this.inputValue === '-' &&
+            (action === 'sub' || action === 'add')) {
+          this.inputValue = '';
+          return true;
+        }
+
+        return false;
       },
 
       /**
