@@ -96,12 +96,12 @@ describe('Undefined operand behaviour: "undefined" and "11"', () => {
     inputValue: 11,
   });
 
-  it('Why does it NaN and not undefined?', () => {
-    expect(wrapper.vm.$data.leftOperand).toBeNaN();
+  it('check undefined init value', () => {
+    expect(wrapper.vm.$data.leftOperand).toBeUndefined();
   });
 
-  wrapper.vm.convertValuesToFloat();
   it('check that variable is NaN', () => {
+    wrapper.vm.convertValuesToFloat();
     expect(wrapper.vm.$data.leftOperand).toBeNaN();
   });
 
