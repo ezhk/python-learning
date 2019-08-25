@@ -1,0 +1,10 @@
+dict:
+  coffee: кофе
+  euro: €
+  tea: чай
+int: 1
+list:
+- item
+- quantity
+- first key: Карл
+  second key: у Клары
