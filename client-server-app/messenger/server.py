@@ -2,6 +2,10 @@
 
 from socket import socket, AF_INET, SOCK_STREAM
 
+import sys
+
+sys.path.append('.')
+
 from jim.config import BACKLOG, BUFSIZE
 from jim.utils import parse_arguments, parse_raw_json, \
     is_valid_message, make_raw_json
