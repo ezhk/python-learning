@@ -10,13 +10,10 @@ from . import exceptions
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Messenger application.')
-    parser.add_argument('-a', '--address', dest='address',
-                        type=str, default=SERVER_ADDRESS)
-    parser.add_argument('-p', '--port', dest='port',
-                        type=int, default=SERVER_PORT)
-    parser.add_argument('-u', '--username', dest='username',
-                        type=str, default='Guest')
+    parser = argparse.ArgumentParser(description="Messenger application.")
+    parser.add_argument("-a", "--address", dest="address", type=str, default=SERVER_ADDRESS)
+    parser.add_argument("-p", "--port", dest="port", type=int, default=SERVER_PORT)
+    parser.add_argument("-u", "--username", dest="username", type=str, default="Guest")
     args = parser.parse_args()
 
     return args
@@ -38,7 +35,7 @@ def make_raw_json(python_object):
 
 def is_valid_message(msg):
     try:
-        action = msg.get('action', None)
+        action = msg.get("action", None)
         # A bit magic: call function from messages with name as action
         msg_template = getattr(messages, action)()
     except Exception as err:
@@ -52,15 +49,15 @@ def is_valid_message(msg):
 
 def raise_invalid_username(username):
     if len(username) > 25:
-        raise exceptions.UsernameError('максимальная длина имени пользователя 25 символов')
+        raise exceptions.UsernameError("максимальная длина имени пользователя 25 символов")
 
     if not re.match(r"^[\w ]+$", username):
-        raise exceptions.UsernameError('допустимые символы - буквы, цифры, подчеркивания и пробелы')
+        raise exceptions.UsernameError("допустимые символы - буквы, цифры, подчеркивания и пробелы")
 
     return True
 
 
 def is_valid_response(msg):
-    if 'response' not in msg or 'time' not in msg:
+    if "response" not in msg or "time" not in msg:
         return False
     return True
