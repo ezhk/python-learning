@@ -1,17 +1,25 @@
 #!/usr/bin/env python
 
+from logging import getLogger
 from socket import socket, AF_INET, SOCK_STREAM
 
 import sys
 
-sys.path.append('.')
+sys.path.append(".")
 
 from jim.config import BUFSIZE
-from jim.utils import parse_arguments, make_raw_json, \
-    parse_raw_json, is_valid_response, raise_invalid_username
+from jim.utils import (
+    parse_arguments,
+    make_raw_json,
+    parse_raw_json,
+    is_valid_response,
+    raise_invalid_username,
+)
 from jim.messages import presence
+import jim.logger
 
 if __name__ == "__main__":
+    logger = getLogger("messenger.client")
     opts = parse_arguments()
     raise_invalid_username(opts.username)
 
@@ -25,6 +33,6 @@ if __name__ == "__main__":
         data = parse_raw_json(raw_data)
 
         if is_valid_response(data):
-            print(f"Получено корректное сообщение от сервера: {data}")
+            logger.debug(f"Получено корректное сообщение от сервера: {data}")
         else:
-            print(f"Получено некорректное сообщение от сервера: {data}")
+            logger.error(f"Получено некорректное сообщение от сервера: {data}")
