@@ -1,11 +1,12 @@
-import __main__ as main
+import sys
 
 from logging import getLogger
 from . import logger
 
 
 def log(func):
-    role = "server" if "server" in main.__file__ else "client"
+    program_name = sys.argv[0]
+    role = "server" if "server" in program_name else "client"
     logger = getLogger(f"messenger.{role}")
 
     def wrapper(*args, **kwargs):
@@ -27,7 +28,8 @@ class Log:
     def __init__(self, function):
         self.function = function
 
-        role = "server" if "server" in main.__file__ else "client"
+        program_name = sys.argv[0]
+        role = "server" if "server" in program_name else "client"
         self.logger = getLogger(f"messenger.{role}")
 
     def __call__(self, *args, **kwargs):
