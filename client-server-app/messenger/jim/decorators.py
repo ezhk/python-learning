@@ -8,8 +8,6 @@ def log(func):
     role = "server" if "server" in main.__file__ else "client"
     logger = getLogger(f"messenger.{role}")
 
-    print(logger.name)
-
     def wrapper(*args, **kwargs):
         logger.info(
             f"Вызвана функция {func.__name__} с аргументами {args}, "
