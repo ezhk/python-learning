@@ -9,7 +9,7 @@ def log(func):
     logger = getLogger(f"messenger.{role}")
 
     def wrapper(*args, **kwargs):
-        logger.info(
+        logger.debug(
             f"Вызвана функция {func.__name__} с аргументами {args}, "
             f"{kwargs} в модуле {func.__module__}"
         )
