@@ -1,6 +1,24 @@
-2019-09-20 11:15:54,103 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60618): {'action': 'presence', 'time': 1568967354.103229, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-20 11:16:25,717 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60630): {'action': 'presence', 'time': 1568967385.716998, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-20 11:16:54,955 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60635): {'action': 'presences', 'time': 1568967414.955622, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-20 11:16:54,956 server.py > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 60635),  ошибка в сообщении, module 'jim.messages' has no attribute 'presences'
-2019-09-20 11:17:00,201 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60636): {'action': 'presence', 'time': 1568967420.201659, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-20 13:20:53,480 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62761): {'action': 'presence', 'time': 1568974853.480466, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
+2019-09-22 13:58:36,300 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 59791): {'action': 'presence', 'time': 1569149916.300413, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
+2019-09-22 13:58:36,300 decorators.py > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-09-22 13:58:36,300 decorators.py > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-09-22 13:58:36,300 decorators.py > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-09-22 13:59:16,357 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 59800): {'action': 'presences', 'time': 1569149956.356914, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
+2019-09-22 13:59:16,357 decorators.py > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-09-22 13:59:16,357 server.py > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 59800),  ошибка в сообщении, module 'jim.messages' has no attribute 'presences'
+2019-09-22 14:00:18,136 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 59811): {'action': 'presence', 'time': 1569150018.13673, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
+2019-09-22 14:00:18,137 decorators.py > decorators:INFO Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-09-22 14:00:18,137 decorators.py > decorators:INFO Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-09-22 14:00:18,137 decorators.py > decorators:INFO Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-09-22 14:05:23,453 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 59929): {}
+2019-09-22 14:05:23,454 decorators.py > decorators:INFO Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-09-22 14:05:23,454 server.py > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 59929),  ошибка в сообщении, getattr(): attribute name must be string
+2019-09-22 14:05:55,095 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 59934): {'action': 'presence', 'time': 1569150355.094712, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
+2019-09-22 14:05:55,095 decorators.py > decorators:INFO Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-09-22 14:05:55,095 server.py > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 59934),  ошибка в сообщении, name 'func' is not defined
+2019-09-22 14:06:07,632 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 59936): {'action': 'presence', 'time': 1569150367.632411, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
+2019-09-22 14:06:07,632 decorators.py > decorators:INFO Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-09-22 14:06:07,632 server.py > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 59936),  ошибка в сообщении, name 'func' is not defined
+2019-09-22 14:06:47,225 server.py > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 59940): {'action': 'presence', 'time': 1569150407.225189, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
+2019-09-22 14:06:47,226 decorators.py > decorators:INFO Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-09-22 14:06:47,226 decorators.py > decorators:INFO Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-09-22 14:06:47,226 decorators.py > decorators:INFO Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages

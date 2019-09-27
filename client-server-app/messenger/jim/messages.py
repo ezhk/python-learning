@@ -1,8 +1,10 @@
 import datetime
 
 from .config import ENCODING
+from .decorators import log
 
 
+@log
 def authenticate(account_name=None, password=None):
     return {
         "action": "authenticate",
@@ -11,6 +13,7 @@ def authenticate(account_name=None, password=None):
     }
 
 
+@log
 def presence(account_name=None, status=None):
     return {
         "action": "presence",
@@ -20,10 +23,12 @@ def presence(account_name=None, status=None):
     }
 
 
+@log
 def probe():
     return {"action": "probe", "time": datetime.datetime.now().timestamp()}
 
 
+@log
 def msg(message=None, source=None, destination=None):
     return {
         "action": "msg",
@@ -35,18 +40,22 @@ def msg(message=None, source=None, destination=None):
     }
 
 
+@log
 def join(room=None):
     return {"action": "join", "time": datetime.datetime.now().timestamp(), "room": room}
 
 
+@log
 def leave(room=None):
     return {"action": "leave", "time": datetime.datetime.now().timestamp(), "room": room}
 
 
+@log
 def quit():
     return {"action": "quit"}
 
 
+@log
 def response(status, message="", is_success=True):
     body = {"response": status, "time": datetime.datetime.now().timestamp()}
 
