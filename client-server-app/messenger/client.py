@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import json
 from logging import getLogger
 from socket import socket, AF_INET, SOCK_STREAM
 
@@ -12,8 +11,6 @@ from jim.config import BUFSIZE
 from jim.exceptions import MessageError
 from jim.utils import (
     parse_arguments,
-    make_raw_json,
-    parse_raw_json,
     send_data,
     recv_data,
     is_valid_message,

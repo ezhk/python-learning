@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 from logging import getLogger
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
@@ -10,14 +9,7 @@ sys.path.append(".")
 
 from jim.exceptions import MessageError
 from jim.messages import response
-from jim.utils import (
-    parse_arguments,
-    parse_raw_json,
-    is_valid_message,
-    make_raw_json,
-    send_data,
-    recv_data,
-)
+from jim.utils import parse_arguments, is_valid_message, send_data, recv_data
 from jim.config import BACKLOG, BUFSIZE
 import jim.logger
 
@@ -102,9 +94,5 @@ if __name__ == "__main__":
             requests = get_request(r_clients, clients)
         if w_clients and requests:
             put_reply(w_clients, clients, requests)
-
-        import time
-
-        time.sleep(0.3)
 
     s.close()
