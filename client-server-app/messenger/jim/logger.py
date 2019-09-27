@@ -5,7 +5,9 @@ import sys
 from .config import SERVER_LOGFILE, CLIENT_LOGFILE, LOGLEVEL, ENCODING
 
 
-formatter = logging.Formatter("%(asctime)s %(filename)s > %(module)s:%(levelname)s %(message)s")
+formatter = logging.Formatter(
+    "%(asctime)s %(filename)s:%(lineno)s > %(module)s:%(levelname)s %(message)s"
+)
 
 
 # Server logger object
