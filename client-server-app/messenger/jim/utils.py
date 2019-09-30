@@ -3,8 +3,11 @@
 import argparse
 import re
 import json
+from queue import Queue
 import socket
 import struct
+import time
+from threading import Thread
 
 from .config import SERVER_ADDRESS, SERVER_PORT, ENCODING
 from . import messages
@@ -16,7 +19,6 @@ def parse_arguments():
     parser.add_argument("-a", "--address", dest="address", type=str, default=SERVER_ADDRESS)
     parser.add_argument("-p", "--port", dest="port", type=int, default=SERVER_PORT)
     parser.add_argument("-u", "--username", dest="username", type=str, default="Guest")
-    parser.add_argument("-w", "--write", dest="write", action="store_true")
     args = parser.parse_args()
 
     return args
@@ -106,3 +108,94 @@ def recv_data(sock):
     except Exception as err:
         pass
     return None
+
+
+class MessageReader(Thread):
+    def __init__(self, sock, logger):
+        super().__init__()
+        self.daemon = True
+        self.sock = sock
+        self.logger = logger
+
+    def run(self):
+        while True:
+            data = recv_data(self.sock)
+            if not data:
+                time.sleep(0.3)
+                continue
+
+            if "from" in data and "message" in data:
+                self.logger.info(f"Сообщение от {data['from']}: {data['message']}")
+                self.logger.debug(f"Получено корректное сообщение от сервера: {data}")
+        return True
+
+
+class Clients(object):
+    def __init__(self, active_clients={}):
+        self.clients = active_clients
+        self.groups = {}
+        self.delayed_messages = {}
+
+    def presence(self, client, socket):
+        self.clients.update({client: {"socket": socket, "active": True, "atime": time.time()}})
+        return True
+
+    def quit(self, client):
+        if client in self.clients:
+            return False
+        self.clients[client]["active"] = False
+        return True
+
+    def update_atime(self, client):
+        if client in self.clients:
+            return False
+        self.clients[client]["atime"] = time.time()
+        return True
+
+    def is_active(self, client):
+        return client in self.clients and self.clients[client]["active"]
+
+    def get_socket(self, client):
+        if self.is_active(client):
+            return self.clients[client]["socket"]
+        return None
+
+    @property
+    def all(self):
+        return self.clients
+
+    def join(self, client, chat):
+        """
+        Group logic, don't used yet.
+        """
+        if client not in self.groups:
+            self.groups.udpate({client: set()})
+        self.groups[client].add(chat)
+        return True
+
+    def leave(self, client, chat):
+        """
+        Group logic, don't used yet.
+        """
+        if client not in self.groups:
+            return False
+        self.groups[client].remove(chat)
+        return True
+
+    def put_message(self, recipient, sender, message):
+        """
+        Offline message logic, don't used yet.
+        """
+        if recipient not in self.delayed_messages:
+            self.delayed_messages[recipient] = Queue(0)
+        self.delayed_messages[recipient].put(
+            {"message": message, "sender": sender, "ctime": time.time()}
+        )
+
+    def get_message(self, recipient):
+        """
+        Offline message logic, don't used yet.
+        """
+        if recipient not in self.delayed_messages:
+            return None
+        return self.delayed_messages[recipient].get()

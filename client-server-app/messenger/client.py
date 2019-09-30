@@ -16,6 +16,7 @@ from jim.utils import (
     is_valid_message,
     is_valid_response,
     raise_invalid_username,
+    MessageReader,
 )
 from jim.messages import presence, msg
 import jim.logger
@@ -52,21 +53,19 @@ if __name__ == "__main__":
         s.connect((opts.address, opts.port))
         s.settimeout(1)
 
+        msg_reader = MessageReader(s, logger)
+        msg_reader.start()
+
         _helo_message(s, opts)
         while True:
-            if opts.write:
-                text = input("Введите сообщение:")
-                message = msg(text, opts.username, "_all")
-                send_data(s, message)
+            try:
+                text = input("Введите сообщение в формате 'recipient:message': ")
+                (recipient, msg_body) = text.split(":", 1)
+            except ValueError:
+                logger.info("Введено пустое сообщение")
+                continue
 
-            # read all data
-            while True:
-                try:
-                    data = _recv_data(s)
-                    if not data:
-                        break
+            message = msg(msg_body, opts.username, recipient)
+            send_data(s, message)
 
-                    logger.info(f"Сообщение от {data['from']}: {data['message']}")
-                    logger.debug(f"Получено корректное сообщение от сервера: {data}")
-                except Exception as err:
-                    pass
+        msg_reader.join()
