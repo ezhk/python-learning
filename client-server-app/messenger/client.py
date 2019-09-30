@@ -8,15 +8,40 @@ import sys
 sys.path.append(".")
 
 from jim.config import BUFSIZE
+from jim.exceptions import MessageError
 from jim.utils import (
     parse_arguments,
-    make_raw_json,
-    parse_raw_json,
+    send_data,
+    recv_data,
+    is_valid_message,
     is_valid_response,
     raise_invalid_username,
 )
-from jim.messages import presence
+from jim.messages import presence, msg
 import jim.logger
+
+
+def _helo_message(sock, opts):
+    message = presence(opts.username)
+    return send_data(sock, message)
+
+
+def _ack_data(sock):
+    data = recv_data(sock)
+    if not is_valid_response(data):
+        raise MessageError(f"Получено некорректное подтверждение от сервера: {data}")
+    return data
+
+
+def _recv_data(sock):
+    data = recv_data(sock)
+    if not data:
+        return False
+
+    if not is_valid_message(data):
+        raise MessageError(f"Получено некорректное сообщение: {data}")
+    return data
+
 
 if __name__ == "__main__":
     logger = getLogger("messenger.client")
@@ -25,14 +50,23 @@ if __name__ == "__main__":
 
     with socket(AF_INET, SOCK_STREAM) as s:
         s.connect((opts.address, opts.port))
+        s.settimeout(1)
 
-        message = presence(opts.username)
-        s.send(make_raw_json(message))
+        _helo_message(s, opts)
+        while True:
+            if opts.write:
+                text = input("Введите сообщение:")
+                message = msg(text, opts.username, "_all")
+                send_data(s, message)
 
-        raw_data = s.recv(BUFSIZE)
-        data = parse_raw_json(raw_data)
+            # read all data
+            while True:
+                try:
+                    data = _recv_data(s)
+                    if not data:
+                        break
 
-        if is_valid_response(data):
-            logger.debug(f"Получено корректное сообщение от сервера: {data}")
-        else:
-            logger.error(f"Получено некорректное сообщение от сервера: {data}")
+                    logger.info(f"Сообщение от {data['from']}: {data['message']}")
+                    logger.debug(f"Получено корректное сообщение от сервера: {data}")
+                except Exception as err:
+                    pass
