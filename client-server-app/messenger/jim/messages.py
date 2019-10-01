@@ -38,7 +38,7 @@ def probe():
 
 
 @log
-def msg(message, source=None, destination=None):
+def msg(message=None, source=None, destination=None):
     return {
         "action": "msg",
         "time": datetime.datetime.now().timestamp(),

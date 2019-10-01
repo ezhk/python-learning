@@ -9,8 +9,12 @@ import struct
 import time
 from threading import Thread
 
-from .config import SERVER_ADDRESS, SERVER_PORT, ENCODING
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+
+from .config import SERVER_ADDRESS, SERVER_PORT, ENCODING, STORAGE
 from . import messages
+from . import models
 from . import exceptions
 
 
@@ -19,6 +23,7 @@ def parse_arguments():
     parser.add_argument("-a", "--address", dest="address", type=str, default=SERVER_ADDRESS)
     parser.add_argument("-p", "--port", dest="port", type=int, default=SERVER_PORT)
     parser.add_argument("-u", "--username", dest="username", type=str, default="Guest")
+    parser.add_argument("-r", "--readonly", dest="readonly", action="store_true")
     args = parser.parse_args()
 
     return args
@@ -124,45 +129,74 @@ class MessageReader(Thread):
                 time.sleep(0.3)
                 continue
 
-            if "from" in data and "message" in data:
-                self.logger.info(f"Сообщение от {data['from']}: {data['message']}")
+            if not set({"from", "to", "message"}) - set(data.keys()):
+                self.logger.info(f"Сообщение от {data['from']} >{data['to']} : {data['message']}")
                 self.logger.debug(f"Получено корректное сообщение от сервера: {data}")
         return True
 
 
 class Clients(object):
-    def __init__(self, active_clients={}):
-        self.clients = active_clients
+    def __init__(self):
+        self.sockets = {}
         self.groups = {}
         self.delayed_messages = {}
 
+        engine = create_engine(STORAGE, echo=False)
+        self.session = Session(bind=engine)
+
     def presence(self, client, socket):
-        self.clients.update({client: {"socket": socket, "active": True, "atime": time.time()}})
+        self.sockets.update({client: socket})
+        user = self.session.query(models.Users).filter_by(username=client).first()
+
+        # create user row if not exists
+        if user is None:
+            u_object = models.Users(username=client)
+            try:
+                self.session.add(u_object)
+                self.session.commit()
+            except Exception as err:
+                self.session.rollback()
+                return False
+            return True
+
+        try:
+            user.is_active = True
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
         return True
 
     def quit(self, client):
-        if client in self.clients:
+        try:
+            self.session.query(models.Users).filter_by(username=client).update({"is_active": False})
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
             return False
-        self.clients[client]["active"] = False
         return True
 
     def update_atime(self, client):
-        if client in self.clients:
+        try:
+            session.query(models.Users).filter_by(username=client).update({})
+            session.commit()
+        except Exception:
+            self.session.rollback()
             return False
-        self.clients[client]["atime"] = time.time()
         return True
 
     def is_active(self, client):
-        return client in self.clients and self.clients[client]["active"]
+        user = self.session.query(models.Users).filter_by(username=client).first()
+        return user is not None and user.is_active
 
     def get_socket(self, client):
         if self.is_active(client):
-            return self.clients[client]["socket"]
+            return self.sockets[client]
         return None
 
     @property
-    def all(self):
-        return self.clients
+    def all_sockets(self):
+        return self.sockets
 
     def join(self, client, chat):
         """

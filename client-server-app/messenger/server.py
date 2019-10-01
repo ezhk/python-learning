@@ -65,7 +65,7 @@ def get_request(r_clients, all_clients):
         try:
             send_data(client_sock, message)
         except Exception as err:
-            logger.debug(f"Клиент отключился {client_sock}: {err}")
+            logger.debug(f"Клиент отключился при подтверждении {client_sock}: {err}")
             all_clients.remove(client_sock)
             client_sock.close()
 
@@ -99,26 +99,27 @@ if __name__ == "__main__":
     s.settimeout(0.1)
     s.setblocking(0)
 
-    cliens_socket = []
+    sockets = []
     while True:
         try:
             sock, addr = s.accept()
-            cliens_socket.append(sock)
+            sockets.append(sock)
         except OSError as e:
             # timeout exceeded
             pass
 
         try:
-            r_clients, w_clients, _ = select(cliens_socket, cliens_socket, [], 0)
+            r_clients, w_clients, _ = select(sockets, sockets, [], 0)
         except Exception as err:
             # received exception when client disconnect
             logger.debug(f"Исключение select: {err}")
+            continue
 
         requests = {}
         if r_clients:
-            requests = get_request(r_clients, cliens_socket)
+            requests = get_request(r_clients, sockets)
         if w_clients and requests:
-            put_reply(w_clients, cliens_socket, requests)
+            put_reply(w_clients, sockets, requests)
 
         time.sleep(0.1)
 

@@ -57,6 +57,10 @@ if __name__ == "__main__":
         msg_reader.start()
 
         _helo_message(s, opts)
+        if opts.readonly:
+            msg_reader.join()
+            sys.exit()
+
         while True:
             try:
                 text = input("Введите сообщение в формате 'recipient:message': ")
