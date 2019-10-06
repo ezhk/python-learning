@@ -10,7 +10,8 @@ sys.path.append(".")
 
 from jim.exceptions import MessageError
 from jim.messages import response, is_presence_message, get_recipient
-from jim.utils import parse_arguments, is_valid_message, send_data, recv_data, Clients
+from jim.utils import parse_arguments, is_valid_message, send_data, recv_data
+from jim.classes import Clients
 from jim.config import BACKLOG, BUFSIZE
 import jim.logger
 

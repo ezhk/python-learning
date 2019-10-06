@@ -40,4 +40,3 @@ if __name__ == "__main__":
 
         if action == "q":
             sys.exit()
-
