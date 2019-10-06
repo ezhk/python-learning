@@ -1,337 +1,76 @@
-2019-09-26 21:54:06,836 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64246): {'action': 'presence', 'time': 1569524046.812877, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 21:54:06,836 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:54:06,836 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 21:54:06,836 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:54:15,907 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64250): {'action': 'presence', 'time': 1569524055.884832, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 21:54:15,907 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:54:15,908 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 21:54:15,908 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:54:19,850 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): {'action': 'presence', 'time': 1569524059.626131, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 21:54:19,850 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:54:19,850 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 21:54:19,851 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:54:22,583 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): {'action': 'msg', 'time': 1569524062.459752, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test message'}
-2019-09-26 21:54:22,584 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:54:22,584 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 21:54:22,584 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:54:27,125 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): {'action': 'msg', 'time': 1569524067.124024, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'привет, мир'}
-2019-09-26 21:54:27,125 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:54:27,125 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 21:54:27,125 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:55:10,091 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:10,092 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:10,094 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:10,397 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:10,398 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:10,398 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:10,699 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:10,699 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:10,699 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:11,004 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:11,004 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:11,004 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:11,306 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:11,308 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:11,308 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:11,611 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:11,611 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:11,611 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:11,915 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:11,915 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:11,915 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:12,217 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:12,217 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:12,218 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:12,524 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:12,524 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:12,524 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:12,825 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:12,825 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:12,825 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:13,128 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:13,128 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:13,128 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:13,431 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:13,431 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:13,432 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:13,733 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:13,733 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:13,734 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:14,038 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:14,038 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:14,038 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:14,340 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:14,340 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:14,341 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:14,646 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:14,646 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:14,647 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:14,949 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:14,949 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:14,949 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:15,253 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:15,253 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:15,253 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:15,558 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:15,558 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:15,558 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:15,859 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:15,859 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:15,860 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:16,165 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:16,165 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:16,165 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:16,467 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:16,467 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:16,467 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:16,770 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:16,770 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:16,770 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:17,071 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:17,071 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:17,072 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:17,374 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:17,375 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:17,375 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:17,679 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:17,679 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:17,679 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:17,980 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:17,980 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:17,981 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:18,284 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:18,284 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:18,284 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:18,585 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:18,586 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:18,586 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:18,886 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:18,887 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:18,887 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:19,189 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:19,189 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:19,189 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:19,492 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:19,492 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:19,492 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:19,793 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:19,793 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:19,793 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:20,097 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:20,097 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:20,097 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:20,400 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:20,400 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:20,401 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:20,701 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:20,702 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:20,702 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:21,002 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:21,003 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:21,003 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:21,303 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:21,304 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:21,304 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:21,609 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:21,609 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:21,609 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:21,914 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:21,915 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:21,915 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:22,215 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:22,216 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:22,216 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:22,517 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:22,517 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:22,517 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:22,818 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:22,818 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:22,819 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:23,121 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:23,122 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:23,122 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:23,425 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:23,425 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:23,426 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:23,730 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:23,730 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:23,730 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:24,034 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:24,034 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:24,035 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:24,335 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:24,335 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:24,335 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:24,639 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:24,640 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:24,641 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:24,945 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:24,946 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:24,946 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:25,246 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:25,247 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:25,247 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:25,550 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:25,550 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:25,550 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:25,851 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:25,851 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:25,851 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:26,152 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:26,153 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:26,153 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:26,453 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:26,454 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:26,454 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:26,758 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:26,759 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:26,759 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:27,063 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:27,063 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:27,063 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:27,364 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:27,364 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:27,365 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:27,665 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:27,666 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:27,666 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:27,971 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:27,971 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:27,972 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:55:28,275 server.py:36 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64251): None
-2019-09-26 21:55:28,275 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:55:28,276 server.py:43 > server:ERROR Ошибка валидации сообщения от ('127.0.0.1', 64251),  ошибка в сообщении, 'NoneType' object has no attribute 'get'
-2019-09-26 21:58:24,584 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64292): {'action': 'presence', 'time': 1569524304.399565, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 21:58:24,586 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:58:24,586 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 21:58:24,587 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:58:30,334 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64293): {'action': 'presence', 'time': 1569524310.32356, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 21:58:30,335 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:58:30,335 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 21:58:30,335 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:58:34,574 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64294): {'action': 'presence', 'time': 1569524314.312541, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 21:58:34,574 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:58:34,574 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 21:58:34,574 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:58:36,087 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64294): {'action': 'msg', 'time': 1569524315.802073, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test'}
-2019-09-26 21:58:36,087 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:58:36,087 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 21:58:36,087 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:58:44,860 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64294): {'action': 'msg', 'time': 1569524324.646236, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test2'}
-2019-09-26 21:58:44,861 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:58:44,861 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 21:58:44,861 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:58:51,234 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64294): {'action': 'msg', 'time': 1569524330.947899, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test3'}
-2019-09-26 21:58:51,235 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 21:58:51,235 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 21:58:51,235 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 21:59:01,533 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=6, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 64292)>:  ошибка в сообщении, Получено сообщение None
-2019-09-26 21:59:09,723 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711)>:  ошибка в сообщении, Получено сообщение None
-2019-09-26 22:00:35,687 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 64293)>:  ошибка в сообщении, Получено сообщение None
-2019-09-26 22:01:30,205 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64316): {'action': 'presence', 'time': 1569524490.125755, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 22:01:30,205 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:01:30,206 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 22:01:30,206 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:01:33,234 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64319): {'action': 'presence', 'time': 1569524493.017457, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 22:01:33,234 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:01:33,234 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 22:01:33,234 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:01:35,656 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64320): {'action': 'presence', 'time': 1569524495.609471, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 22:01:35,656 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:01:35,656 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 22:01:35,656 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:01:36,571 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64320): {'action': 'msg', 'time': 1569524496.350866, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test'}
-2019-09-26 22:01:36,571 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:01:36,571 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 22:01:36,571 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:01:39,603 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64320): {'action': 'msg', 'time': 1569524499.386078, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test234'}
-2019-09-26 22:01:39,603 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:01:39,604 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 22:01:39,604 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:01:42,941 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64320): {'action': 'msg', 'time': 1569524502.835183, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'привет, мир'}
-2019-09-26 22:01:42,941 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:01:42,941 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 22:01:42,942 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:04:50,294 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64320): {'action': 'msg', 'time': 1569524690.188994, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'еуые'}
-2019-09-26 22:04:50,294 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:04:50,294 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 22:04:50,295 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:05:07,551 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 64320)>:  ошибка в сообщении, Получено сообщение None
-2019-09-26 22:05:08,459 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64362): {'action': 'presence', 'time': 1569524708.268275, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-26 22:05:08,460 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:05:08,460 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-26 22:05:08,460 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:05:09,371 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64362): {'action': 'msg', 'time': 1569524709.166579, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test'}
-2019-09-26 22:05:09,371 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:05:09,371 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 22:05:09,371 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-26 22:05:13,916 server.py:38 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 64362): {'action': 'msg', 'time': 1569524713.826654, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test_123'}
-2019-09-26 22:05:13,917 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-26 22:05:13,917 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-26 22:05:13,917 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:10:10,986 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 64362)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:12:31,708 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 64319)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:13:04,326 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 65530): {'action': 'presence', 'time': 1569568384.126691, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:13:04,326 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:13:04,326 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:13:04,326 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:13:12,586 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=6, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 64316)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:13:20,959 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 65533): {'action': 'presence', 'time': 1569568400.860856, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:13:20,960 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:13:20,960 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:13:20,960 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:13:21,565 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 65533): {'action': 'msg', 'time': 1569568401.513528, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test'}
-2019-09-27 10:13:21,565 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:13:21,565 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-27 10:13:21,566 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:13:27,931 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 65535): {'action': 'presence', 'time': 1569568407.768885, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:13:27,932 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:13:27,932 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:13:27,932 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:13:29,450 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49152): {'action': 'presence', 'time': 1569568409.363947, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:13:29,451 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:13:29,451 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:13:29,451 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:13:33,993 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49152): {'action': 'msg', 'time': 1569568413.807263, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test2'}
-2019-09-27 10:13:33,993 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:13:33,994 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-27 10:13:33,994 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:01,287 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=6, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 65530)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:14:01,288 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 65535)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:14:01,288 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 49152)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:14:04,316 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49157): {'action': 'presence', 'time': 1569568444.10738, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:14:04,316 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:14:04,316 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:14:04,317 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:05,527 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49158): {'action': 'presence', 'time': 1569568445.388194, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:14:05,527 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:14:05,528 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:14:05,528 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:05,833 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49159): {'action': 'presence', 'time': 1569568445.637794, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:14:05,834 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:14:05,834 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:14:05,834 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:15,221 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49159): {'action': 'msg', 'time': 1569568455.141439, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'Тестирование 3 процессов'}
-2019-09-27 10:14:15,221 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:14:15,222 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-27 10:14:15,222 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:22,482 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=6, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 49157)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:14:22,484 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 49158)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:14:22,485 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 49159)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:14:25,819 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49159): {'action': 'msg', 'time': 1569568465.717614, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test'}
-2019-09-27 10:14:25,819 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:14:25,819 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-27 10:14:25,819 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:29,472 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49163): {'action': 'presence', 'time': 1569568469.303355, 'type': 'status', 'user': {'account_name': 'Guest', 'status': None}}
-2019-09-27 10:14:29,473 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:14:29,473 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-09-27 10:14:29,473 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:33,108 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49163): {'action': 'msg', 'time': 1569568473.003141, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'test432'}
-2019-09-27 10:14:33,109 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:14:33,109 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-27 10:14:33,109 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-09-27 10:14:37,044 server.py:33 > server:DEBUG Клиент отключился <socket.socket fd=6, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 49163)>:  ошибка в сообщении, Получено сообщение None
-2019-09-27 10:16:17,494 server.py:39 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49163): {'action': 'msg', 'time': 1569568577.192028, 'from': 'Guest', 'to': '_all', 'encoding': 'utf-8', 'message': 'asd'}
-2019-09-27 10:16:17,496 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-09-27 10:16:17,497 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-09-27 10:16:17,497 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:52:56,562 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60657): {'action': 'presence', 'time': 1569919976.493322, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-01 11:52:56,562 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:52:56,562 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-01 11:52:56,563 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:53:00,787 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60658): {'action': 'presence', 'time': 1569919980.764388, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
+2019-10-01 11:53:00,788 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:53:00,788 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-01 11:53:00,788 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:53:09,646 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'presence', 'time': 1569919989.562103, 'type': 'status', 'user': {'account_name': 'Andrew', 'status': None}}
+2019-10-01 11:53:09,648 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:53:09,648 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-01 11:53:09,648 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:53:16,156 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'msg', 'time': 1569919996.14648, 'from': 'Andrew', 'to': 'John', 'encoding': 'utf-8', 'message': 'Привет, Джон.'}
+2019-10-01 11:53:16,156 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:53:16,156 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:53:16,156 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:53:24,510 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'msg', 'time': 1569920004.43243, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
+2019-10-01 11:53:24,510 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:53:24,510 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:53:24,510 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:53:38,722 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'msg', 'time': 1569920018.632696, 'from': 'Andrew', 'to': 'John', 'encoding': 'utf-8', 'message': 'Привет, Джон. Снова.'}
+2019-10-01 11:53:38,723 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:53:38,723 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:53:38,723 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:09,716 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 60657)>:  ошибка в сообщении, Получено сообщение None
+2019-10-01 11:54:09,717 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 60658)>:  ошибка в сообщении, Получено сообщение None
+2019-10-01 11:54:13,515 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'presence', 'time': 1569920053.454597, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
+2019-10-01 11:54:13,515 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:13,515 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:13,515 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:16,410 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920056.353702, 'from': 'Andrew', 'to': 'John', 'encoding': 'utf-8', 'message': 'Привет, Джон. Снова.'}
+2019-10-01 11:54:16,410 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:16,410 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:16,410 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:20,217 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920060.210883, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
+2019-10-01 11:54:20,217 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:20,217 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:20,218 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:21,251 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920061.188759, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
+2019-10-01 11:54:21,252 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:21,252 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:21,252 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:21,767 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920061.683306, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
+2019-10-01 11:54:21,768 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:21,768 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:21,768 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:22,707 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920062.633329, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
+2019-10-01 11:54:22,707 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:22,707 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:22,707 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:23,541 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920063.464768, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
+2019-10-01 11:54:23,541 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:23,541 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:23,541 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:24,066 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920064.02901, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
+2019-10-01 11:54:24,066 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 11:54:24,066 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 11:54:24,066 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 11:54:30,677 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 60667)>:  ошибка в сообщении, Получено сообщение None
+2019-10-01 12:00:30,194 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60726): {'action': 'presence', 'time': 1569920430.19098, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-01 12:00:30,195 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 12:00:30,195 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-01 12:00:30,195 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 12:00:35,861 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60726): {'action': 'msg', 'time': 1569920435.823557, 'from': 'John', 'to': 'John', 'encoding': 'utf-8', 'message': 'ПРивет, Джолн'}
+2019-10-01 12:00:35,861 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 12:00:35,861 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 12:00:35,861 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 12:00:48,641 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 60726)>:  ошибка в сообщении, Получено сообщение None
+2019-10-01 12:01:25,230 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60731): {'action': 'presence', 'time': 1569920485.228657, 'type': 'status', 'user': {'account_name': 'Andrey', 'status': None}}
+2019-10-01 12:01:25,231 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 12:01:25,231 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-01 12:01:25,231 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-01 12:01:28,738 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60731): {'action': 'msg', 'time': 1569920488.718559, 'from': 'Andrey', 'to': 'Andrey', 'encoding': 'utf-8', 'message': 'Привет, мир'}
+2019-10-01 12:01:28,738 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-01 12:01:28,738 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-01 12:01:28,738 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages

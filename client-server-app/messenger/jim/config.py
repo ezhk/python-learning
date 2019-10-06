@@ -11,3 +11,5 @@ ENCODING = "utf-8"
 SERVER_LOGFILE = "log/server.log"
 CLIENT_LOGFILE = "log/client.log"
 LOGLEVEL = logging.DEBUG
+
+STORAGE = "sqlite:///messenger.sql"

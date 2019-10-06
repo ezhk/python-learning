@@ -23,6 +23,15 @@ def presence(account_name=None, status=None):
     }
 
 
+def is_presence_message(message):
+    try:
+        if message["action"] == "presence":
+            return message["user"]["account_name"]
+    except Exception:
+        pass
+    return None
+
+
 @log
 def probe():
     return {"action": "probe", "time": datetime.datetime.now().timestamp()}
@@ -38,6 +47,14 @@ def msg(message=None, source=None, destination=None):
         "encoding": ENCODING,
         "message": message,
     }
+
+
+def get_recipient(message):
+    try:
+        return message.get("to", None)
+    except Exception:
+        pass
+    return None
 
 
 @log
