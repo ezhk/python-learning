@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from .config import STORAGE, BACKLOG
 from .descriptors import Port, Username
 from .exceptions import MessageError
+from .metaclasses import ServerVerifier, ClientVerifier
 from .messages import presence, is_presence_message, msg, get_recipient, response
 from .models import Users
 from .utils import is_valid_message, send_data, recv_data
@@ -148,7 +149,7 @@ class UsersExtension(object):
         return self.delayed_messages[recipient].get()
 
 
-class Server(object):
+class Server(metaclass=ServerVerifier):
     port = Port()
 
     def __init__(self, address, port, **kwargs):
@@ -274,7 +275,7 @@ class Server(object):
             time.sleep(0.1)
 
 
-class Client(object):
+class Client(metaclass=ClientVerifier):
     port = Port()
     username = Username()
 
