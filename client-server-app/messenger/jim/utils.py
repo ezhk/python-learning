@@ -38,16 +38,6 @@ def is_valid_message(msg):
     return True
 
 
-def raise_invalid_username(username):
-    if len(username) > 25:
-        raise exceptions.UsernameError("максимальная длина имени пользователя 25 символов")
-
-    if not re.match(r"^[\w ]+$", username):
-        raise exceptions.UsernameError("допустимые символы - буквы, цифры, подчеркивания и пробелы")
-
-    return True
-
-
 def is_valid_response(msg):
     if "response" not in msg or "time" not in msg:
         return False

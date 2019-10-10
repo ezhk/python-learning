@@ -1,189 +1,76 @@
-2019-10-01 11:52:56,562 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60657): {'action': 'presence', 'time': 1569919976.493322, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
-2019-10-01 11:52:56,562 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:52:56,562 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 11:52:56,563 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:53:00,787 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60658): {'action': 'presence', 'time': 1569919980.764388, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
-2019-10-01 11:53:00,788 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:53:00,788 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 11:53:00,788 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:53:09,646 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'presence', 'time': 1569919989.562103, 'type': 'status', 'user': {'account_name': 'Andrew', 'status': None}}
-2019-10-01 11:53:09,648 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:53:09,648 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 11:53:09,648 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:53:16,156 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'msg', 'time': 1569919996.14648, 'from': 'Andrew', 'to': 'John', 'encoding': 'utf-8', 'message': 'Привет, Джон.'}
-2019-10-01 11:53:16,156 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:53:16,156 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:53:16,156 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:53:24,510 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'msg', 'time': 1569920004.43243, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 11:53:24,510 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:53:24,510 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:53:24,510 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:53:38,722 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60660): {'action': 'msg', 'time': 1569920018.632696, 'from': 'Andrew', 'to': 'John', 'encoding': 'utf-8', 'message': 'Привет, Джон. Снова.'}
-2019-10-01 11:53:38,723 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:53:38,723 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:53:38,723 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:09,716 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 60657)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 11:54:09,717 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 60658)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 11:54:13,515 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'presence', 'time': 1569920053.454597, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
-2019-10-01 11:54:13,515 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:13,515 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:13,515 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:16,410 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920056.353702, 'from': 'Andrew', 'to': 'John', 'encoding': 'utf-8', 'message': 'Привет, Джон. Снова.'}
-2019-10-01 11:54:16,410 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:16,410 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:16,410 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:20,217 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920060.210883, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 11:54:20,217 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:20,217 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:20,218 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:21,251 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920061.188759, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 11:54:21,252 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:21,252 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:21,252 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:21,767 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920061.683306, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 11:54:21,768 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:21,768 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:21,768 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:22,707 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920062.633329, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 11:54:22,707 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:22,707 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:22,707 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:23,541 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920063.464768, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 11:54:23,541 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:23,541 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:23,541 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:24,066 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60667): {'action': 'msg', 'time': 1569920064.02901, 'from': 'Andrew', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 11:54:24,066 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 11:54:24,066 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 11:54:24,066 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 11:54:30,677 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 60667)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 12:00:30,194 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60726): {'action': 'presence', 'time': 1569920430.19098, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
-2019-10-01 12:00:30,195 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:00:30,195 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 12:00:30,195 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:00:35,861 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60726): {'action': 'msg', 'time': 1569920435.823557, 'from': 'John', 'to': 'John', 'encoding': 'utf-8', 'message': 'ПРивет, Джолн'}
-2019-10-01 12:00:35,861 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:00:35,861 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 12:00:35,861 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:00:48,641 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 60726)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 12:01:25,230 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60731): {'action': 'presence', 'time': 1569920485.228657, 'type': 'status', 'user': {'account_name': 'Andrey', 'status': None}}
-2019-10-01 12:01:25,231 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:01:25,231 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 12:01:25,231 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:01:28,738 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60731): {'action': 'msg', 'time': 1569920488.718559, 'from': 'Andrey', 'to': 'Andrey', 'encoding': 'utf-8', 'message': 'Привет, мир'}
-2019-10-01 12:01:28,738 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:01:28,738 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 12:01:28,738 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:04:46,666 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7711), raddr=('127.0.0.1', 60660)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 12:05:04,316 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60759): {'action': 'presence', 'time': 1569920704.258078, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
-2019-10-01 12:05:04,316 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:05:04,316 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 12:05:04,316 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:05:06,469 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 60759): {'action': 'msg', 'time': 1569920706.406792, 'from': 'Ann', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет'}
-2019-10-01 12:05:06,469 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:05:06,469 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 12:05:06,470 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:05:14,506 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7700), raddr=('127.0.0.1', 60759)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 12:27:05,449 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61163): {'action': 'presence', 'time': 1569922025.356185, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
-2019-10-01 12:27:05,452 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:27:05,453 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 12:27:05,453 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:27:12,040 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61164): {'action': 'presence', 'time': 1569922032.015736, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
-2019-10-01 12:27:12,040 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:27:12,040 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 12:27:12,040 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:27:20,683 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61164): {'action': 'msg', 'time': 1569922040.674671, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'Привет, Энн.'}
-2019-10-01 12:27:20,683 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:27:20,684 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 12:27:20,684 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 12:27:29,901 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61164): {'action': 'msg', 'time': 1569922049.837487, 'from': 'Ann', 'to': 'John', 'encoding': 'utf-8', 'message': 'Привет, Джон!'}
-2019-10-01 12:27:29,901 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 12:27:29,902 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 12:27:29,902 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:05:26,248 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61730): {'action': 'presence', 'time': 1569924326.214002, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
-2019-10-01 13:05:26,249 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:05:26,249 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 13:05:26,249 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:05:29,745 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61731): {'action': 'presence', 'time': 1569924329.730479, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
-2019-10-01 13:05:29,745 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:05:29,745 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 13:05:29,745 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:05:32,728 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61731): {'action': 'msg', 'time': 1569924332.669961, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:05:32,728 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:05:32,728 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:05:32,729 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:05:41,852 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 61730)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 13:05:42,769 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61741): {'action': 'presence', 'time': 1569924342.713689, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
-2019-10-01 13:05:42,769 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:05:42,769 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 13:05:42,769 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:05:47,677 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61741): {'action': 'msg', 'time': 1569924347.594427, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:05:47,677 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:05:47,677 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:05:47,677 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:12:18,783 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61741): {'action': 'msg', 'time': 1569924738.679505, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:12:18,792 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:12:18,794 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:12:18,794 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:27:50,963 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61741): {'action': 'msg', 'time': 1569925670.936126, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:27:50,964 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:27:50,965 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:27:50,965 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:28:03,479 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 61741)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 13:28:10,224 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61741): {'action': 'msg', 'time': 1569925690.187195, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:28:10,242 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:28:10,242 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:28:10,242 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:28:22,344 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 61741): {'action': 'msg', 'time': 1569925702.27679, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:28:22,344 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:28:22,344 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:28:22,344 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:28:35,778 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62141): {'action': 'presence', 'time': 1569925715.772836, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
-2019-10-01 13:28:35,778 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:28:35,778 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 13:28:35,778 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:28:42,051 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62141): {'action': 'msg', 'time': 1569925722.026157, 'from': 'John', 'to': 'Ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:28:42,051 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:28:42,051 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:28:42,051 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:38:46,604 server.py:55 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62141): {'action': 'msg', 'time': 1569926326.509503, 'from': 'Ann', 'to': 'John', 'encoding': 'utf-8', 'message': 'ага'}
-2019-10-01 13:38:46,611 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:38:46,613 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:38:46,613 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:38:57,405 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 61731)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 13:39:01,404 server.py:49 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 62141)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 13:48:18,598 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62817): {'action': 'presence', 'time': 1569926898.55835, 'type': 'status', 'user': {'account_name': 'ann', 'status': None}}
-2019-10-01 13:48:18,599 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:48:18,599 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 13:48:18,599 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:48:26,284 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62818): {'action': 'presence', 'time': 1569926906.234051, 'type': 'status', 'user': {'account_name': 'john', 'status': None}}
-2019-10-01 13:48:26,285 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:48:26,285 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 13:48:26,285 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:48:28,750 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62818): {'action': 'msg', 'time': 1569926908.694361, 'from': 'john', 'to': 'ann', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 13:48:28,750 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:48:28,750 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:48:28,750 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:48:35,543 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62818): {'action': 'msg', 'time': 1569926915.520932, 'from': 'ann', 'to': 'john', 'encoding': 'utf-8', 'message': 'hi'}
-2019-10-01 13:48:35,545 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:48:35,545 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:48:35,545 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 13:48:44,416 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62818): {'action': 'msg', 'time': 1569926924.388802, 'from': 'john', 'to': 'john', 'encoding': 'utf-8', 'message': "it's me"}
-2019-10-01 13:48:44,417 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 13:48:44,417 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 13:48:44,417 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 16:30:51,589 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 62818): {'action': 'msg', 'time': 1569936651.467048, 'from': 'john', 'to': 'ann', 'encoding': 'utf-8', 'message': 'hi'}
-2019-10-01 16:30:51,600 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 16:30:51,601 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 16:30:51,602 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 16:45:13,940 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49669): {'action': 'presence', 'time': 1569937513.867445, 'type': 'status', 'user': {'account_name': 'test', 'status': None}}
-2019-10-01 16:45:13,944 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 16:45:13,945 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
-2019-10-01 16:45:13,946 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 16:45:18,519 server.py:56 > server:DEBUG Получено сообщение от клиента ('127.0.0.1', 49669): {'action': 'msg', 'time': 1569937518.484281, 'from': 'john', 'to': 'test', 'encoding': 'utf-8', 'message': 'привет'}
-2019-10-01 16:45:18,519 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
-2019-10-01 16:45:18,519 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
-2019-10-01 16:45:18,519 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
-2019-10-01 18:05:59,561 server.py:50 > server:DEBUG Клиент отключился <socket.socket fd=7, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 62817)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 18:06:03,299 server.py:50 > server:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 62818)>:  ошибка в сообщении, Получено сообщение None
-2019-10-01 18:06:04,745 server.py:50 > server:DEBUG Клиент отключился <socket.socket fd=10, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 49669)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:41:19,611 classes.py:210 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58437)>: {'action': 'presence', 'time': 1570711279.531191, 'type': 'status', 'user': {'account_name': None, 'status': None}}
+2019-10-10 15:41:19,612 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:41:19,612 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:41:19,612 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:41:20,848 classes.py:205 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58437)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:41:35,038 classes.py:210 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58442)>: {'action': 'presence', 'time': 1570711294.944751, 'type': 'status', 'user': {'account_name': None, 'status': None}}
+2019-10-10 15:41:35,038 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:41:35,038 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:41:35,038 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:41:35,752 classes.py:205 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58442)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:42:01,140 classes.py:210 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58448)>: {'action': 'presence', 'time': 1570711321.081503, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-10 15:42:01,140 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:42:01,140 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:42:01,141 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:42:03,016 classes.py:210 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58448)>: {'action': 'msg', 'time': 1570711322.990095, 'from': 'John', 'to': 'John', 'encoding': 'utf-8', 'message': 'test'}
+2019-10-10 15:42:03,016 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:42:03,017 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-10 15:42:03,017 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:42:29,071 classes.py:205 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58448)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:43:17,656 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58492)>: {'action': 'presence', 'time': 1570711397.65487, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-10 15:43:17,657 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:43:17,658 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:43:17,658 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:43:22,278 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58494)>: {'action': 'presence', 'time': 1570711402.265501, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
+2019-10-10 15:43:22,279 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:43:22,279 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:43:22,279 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:43:24,434 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58494)>: {'action': 'msg', 'time': 1570711404.337225, 'from': 'Ann', 'to': 'John', 'encoding': 'utf-8', 'message': 'test'}
+2019-10-10 15:43:24,435 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:43:24,435 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-10 15:43:24,435 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:43:27,822 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58492)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:43:30,275 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58494)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:46:08,759 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58556)>: {'action': 'presence', 'time': 1570711568.685628, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-10 15:46:08,760 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:46:08,760 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:46:08,760 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:47:21,351 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58556)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:47:22,892 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58584)>: {'action': 'presence', 'time': 1570711642.890073, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-10 15:47:22,892 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:47:22,892 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:47:22,892 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:47:24,226 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58584)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:47:45,426 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58594)>: {'action': 'presence', 'time': 1570711665.381004, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-10 15:47:45,427 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:47:45,427 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:47:45,427 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:47:46,654 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58594)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:49:08,404 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58624)>: {'action': 'presence', 'time': 1570711748.337372, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-10 15:49:08,404 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:49:08,404 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:49:08,404 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:49:12,591 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58625)>: {'action': 'presence', 'time': 1570711752.553218, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
+2019-10-10 15:49:12,591 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:49:12,592 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:49:12,592 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:49:15,365 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58625)>: {'action': 'msg', 'time': 1570711755.334475, 'from': 'Ann', 'to': 'John', 'encoding': 'utf-8', 'message': 'test'}
+2019-10-10 15:49:15,366 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:49:15,366 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-10 15:49:15,366 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:49:20,684 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58624)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:49:23,019 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58625)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:49:37,384 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58634)>: {'action': 'presence', 'time': 1570711777.29507, 'type': 'status', 'user': {'account_name': 'Ann', 'status': None}}
+2019-10-10 15:49:37,384 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:49:37,385 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:49:37,385 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:49:40,981 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58635)>: {'action': 'presence', 'time': 1570711780.959926, 'type': 'status', 'user': {'account_name': 'John', 'status': None}}
+2019-10-10 15:49:40,982 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:49:40,982 decorators.py:14 > decorators:DEBUG Вызвана функция presence с аргументами (), {} в модуле jim.messages
+2019-10-10 15:49:40,982 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:49:47,145 classes.py:209 > classes:DEBUG Получено сообщение от клиента <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58634)>: {'action': 'msg', 'time': 1570711787.110327, 'from': 'Ann', 'to': 'John', 'encoding': 'utf-8', 'message': 'test'}
+2019-10-10 15:49:47,146 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (400, 'Incorrect JSON', False), {} в модуле jim.messages
+2019-10-10 15:49:47,146 decorators.py:14 > decorators:DEBUG Вызвана функция msg с аргументами (), {} в модуле jim.messages
+2019-10-10 15:49:47,146 decorators.py:14 > decorators:DEBUG Вызвана функция response с аргументами (202, 'Accepted', True), {} в модуле jim.messages
+2019-10-10 15:49:50,845 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58635)>:  ошибка в сообщении, Получено сообщение None
+2019-10-10 15:49:54,327 classes.py:204 > classes:DEBUG Клиент отключился <socket.socket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58634)>:  ошибка в сообщении, Получено сообщение None

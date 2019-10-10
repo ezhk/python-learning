@@ -32,13 +32,6 @@ class TestUtils(unittest.TestCase):
         self.assertFalse(utils.is_valid_response({"status": 200}))
         self.assertTrue(utils.is_valid_response(messages.response(200)))
 
-    def test_raise_username(self):
-        self.assertTrue(utils.raise_invalid_username("test"))
-        with self.assertRaises(exceptions.UsernameError):
-            utils.raise_invalid_username("test$")
-        with self.assertRaises(exceptions.UsernameError):
-            utils.raise_invalid_username("test1234567890123456789012345")
-
     def test_Logger(self):
         self.assertIsInstance(utils.logger_init("test.log"), logging.Logger)
 
