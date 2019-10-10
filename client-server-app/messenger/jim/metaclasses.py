@@ -8,8 +8,8 @@ def is_incorrect_methods(instruction, incorrect_methods):
 class ClientVerifier(type):
     INCORRECT_METHODS = ("accept", "listen", "bind")
 
-    def __init__(self, name, bases, dict):
-        for f_name, f_call in dict.items():
+    def __init__(self, name, bases, attrs):
+        for f_name, f_call in attrs.items():
             try:
                 for instruction in dis.get_instructions(f_call):
                     if is_incorrect_methods(instruction, self.INCORRECT_METHODS):
@@ -17,7 +17,7 @@ class ClientVerifier(type):
             except TypeError:
                 pass
 
-        return super().__init__(name, bases, dict)
+        return super().__init__(name, bases, attrs)
 
 
 class ServerVerifier(type):
@@ -31,9 +31,9 @@ class ServerVerifier(type):
     INCORRECT_METHODS = ("connect",)
     IMPORT_GLOBAL = set(["SOCK_STREAM", "AF_INET"])
 
-    def __init__(self, name, bases, dict):
+    def __init__(self, name, bases, attrs):
         load_global = set()
-        for f_name, f_call in dict.items():
+        for f_name, f_call in attrs.items():
             try:
                 for instruction in dis.get_instructions(f_call):
                     if is_incorrect_methods(instruction, self.INCORRECT_METHODS):
@@ -47,4 +47,4 @@ class ServerVerifier(type):
         if self.IMPORT_GLOBAL - load_global:
             raise RuntimeError(f"Const {self.IMPORT_GLOBAL} doesn't import globally")
 
-        return super().__init__(name, bases, dict)
+        return super().__init__(name, bases, attrs)
