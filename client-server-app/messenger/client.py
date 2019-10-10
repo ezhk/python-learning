@@ -8,6 +8,7 @@ import sys
 sys.path.append(".")
 
 from jim.config import BUFSIZE
+from jim.classes import MessageReader
 from jim.exceptions import MessageError
 from jim.utils import (
     parse_arguments,
@@ -16,7 +17,6 @@ from jim.utils import (
     is_valid_message,
     is_valid_response,
     raise_invalid_username,
-    MessageReader,
 )
 from jim.messages import presence, msg
 import jim.logger
