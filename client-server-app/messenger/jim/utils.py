@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
-import re
 import json
-import socket
 import struct
-import time
 
 from .config import SERVER_ADDRESS, SERVER_PORT, ENCODING
 from . import messages
-from . import models
 from . import exceptions
 
 
