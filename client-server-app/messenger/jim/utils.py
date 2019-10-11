@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
-import re
 import json
-import socket
 import struct
-import time
 
 from .config import SERVER_ADDRESS, SERVER_PORT, ENCODING
 from . import messages
-from . import models
 from . import exceptions
 
 
@@ -35,16 +31,6 @@ def is_valid_message(msg):
     # check that input messages contains all template keys
     if set(msg_template.keys()) - set(msg.keys()):
         return False
-    return True
-
-
-def raise_invalid_username(username):
-    if len(username) > 25:
-        raise exceptions.UsernameError("максимальная длина имени пользователя 25 символов")
-
-    if not re.match(r"^[\w ]+$", username):
-        raise exceptions.UsernameError("допустимые символы - буквы, цифры, подчеркивания и пробелы")
-
     return True
 
 
