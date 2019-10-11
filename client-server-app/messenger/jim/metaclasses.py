@@ -44,6 +44,7 @@ class ServerVerifier(type):
             except TypeError:
                 pass
 
+        # it's enought check only once, because for client this metaclass called too.
         if self.IMPORT_GLOBAL - load_global:
             raise RuntimeError(f"Const {self.IMPORT_GLOBAL} doesn't import globally")
 
