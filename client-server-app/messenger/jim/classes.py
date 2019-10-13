@@ -55,7 +55,7 @@ class UsersExtension(object):
         self.groups = {}
         self.delayed_messages = {}
 
-        engine = create_engine(STORAGE, echo=False)
+        engine = create_engine(STORAGE, pool_recycle=3600, echo=False)
         self.session = Session(bind=engine)
 
     def presence(self, client, socket):
