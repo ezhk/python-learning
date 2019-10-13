@@ -132,11 +132,15 @@ class UsersExtension(object):
                 .order_by(UsersHistory.ctime.desc())
                 .first()
             )
-            if user is None:
+            if user is None or not user.history:
                 return True
 
-            user.is_active = False
-            self.session.commit()
+            latest_session = user.history[-1]
+            # validate latest session data, user might have same address and port
+            # this case possible, when user is not logged in
+            if latest_session.address == address and latest_session.port == port:
+                user.is_active = False
+                self.session.commit()
         except Exception as err:
             self.session.rollback()
             return False
@@ -157,7 +161,7 @@ class UsersExtension(object):
 
     def get_socket(self, client):
         if self.is_active(client):
-            return self.sockets[client]
+            return self.sockets.get(client, None)
         return None
 
     @property
