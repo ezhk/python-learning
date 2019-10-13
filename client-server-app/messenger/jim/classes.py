@@ -13,7 +13,7 @@ from .descriptors import Port, Username
 from .exceptions import MessageError
 from .metaclasses import ServerVerifier, ClientVerifier
 from .messages import presence, is_presence_message, msg, get_recipient, response
-from .models import Users
+from .server_models import Users, UsersHistory
 from .utils import is_valid_message, send_data, recv_data
 
 
@@ -59,6 +59,31 @@ class UsersExtension(object):
         self.session = Session(bind=engine)
 
     def presence(self, client, socket):
+        """
+        Create and save user history when
+        received presence message type.
+        """
+
+        def _save_history(client, socket):
+            """
+            Internal method, that save login history by user.
+            """
+
+            try:
+                user = self.session.query(Users).filter_by(username=client).first()
+                if user is None:
+                    return False
+
+                (address, port) = socket.getpeername()
+                h_object = UsersHistory(user=user.id, address=address, port=port)
+                self.session.add(h_object)
+
+                self.session.commit()
+            except Exception as err:
+                self.session.rollback()
+                return False
+            return True
+
         self.sockets.update({client: socket})
         user = self.session.query(Users).filter_by(username=client).first()
 
@@ -71,21 +96,48 @@ class UsersExtension(object):
             except Exception as err:
                 self.session.rollback()
                 return False
-            return True
+        # update user-state to active for exist user
+        else:
+            try:
+                user.is_active = True
+                self.session.commit()
+            except Exception:
+                self.session.rollback()
+                return False
 
-        try:
-            user.is_active = True
-            self.session.commit()
-        except Exception:
-            self.session.rollback()
-            return False
-        return True
+        return _save_history(client, socket)
 
     def quit(self, client):
         try:
             self.session.query(Users).filter_by(username=client).update({"is_active": False})
             self.session.commit()
         except Exception:
+            self.session.rollback()
+            return False
+        return True
+
+    def disconnect(self, address, port):
+        """
+        Try to make disconnected user is inactive.
+        Found in history database last session with
+        current address and port, set this user flag
+        is_active to False.
+        """
+
+        try:
+            user = (
+                self.session.query(Users)
+                .join(Users.history)
+                .filter_by(address=address, port=port)
+                .order_by(UsersHistory.ctime.desc())
+                .first()
+            )
+            if user is None:
+                return True
+
+            user.is_active = False
+            self.session.commit()
+        except Exception as err:
             self.session.rollback()
             return False
         return True
@@ -211,6 +263,7 @@ class Server(metaclass=ServerVerifier):
                     raise MessageError("Получено сообщение None")
             except Exception as err:
                 self.logger.debug(f"Клиент отключился {client_sock}: {err}")
+                self.users_extension.disconnect(*client_sock.getpeername())
                 self.client_sockets.remove(client_sock)
                 client_sock.close()
                 continue
@@ -229,6 +282,7 @@ class Server(metaclass=ServerVerifier):
                 send_data(client_sock, message)
             except Exception as err:
                 self.logger.debug(f"Клиент отключился при подтверждении {client_sock}: {err}")
+                self.users_extension.disconnect(*client_sock.getpeername())
                 self.client_sockets.remove(client_sock)
                 client_sock.close()
 
@@ -243,6 +297,7 @@ class Server(metaclass=ServerVerifier):
                     sended += self._process_output_message(req, client)
             except Exception as err:
                 self.logger.debug(f"Клиент отключился {client}: {err}")
+                self.users_extension.disconnect(*client.getpeername())
                 self.client_sockets.remove(client)
                 client.close()
                 continue

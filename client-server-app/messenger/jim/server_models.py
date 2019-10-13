@@ -13,6 +13,7 @@ from sqlalchemy import (
     create_engine,
 )
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from .config import STORAGE
@@ -28,8 +29,28 @@ class Users(Base):
     id = Column(Integer, autoincrement=True, primary_key=True)
     username = Column(String(255), index=True, unique=True)
     atime = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
-
     is_active = Column(Boolean, default=True)
+
+    history = relationship("UsersHistory")
+
+
+class UsersHistory(Base):
+    __tablename__ = "history"
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    user = Column(Integer, ForeignKey("users.id"), index=True)
+    address = Column(String(42), nullable=False)
+    port = Column(Integer, nullable=False)
+
+    ctime = Column(DateTime(timezone=True), default=func.now())
+
+
+class Contacts(Base):
+    __tablename__ = "contacts"
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    owner = Column(Integer, ForeignKey("users.id"), index=True)
+    contact = Column(Integer, ForeignKey("users.id"), index=True)
 
 
 class Groups(Base):
