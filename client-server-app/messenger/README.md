@@ -14,7 +14,7 @@
 
 - создаем в директории messenger БД(sqlite):  
 ```
->>> from jim.models import create_db
+>>> from jim.server_models import create_db
 >>> create_db()
 ```
 
