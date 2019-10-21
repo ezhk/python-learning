@@ -23,8 +23,43 @@ from .messages import (
     get_contacts,
     response,
 )
-from .server_models import Users, UsersHistory, Contacts, Groups, Messages
-from .utils import is_valid_message, send_data, recv_data
+from .models import Users, UsersHistory, Contacts, Groups, Messages
+from .utils import is_valid_message, send_data, recv_data, load_server_settings
+
+
+class ServerThread(object):
+    def __init__(self, logger):
+        super().__init__()
+        self.server = None
+        self.thread = None
+
+        self.logger = logger
+
+    def start(self):
+        if self.thread and self.thread.is_alive():
+            return False
+
+        settings = load_server_settings()
+        self.server = Server(settings.get("address"), int(settings.get("port")), logger=self.logger)
+        self.thread = Thread(target=self.server.run, daemon=True)
+        self.thread.start()
+        return True
+
+    def stop(self):
+        try:
+            self.server.stop()
+            self.thread.join()
+        except Exception as err:
+            logger.error(f"Cannot stop server: {err}")
+            return False
+        return True
+
+    def alive(self):
+        try:
+            return self.thread.is_alive()
+        except Exception:
+            pass
+        return False
 
 
 class MessageReader(Thread):
@@ -35,6 +70,7 @@ class MessageReader(Thread):
     def __init__(self, sock, logger):
         super().__init__()
         self.daemon = True
+
         self.sock = sock
         self.logger = logger
 
@@ -186,6 +222,46 @@ class UsersExtension(object):
     def all_sockets(self):
         return self.sockets
 
+    @property
+    def active_users(self):
+        users = []
+        for user in (
+            self.session.query(Users)
+            .join(Users.history)
+            .filter(Users.is_active == True)
+            .order_by(UsersHistory.id)
+            .all()
+        ):
+            last_access = user.history[-1]
+            users.append(
+                {
+                    "username": user.username,
+                    "address": last_access.address,
+                    "port": last_access.port,
+                    "atime": user.atime.isoformat(),
+                }
+            )
+        return users
+
+    @property
+    def users_history(self):
+        history = []
+        for history_record in (
+            self.session.query(UsersHistory)
+            .join(Users, Users.id == UsersHistory.user)
+            .order_by(UsersHistory.id.desc())
+            .with_entities(
+                Users.username, UsersHistory.address, UsersHistory.port, UsersHistory.ctime
+            )
+            .limit(30)
+            .all()
+        ):
+            username, address, port, ctime = history_record
+            history.append(
+                {"username": username, "address": address, "port": port, "ctime": ctime.isoformat()}
+            )
+        return history
+
     def join(self, client, chat):
         """
         Group logic, don't used yet.
@@ -334,8 +410,11 @@ class Server(metaclass=ServerVerifier):
         self.users_extension = UsersExtension()
         self.client_sockets = []
 
+        self.running_flag = None
+
     def __del__(self):
         try:
+            self.stop()
             self.sock.close()
         except Exception:
             pass
@@ -437,8 +516,9 @@ class Server(metaclass=ServerVerifier):
 
     def run(self):
         self.listen()
+        self.running_flag = True
 
-        while True:
+        while self.running_flag:
             try:
                 sock, addr = self.sock.accept()
                 self.client_sockets.append(sock)
@@ -460,6 +540,11 @@ class Server(metaclass=ServerVerifier):
                 self.push_requests(w_clients, requests)
 
             time.sleep(0.1)
+
+        self.sock.close()
+
+    def stop(self):
+        self.running_flag = False
 
 
 class Client(metaclass=ClientVerifier):

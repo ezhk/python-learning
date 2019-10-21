@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
+import configparser
 import json
 import struct
 
-from .config import SERVER_ADDRESS, SERVER_PORT, ENCODING
+from .config import SERVER_ADDRESS, SERVER_PORT, STORAGE, ENCODING
 from . import messages
 from . import exceptions
 
@@ -94,3 +95,24 @@ def recv_data(sock):
     except Exception as err:
         pass
     return None
+
+
+def load_server_settings():
+    settings = configparser.ConfigParser()
+    settings.read("settings.ini")
+
+    return {
+        "address": settings.get("SERVER", "address", fallback=SERVER_ADDRESS),
+        "port": settings.get("SERVER", "port", fallback=SERVER_PORT),
+        "storage": settings.get("SERVER", "storage", fallback=STORAGE),
+    }
+
+
+def save_server_settings(address, port, storage):
+    settings = configparser.ConfigParser()
+    settings.read("settings.ini")
+
+    settings.update({"SERVER": {"Address": address, "Port": port, "Storage": storage}})
+    with open("settings.ini", "w") as fh:
+        settings.write(fh)
+
