@@ -1,0 +1,1 @@
+2019-10-21 12:17:44,596 classes.py:473 > classes:DEBUG Клиент отключился <socket.socket fd=31, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 57091)>:  ошибка в сообщении, Получено сообщение None

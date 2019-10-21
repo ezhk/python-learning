@@ -91,6 +91,30 @@ class TestMessages(unittest.TestCase):
             [self.fail_status[x] for x in ("response", "error")],
         )
 
+    def test_get_contanct(self):
+        self.assertEqual(
+            [jim.messages.get_contacts("test_username")[x] for x in ("action", "user")],
+            ["get_contacts", "test_username"],
+        )
+
+    def test_add_contact(self):
+        self.assertEqual(
+            [
+                jim.messages.add_contact("test", "test_contact")[x]
+                for x in ("action", "user", "contact")
+            ],
+            ["add_contact", "test", "test_contact"],
+        )
+
+    def test_del_contact(self):
+        self.assertEqual(
+            [
+                jim.messages.del_contact("test", "test_contact")[x]
+                for x in ("action", "user", "contact")
+            ],
+            ["del_contact", "test", "test_contact"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -75,7 +75,7 @@ class Messages(Base):
         Index("destination_group_delivered", "destination_group", "delivered"),
     )
 
-    id = Column(BigInteger, autoincrement=True, primary_key=True)
+    id = Column(Integer, autoincrement=True, primary_key=True)
     author = Column(Integer, ForeignKey("users.id"), nullable=False)
     content = Column(String(4096), default="")
     ctime = Column(DateTime(timezone=True), default=func.now())
