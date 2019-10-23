@@ -10,10 +10,10 @@ def _close_clients(processes):
     return True
 
 
-def _run_clients(count=1, username="Guest"):
+def _run_clients(count=1):
     process_list = []
     for _ in range(count):
-        cmd = ["python", "client.py", "-r", "-u", username] + sys.argv[1:]
+        cmd = ["python", "client.py"] + sys.argv[1:]
         process_list.append(Popen(" ".join(cmd), shell=True))
     return process_list
 
@@ -24,8 +24,7 @@ if __name__ == "__main__":
     while True:
         action = input("(r)un new process / (c)lose all processes / (s)how clients / (q)uit\n")
         if action == "r":
-            username = input("Input username: ")
-            process_list.extend(_run_clients(username=username))
+            process_list.extend(_run_clients())
             continue
 
         if action == "c":

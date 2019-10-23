@@ -14,7 +14,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Messenger application.")
     parser.add_argument("-a", "--address", dest="address", type=str, default=SERVER_ADDRESS)
     parser.add_argument("-p", "--port", dest="port", type=int, default=SERVER_PORT)
-    parser.add_argument("-u", "--username", dest="username", type=str, default="Guest")
+    parser.add_argument("-u", "--username", dest="username", type=str, default=None)
     parser.add_argument("-r", "--readonly", dest="readonly", action="store_true")
     args = parser.parse_args()
 

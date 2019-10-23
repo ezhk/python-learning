@@ -5,8 +5,10 @@ from queue import Queue
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
 
-from sqlalchemy import create_engine, or_
+from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import Session, aliased
+
+from PyQt5 import QtCore, QtWidgets
 
 from .config import STORAGE, BACKLOG
 from .descriptors import Port, Username
@@ -16,11 +18,15 @@ from .messages import (
     presence,
     is_presence_message,
     is_message,
+    is_chat,
     is_get_contacts,
     is_contact_operation,
     msg,
+    chat,
     get_recipient,
     get_contacts,
+    add_contact,
+    del_contact,
     response,
 )
 from .models import Users, UsersHistory, Contacts, Groups, Messages
@@ -40,7 +46,9 @@ class ServerThread(object):
             return False
 
         settings = load_server_settings()
-        self.server = Server(settings.get("address"), int(settings.get("port")), logger=self.logger)
+        self.server = Server(
+            settings.get("address"), int(settings.get("port")), logger=self.logger
+        )
         self.thread = Thread(target=self.server.run, daemon=True)
         self.thread.start()
         return True
@@ -87,7 +95,9 @@ class MessageReader(Thread):
 
             # message received
             if not set({"from", "to", "message"}) - set(data.keys()):
-                self.logger.info(f"Сообщение от {data['from']} >{data['to']} : {data['message']}")
+                self.logger.info(
+                    f"Сообщение от {data['from']} >{data['to']} : {data['message']}"
+                )
                 self.logger.debug(f"Получено корректное сообщение от сервера: {data}")
                 continue
 
@@ -163,7 +173,9 @@ class UsersExtension(object):
 
     def quit(self, client):
         try:
-            self.session.query(Users).filter_by(username=client).update({"is_active": False})
+            self.session.query(Users).filter_by(username=client).update(
+                {"is_active": False}
+            )
             self.session.commit()
         except Exception:
             self.session.rollback()
@@ -251,14 +263,22 @@ class UsersExtension(object):
             .join(Users, Users.id == UsersHistory.user)
             .order_by(UsersHistory.id.desc())
             .with_entities(
-                Users.username, UsersHistory.address, UsersHistory.port, UsersHistory.ctime
+                Users.username,
+                UsersHistory.address,
+                UsersHistory.port,
+                UsersHistory.ctime,
             )
             .limit(30)
             .all()
         ):
             username, address, port, ctime = history_record
             history.append(
-                {"username": username, "address": address, "port": port, "ctime": ctime.isoformat()}
+                {
+                    "username": username,
+                    "address": address,
+                    "port": port,
+                    "ctime": ctime.isoformat(),
+                }
             )
         return history
 
@@ -293,45 +313,96 @@ class UsersExtension(object):
             destination = self.session.query(Groups).filter_by(name=recipient).first()
             if destination is None:
                 return None
-            m_object = Messages(author=author.id, destination_group=destination.id, content=message)
+            m_object = Messages(
+                author=author.id, destination_group=destination.id, content=message
+            )
         else:
-            destination = self.session.query(Users).filter_by(username=recipient).first()
+            destination = (
+                self.session.query(Users).filter_by(username=recipient).first()
+            )
             if destination is None:
                 return None
-            m_object = Messages(author=author.id, destination_user=destination.id, content=message)
+            m_object = Messages(
+                author=author.id, destination_user=destination.id, content=message
+            )
 
         self.session.add(m_object)
         self.session.commit()
         return True
 
-    def get_message(self, recipient):
+    def get_chat(self, recipient, sender=None):
         """
         Offline message logic, don't used yet.
         """
+
+        messages = []
+
+        if not recipient:
+            return messages
 
         usersAuthor = aliased(Users)
         usersDestination = aliased(Users)
 
         if recipient.startswith("#"):
-            return (
+            for msg in (
                 self.session.query(Messages)
                 .join(usersAuthor, usersAuthor.id == Messages.author)
                 .join(Groups, Groups.id == Messages.destination_group)
                 .filter(Groups.name == recipient)
-                .with_entities(usersAuthor.username, Groups.name, Messages.content, Messages.ctime)
+                .with_entities(
+                    usersAuthor.username, Groups.name, Messages.content, Messages.ctime
+                )
+                .order_by(Messages.ctime.desc())
+                .limit(50)
                 .all()
-            )
+            ):
+                user, group, text, ctime = msg
+                messages.append(
+                    {
+                        "from": user,
+                        "to": group,
+                        "text": text,
+                        "ctime": ctime.isoformat(),
+                    }
+                )
 
-        return (
+        for msg in (
             self.session.query(Messages)
             .join(usersAuthor, usersAuthor.id == Messages.author)
             .join(usersDestination, usersDestination.id == Messages.destination_user)
-            .filter(usersDestination.username == recipient)
-            .with_entities(
-                usersAuthor.username, usersDestination.username, Messages.content, Messages.ctime
+            .filter(
+                or_(
+                    and_(
+                        usersAuthor.username == sender,
+                        usersDestination.username == recipient,
+                    ),
+                    and_(
+                        usersAuthor.username == recipient,
+                        usersDestination.username == sender,
+                    ),
+                )
             )
+            .with_entities(
+                usersAuthor.username,
+                usersDestination.username,
+                Messages.content,
+                Messages.ctime,
+            )
+            .order_by(Messages.ctime.desc())
+            .limit(50)
             .all()
-        )
+        ):
+            sender, recipient, text, ctime = msg
+            messages.append(
+                {
+                    "from": sender,
+                    "to": recipient,
+                    "text": text,
+                    "ctime": ctime.isoformat(),
+                }
+            )
+
+        return messages
 
     def get_contacts(self, user):
         """
@@ -374,7 +445,9 @@ class UsersExtension(object):
         if users[0].username == input_contact:
             owner, contact = users[1], users[0]
 
-        exist_contact = self.session.query(Contacts).filter_by(owner=owner.id, contact=contact.id)
+        exist_contact = self.session.query(Contacts).filter_by(
+            owner=owner.id, contact=contact.id
+        )
 
         if not exist_contact.count() and action == "add_contact":
             c_object = Contacts(owner=owner.id, contact=contact.id)
@@ -430,9 +503,15 @@ class Server(metaclass=ServerVerifier):
             self.users_extension.put_message(*is_message(data))
             return
 
+        # load chat history
+        if is_chat(data) is not None:
+            return {"chat": self.users_extension.get_chat(*is_chat(data))}
+
         # receive contacts
         if is_get_contacts(data) is not None:
-            return {"contacts": self.users_extension.get_contacts(is_get_contacts(data))}
+            return {
+                "contacts": self.users_extension.get_contacts(is_get_contacts(data))
+            }
         # add or delete contacts
         if is_contact_operation(data) is not None:
             self.users_extension.contact_operation(*is_contact_operation(data))
@@ -463,6 +542,14 @@ class Server(metaclass=ServerVerifier):
         self.sock.setblocking(0)
 
     def pull_requests(self, r_clients):
+        def _disconnect_client(self, c_socket):
+            try:
+                self.users_extension.disconnect(*c_socket.getpeername())
+                self.client_sockets.remove(c_socket)
+            except Exception:
+                return False
+            return True
+
         requests = {}
         for client_sock in r_clients:
             try:
@@ -471,8 +558,7 @@ class Server(metaclass=ServerVerifier):
                     raise MessageError("Получено сообщение None")
             except Exception as err:
                 self.logger.debug(f"Клиент отключился {client_sock}: {err}")
-                self.users_extension.disconnect(*client_sock.getpeername())
-                self.client_sockets.remove(client_sock)
+                _disconnect_client(self, client_sock)
                 client_sock.close()
                 continue
 
@@ -492,7 +578,9 @@ class Server(metaclass=ServerVerifier):
             try:
                 send_data(client_sock, message)
             except Exception as err:
-                self.logger.debug(f"Клиент отключился при подтверждении {client_sock}: {err}")
+                self.logger.debug(
+                    f"Клиент отключился при подтверждении {client_sock}: {err}"
+                )
                 self.users_extension.disconnect(*client_sock.getpeername())
                 self.client_sockets.remove(client_sock)
                 client_sock.close()
@@ -527,7 +615,9 @@ class Server(metaclass=ServerVerifier):
                 pass
 
             try:
-                r_clients, w_clients, _ = select(self.client_sockets, self.client_sockets, [], 0)
+                r_clients, w_clients, _ = select(
+                    self.client_sockets, self.client_sockets, [], 0
+                )
             except Exception as err:
                 # received exception when client disconnect
                 self.logger.debug(f"Исключение select: {err}")
@@ -547,11 +637,19 @@ class Server(metaclass=ServerVerifier):
         self.running_flag = False
 
 
-class Client(metaclass=ClientVerifier):
+class Client(Thread, QtCore.QObject):
     port = Port()
     username = Username()
 
+    client_error = QtCore.pyqtSignal(str)
+    server_message = QtCore.pyqtSignal(dict)
+
     def __init__(self, address, port, username, **kwargs):
+        Thread.__init__(self)
+        QtCore.QObject.__init__(self)
+
+        self.daemon = True
+
         self.username = username
         self.address = address or "localhost"
         self.port = port
@@ -559,15 +657,22 @@ class Client(metaclass=ClientVerifier):
         self.family = kwargs.get("family", AF_INET)
         self.type = kwargs.get("type", SOCK_STREAM)
         self.timeout = kwargs.get("timeout", 1)
-
-        # listen methods define sock object
-        self.sock = None
-
-        # reader cannot be defined without sock
-        self.reader = None
-
-        self.readonly = kwargs.get("readonly", False)
         self.logger = kwargs.get("logger", getLogger("client"))
+
+        # connect methods define sock object
+        self.sock = None
+        self.running_flag = None
+
+        self.current_chat = None
+        self.contacts = []
+
+    @property
+    def active_chat(self):
+        return self.current_chat
+
+    @active_chat.setter
+    def active_chat(self, value):
+        self.current_chat = value
 
     def __del__(self):
         try:
@@ -583,32 +688,63 @@ class Client(metaclass=ClientVerifier):
         message = get_contacts(self.username)
         return send_data(self.sock, message)
 
+    def _add_contact(self, contact):
+        message = add_contact(self.username, contact)
+        return send_data(self.sock, message)
+
+    def _delete_contact(self, contact):
+        message = del_contact(self.username, contact)
+        return send_data(self.sock, message)
+
+    def _get_chat(self, contact):
+        message = chat(self.username, contact)
+        return send_data(self.sock, message)
+
+    def _send_message(self, destination, text):
+        message = msg(text, self.username, destination)
+        return send_data(self.sock, message)
+
     def connect(self):
-        self.sock = socket(family=self.family, type=self.type)
-        self.sock.connect((self.address, self.port))
-        self.sock.settimeout(self.timeout)
+        try:
+            self.sock = socket(family=self.family, type=self.type)
+            self.sock.connect((self.address, self.port))
+            self.sock.settimeout(self.timeout)
+        except Exception as err:
+            self.client_error.emit(str(err))
+            return False
 
         self._helo_message()
         self._get_contacts()
+        return True
+
+    def close(self):
+        self.sock.close()
 
     def run(self):
-        self.connect()
-        self.reader = MessageReader(self.sock, self.logger)
-        self.reader.start()
-
-        if self.readonly:
-            self.reader.join()
+        if not self.connect():
             return
+        self.running_flag = True
 
-        while True:
-            try:
-                text = input("Введите сообщение в формате 'recipient:message': ")
-                (recipient, msg_body) = text.split(":", 1)
-            except ValueError:
-                self.logger.info("Введено пустое сообщение")
+        while self.running_flag:
+            data = recv_data(self.sock)
+            if not data:
+                time.sleep(0.3)
                 continue
 
-            message = msg(msg_body, self.username, recipient)
-            send_data(self.sock, message)
+            if "action" in data and "msg" in data["action"] and self.active_chat:
+                if data["to"] == self.username or (
+                    data["to"] == self.active_chat and self.active_chat.startswith("#")
+                ):
+                    self._get_chat(self.active_chat)
 
-        self.reader.join()
+            if "alert" in data:
+                if "contacts" in data["alert"]:
+                    self.contacts = data["alert"]["contacts"]
+                    self.server_message.emit({"action": "update_contacts"})
+                if "chat" in data["alert"]:
+                    self.chat = data["alert"]["chat"]
+                    self.server_message.emit({"action": "update_chat"})
+        self.close()
+
+    def stop(self):
+        self.running_flag = False

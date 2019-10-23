@@ -133,7 +133,26 @@ def del_contact(account_name=None, contact=None):
 def is_contact_operation(message):
     try:
         if message["action"] == "add_contact" or message["action"] == "del_contact":
-            return message["action"], message["user"], message["user"]
+            return message["action"], message["user"], message["contact"]
+    except Exception:
+        pass
+    return None
+
+
+@log
+def chat(source=None, destination=None):
+    return {
+        "action": "chat",
+        "time": datetime.datetime.now().timestamp(),
+        "from": source,
+        "to": destination,
+    }
+
+
+def is_chat(message):
+    try:
+        if message["action"] == "chat":
+            return message["from"], message["to"]
     except Exception:
         pass
     return None
