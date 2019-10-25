@@ -5,12 +5,65 @@ from .decorators import log
 
 
 @log
+def helo(publickey):
+    """
+    Server initiate key exchange with send public key.
+    """
+    return {
+        "action": "helo",
+        "time": datetime.datetime.now().timestamp(),
+        "type": "handshake",
+        "publickey": publickey,
+    }
+
+
+def is_helo(message):
+    try:
+        if message["action"] == "helo":
+            return message["publickey"]
+    except Exception:
+        pass
+    return None
+
+
+@log
+def key_exchange(sessionkey):
+    """
+    Server initiate key exchange with send public key.
+    """
+    return {
+        "action": "key_exchange",
+        "time": datetime.datetime.now().timestamp(),
+        "type": "handshake",
+        "key": sessionkey,
+    }
+
+
+def is_key_exchange(message):
+    try:
+        if message["action"] == "key_exchange":
+            return message["key"]
+    except Exception:
+        pass
+    return None
+
+
+@log
 def authenticate(account_name=None, password=None):
     return {
         "action": "authenticate",
         "time": datetime.datetime.now().timestamp(),
         "user": {"account_name": account_name, "password": password},
     }
+
+
+def is_authenticate(message):
+    try:
+        if message["action"] == "authenticate":
+            return message["user"]["account_name"], message["user"]["password"]
+    except Exception:
+        pass
+    return None
 
 
 @log
@@ -52,7 +105,12 @@ def msg(message=None, source=None, destination=None):
 def is_message(message):
     try:
         if message["action"] == "msg":
-            return message["from"], message["to"], message["encoding"], message["message"]
+            return (
+                message["from"],
+                message["to"],
+                message["encoding"],
+                message["message"],
+            )
     except Exception:
         pass
     return None
@@ -73,7 +131,11 @@ def join(room=None):
 
 @log
 def leave(room=None):
-    return {"action": "leave", "time": datetime.datetime.now().timestamp(), "room": room}
+    return {
+        "action": "leave",
+        "time": datetime.datetime.now().timestamp(),
+        "room": room,
+    }
 
 
 @log
@@ -89,6 +151,15 @@ def response(status, message="", is_success=True):
     body.update(message_desc)
 
     return body
+
+
+def is_error_response(message):
+    try:
+        if "error" in message:
+            return message["error"]
+    except Exception:
+        pass
+    return None
 
 
 @log

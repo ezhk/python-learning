@@ -34,7 +34,9 @@ class MainWindow(object):
 
     def get_active_users_model(self):
         table = QtGui.QStandardItemModel()
-        table.setHorizontalHeaderLabels(["Username", "IP address", "Port", "Last access"])
+        table.setHorizontalHeaderLabels(
+            ["Username", "IP address", "Port", "Last access"]
+        )
         for user in self.users_extension.active_users:
             row = []
             for key in ("username", "address", "port", "atime"):
@@ -63,15 +65,21 @@ class MainWindow(object):
         self.button_actions["exit"].triggered.connect(_exit_action)
 
         # refresh action
-        self.button_actions.update({"refresh": QtWidgets.QAction("Refresh", MainWindow)})
+        self.button_actions.update(
+            {"refresh": QtWidgets.QAction("Refresh", MainWindow)}
+        )
         self.button_actions["refresh"].triggered.connect(_refresh_action)
 
         # refresh action
-        self.button_actions.update({"history": QtWidgets.QAction("History", MainWindow)})
+        self.button_actions.update(
+            {"history": QtWidgets.QAction("History", MainWindow)}
+        )
         self.button_actions["history"].triggered.connect(_history_action)
 
         # refresh action
-        self.button_actions.update({"settings": QtWidgets.QAction("Settings", MainWindow)})
+        self.button_actions.update(
+            {"settings": QtWidgets.QAction("Settings", MainWindow)}
+        )
         self.button_actions["settings"].triggered.connect(_settings_action)
 
     def setupUi(self, MainWindow):

@@ -28,6 +28,7 @@ class Users(Base):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     username = Column(String(255), index=True, unique=True)
+    password = Column(String(256))
     atime = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
     is_active = Column(Boolean, default=True)
 

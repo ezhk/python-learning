@@ -12,7 +12,9 @@ from . import exceptions
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Messenger application.")
-    parser.add_argument("-a", "--address", dest="address", type=str, default=SERVER_ADDRESS)
+    parser.add_argument(
+        "-a", "--address", dest="address", type=str, default=SERVER_ADDRESS
+    )
     parser.add_argument("-p", "--port", dest="port", type=int, default=SERVER_PORT)
     parser.add_argument("-u", "--username", dest="username", type=str, default=None)
     parser.add_argument("-r", "--readonly", dest="readonly", action="store_true")
@@ -115,4 +117,3 @@ def save_server_settings(address, port, storage):
     settings.update({"SERVER": {"Address": address, "Port": port, "Storage": storage}})
     with open("settings.ini", "w") as fh:
         settings.write(fh)
-

@@ -10,11 +10,17 @@ from sqlalchemy.orm import Session, aliased
 
 from PyQt5 import QtCore, QtWidgets
 
-from .config import STORAGE, BACKLOG
+from .config import STORAGE, BACKLOG, ENCODING, SALT
 from .descriptors import Port, Username
 from .exceptions import MessageError
 from .metaclasses import ServerVerifier, ClientVerifier
 from .messages import (
+    helo,
+    is_helo,
+    key_exchange,
+    is_key_exchange,
+    authenticate,
+    is_authenticate,
     presence,
     is_presence_message,
     is_message,
@@ -28,9 +34,23 @@ from .messages import (
     add_contact,
     del_contact,
     response,
+    is_error_response,
 )
 from .models import Users, UsersHistory, Contacts, Groups, Messages
-from .utils import is_valid_message, send_data, recv_data, load_server_settings
+from .security import (
+    AsymmetricCipher,
+    SymmetricCipher,
+    generate_base64_session_key,
+    get_text_digest,
+)
+from .utils import (
+    is_valid_message,
+    send_data,
+    recv_data,
+    parse_raw_json,
+    make_raw_json,
+    load_server_settings,
+)
 
 
 class ServerThread(object):
@@ -119,8 +139,33 @@ class UsersExtension(object):
         self.groups = {}
         self.delayed_messages = {}
 
+        self.salt = SALT
+
         engine = create_engine(STORAGE, pool_recycle=3600, echo=False)
         self.session = Session(bind=engine)
+
+    def authenticate(self, username, password):
+        password_hash = get_text_digest(password, self.salt)
+
+        user = self.session.query(Users).filter_by(username=username).first()
+        if user is None:
+            u_object = Users(username=username, password=password_hash)
+            try:
+                self.session.add(u_object)
+                self.session.commit()
+            except Exception as err:
+                self.session.rollback()
+                return False
+            return True
+
+        if user.password is None:
+            user.password = password_hash
+            self.session.commit()
+            return True
+
+        if user.password == password_hash:
+            return True
+        return False
 
     def presence(self, client, socket):
         """
@@ -151,23 +196,17 @@ class UsersExtension(object):
         self.sockets.update({client: socket})
         user = self.session.query(Users).filter_by(username=client).first()
 
-        # create user row if not exists
+        # user must create in authenticate function
         if user is None:
-            u_object = Users(username=client)
-            try:
-                self.session.add(u_object)
-                self.session.commit()
-            except Exception as err:
-                self.session.rollback()
-                return False
+            return False
+
         # update user-state to active for exist user
-        else:
-            try:
-                user.is_active = True
-                self.session.commit()
-            except Exception:
-                self.session.rollback()
-                return False
+        try:
+            user.is_active = True
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
 
         return _save_history(client, socket)
 
@@ -467,6 +506,7 @@ class Server(metaclass=ServerVerifier):
     port = Port()
 
     def __init__(self, address, port, **kwargs):
+        self.cipher = AsymmetricCipher()
         self.address = address or "localhost"
         self.port = port
 
@@ -482,6 +522,8 @@ class Server(metaclass=ServerVerifier):
 
         self.users_extension = UsersExtension()
         self.client_sockets = []
+        self.authenticated_clients = set()
+        self.client_session_keys = {}
 
         self.running_flag = None
 
@@ -493,6 +535,27 @@ class Server(metaclass=ServerVerifier):
             pass
 
     def _process_input_message(self, data, sock):
+        if is_key_exchange(data) is not None:
+            cipher = SymmetricCipher(is_key_exchange(data))
+            self.client_session_keys.update({sock: cipher})
+            return
+
+        # skip unsecure
+        if sock in self.client_session_keys:
+            cipher = self.client_session_keys[sock]
+            data = cipher.decrypt(data).decode()
+
+        # check auth data
+        if is_authenticate(data) is not None:
+            if self.users_extension.authenticate(*is_authenticate(data)):
+                self.authenticated_clients.add(sock)
+                return
+            else:
+                raise MessageError("Ошибка авторизации")
+
+        if sock not in self.authenticated_clients:
+            raise MessageError("Пользователь должен быть авторизован")
+
         # online message
         if is_presence_message(data) is not None:
             self.users_extension.presence(is_presence_message(data), sock)
@@ -545,6 +608,8 @@ class Server(metaclass=ServerVerifier):
         def _disconnect_client(self, c_socket):
             try:
                 self.users_extension.disconnect(*c_socket.getpeername())
+
+                self.authenticated_clients.remove(c_socket)
                 self.client_sockets.remove(c_socket)
             except Exception:
                 return False
@@ -574,6 +639,7 @@ class Server(metaclass=ServerVerifier):
                     message = response(202, processing, True)
             except MessageError as err:
                 self.logger.error(f"Ошибка валидации сообщения от {client_sock}, {err}")
+                message = response(400, str(err), False)
 
             try:
                 send_data(client_sock, message)
@@ -582,6 +648,8 @@ class Server(metaclass=ServerVerifier):
                     f"Клиент отключился при подтверждении {client_sock}: {err}"
                 )
                 self.users_extension.disconnect(*client_sock.getpeername())
+
+                self.authenticated_clients.remove(client_sock)
                 self.client_sockets.remove(client_sock)
                 client_sock.close()
 
@@ -597,10 +665,26 @@ class Server(metaclass=ServerVerifier):
             except Exception as err:
                 self.logger.debug(f"Клиент отключился {client}: {err}")
                 self.users_extension.disconnect(*client.getpeername())
+
+                self.authenticated_clients.remove(client_sock)
                 self.client_sockets.remove(client)
                 client.close()
                 continue
         return sended
+
+    def _helo(self, c_socket):
+        helo_message = helo(self.cipher.public_key.decode())
+        send_data(c_socket, helo_message)
+
+    def validate_client_sockets(self):
+        """
+        Function check, that possible to select with socket.
+        """
+        for c_sock in list(self.client_sockets):
+            if c_sock.fileno() < 0:
+                self.logger.debug(f"Клиент отключился {c_sock}: fd is negative")
+                self.client_sockets.remove(c_sock)
+                self.authenticated_clients.remove(c_sock)
 
     def run(self):
         self.listen()
@@ -610,11 +694,13 @@ class Server(metaclass=ServerVerifier):
             try:
                 sock, addr = self.sock.accept()
                 self.client_sockets.append(sock)
+                # self._helo(sock)
             except OSError as e:
                 # timeout exceeded
                 pass
 
             try:
+                self.validate_client_sockets()
                 r_clients, w_clients, _ = select(
                     self.client_sockets, self.client_sockets, [], 0
                 )
@@ -644,13 +730,14 @@ class Client(Thread, QtCore.QObject):
     client_error = QtCore.pyqtSignal(str)
     server_message = QtCore.pyqtSignal(dict)
 
-    def __init__(self, address, port, username, **kwargs):
+    def __init__(self, address, port, username, password, **kwargs):
         Thread.__init__(self)
         QtCore.QObject.__init__(self)
 
         self.daemon = True
 
         self.username = username
+        self.password = password
         self.address = address or "localhost"
         self.port = port
 
@@ -661,6 +748,7 @@ class Client(Thread, QtCore.QObject):
 
         # connect methods define sock object
         self.sock = None
+        self.cipher = None
         self.running_flag = None
 
         self.current_chat = None
@@ -680,7 +768,11 @@ class Client(Thread, QtCore.QObject):
         except Exception:
             pass
 
-    def _helo_message(self):
+    def _authenticate(self):
+        message = authenticate(self.username, self.password)
+        return send_data(self.sock, message)
+
+    def _presence_message(self):
         message = presence(self.username)
         return send_data(self.sock, message)
 
@@ -704,6 +796,10 @@ class Client(Thread, QtCore.QObject):
         message = msg(text, self.username, destination)
         return send_data(self.sock, message)
 
+    def _key_exchange(self, key):
+        message = key_exchange(key)
+        send_data(self.sock, message)
+
     def connect(self):
         try:
             self.sock = socket(family=self.family, type=self.type)
@@ -713,7 +809,10 @@ class Client(Thread, QtCore.QObject):
             self.client_error.emit(str(err))
             return False
 
-        self._helo_message()
+        self._authenticate()
+        time.sleep(0.3)
+
+        self._presence_message()
         self._get_contacts()
         return True
 
@@ -729,6 +828,23 @@ class Client(Thread, QtCore.QObject):
             data = recv_data(self.sock)
             if not data:
                 time.sleep(0.3)
+                continue
+
+            # if is_helo(data):
+            #     session_key = generate_base64_session_key()
+            #     self.cipher = SymmetricCipher(session_key)
+            #     self._key_exchange(session_key.decode())
+
+            # self._precense_message()
+            # self._get_contacts()
+
+            # session must be encrypted
+            # if not self.cipher:
+            #     continue
+
+            # error
+            if is_error_response(data) is not None:
+                self.client_error.emit(is_error_response(data))
                 continue
 
             if "action" in data and "msg" in data["action"] and self.active_chat:

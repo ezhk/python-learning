@@ -21,7 +21,9 @@ class HistoryDialog(object):
 
     def get_history_model(self):
         table = QtGui.QStandardItemModel()
-        table.setHorizontalHeaderLabels(["Username", "IP address", "Port", "Connect time"])
+        table.setHorizontalHeaderLabels(
+            ["Username", "IP address", "Port", "Connect time"]
+        )
         for user in self.users_extension.users_history:
             row = []
             for key in ("username", "address", "port", "ctime"):
