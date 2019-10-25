@@ -43,14 +43,7 @@ from .security import (
     generate_base64_session_key,
     get_text_digest,
 )
-from .utils import (
-    is_valid_message,
-    send_data,
-    recv_data,
-    parse_raw_json,
-    make_raw_json,
-    load_server_settings,
-)
+from .utils import is_valid_message, send_data, recv_data, load_server_settings
 
 
 class ServerThread(object):
@@ -88,45 +81,6 @@ class ServerThread(object):
         except Exception:
             pass
         return False
-
-
-class MessageReader(Thread):
-    """
-    Trhread, that read messages on client side.
-    """
-
-    def __init__(self, sock, logger):
-        super().__init__()
-        self.daemon = True
-
-        self.sock = sock
-        self.logger = logger
-
-    def run(self):
-        """
-        Func is reading messages from socket in infinite cycle.
-        """
-
-        while True:
-            data = recv_data(self.sock)
-            if not data:
-                time.sleep(0.3)
-                continue
-
-            # message received
-            if not set({"from", "to", "message"}) - set(data.keys()):
-                self.logger.info(
-                    f"Сообщение от {data['from']} >{data['to']} : {data['message']}"
-                )
-                self.logger.debug(f"Получено корректное сообщение от сервера: {data}")
-                continue
-
-            # server data received
-            if "alert" in data:
-                if "contacts" in data["alert"]:
-                    contacts = data["alert"]["contacts"]
-                    self.logger.info(f"Список контактов: {', '.join(contacts)}")
-        return True
 
 
 class UsersExtension(object):
@@ -523,7 +477,7 @@ class Server(metaclass=ServerVerifier):
         self.users_extension = UsersExtension()
         self.client_sockets = []
         self.authenticated_clients = set()
-        self.client_session_keys = {}
+        self.client_ciphers = {}
 
         self.running_flag = None
 
@@ -536,14 +490,10 @@ class Server(metaclass=ServerVerifier):
 
     def _process_input_message(self, data, sock):
         if is_key_exchange(data) is not None:
-            cipher = SymmetricCipher(is_key_exchange(data))
-            self.client_session_keys.update({sock: cipher})
+            session_key = self.cipher.decrypt(is_key_exchange(data).encode())
+            cipher = SymmetricCipher(session_key)
+            self.client_ciphers.update({sock: cipher})
             return
-
-        # skip unsecure
-        if sock in self.client_session_keys:
-            cipher = self.client_session_keys[sock]
-            data = cipher.decrypt(data).decode()
 
         # check auth data
         if is_authenticate(data) is not None:
@@ -590,10 +540,10 @@ class Server(metaclass=ServerVerifier):
                 self.users_extension.is_active(username)
                 and self.users_extension.get_socket(username) == sock
             ):
-                send_data(sock, data)
+                send_data(sock, data, self.client_ciphers.get(sock, None))
                 sended += 1
         else:
-            send_data(sock, data)
+            send_data(sock, data, self.client_ciphers.get(sock, None))
             sended += 1
         return sended
 
@@ -618,7 +568,9 @@ class Server(metaclass=ServerVerifier):
         requests = {}
         for client_sock in r_clients:
             try:
-                data = recv_data(client_sock)
+                data = recv_data(
+                    client_sock, self.client_ciphers.get(client_sock, None)
+                )
                 if data is None:
                     raise MessageError("Получено сообщение None")
             except Exception as err:
@@ -642,7 +594,9 @@ class Server(metaclass=ServerVerifier):
                 message = response(400, str(err), False)
 
             try:
-                send_data(client_sock, message)
+                send_data(
+                    client_sock, message, self.client_ciphers.get(client_sock, None)
+                )
             except Exception as err:
                 self.logger.debug(
                     f"Клиент отключился при подтверждении {client_sock}: {err}"
@@ -666,7 +620,7 @@ class Server(metaclass=ServerVerifier):
                 self.logger.debug(f"Клиент отключился {client}: {err}")
                 self.users_extension.disconnect(*client.getpeername())
 
-                self.authenticated_clients.remove(client_sock)
+                self.authenticated_clients.remove(client)
                 self.client_sockets.remove(client)
                 client.close()
                 continue
@@ -694,7 +648,7 @@ class Server(metaclass=ServerVerifier):
             try:
                 sock, addr = self.sock.accept()
                 self.client_sockets.append(sock)
-                # self._helo(sock)
+                self._helo(sock)
             except OSError as e:
                 # timeout exceeded
                 pass
@@ -770,35 +724,35 @@ class Client(Thread, QtCore.QObject):
 
     def _authenticate(self):
         message = authenticate(self.username, self.password)
-        return send_data(self.sock, message)
+        return send_data(self.sock, message, self.cipher)
 
     def _presence_message(self):
         message = presence(self.username)
-        return send_data(self.sock, message)
+        return send_data(self.sock, message, self.cipher)
 
     def _get_contacts(self):
         message = get_contacts(self.username)
-        return send_data(self.sock, message)
+        return send_data(self.sock, message, self.cipher)
 
     def _add_contact(self, contact):
         message = add_contact(self.username, contact)
-        return send_data(self.sock, message)
+        return send_data(self.sock, message, self.cipher)
 
     def _delete_contact(self, contact):
         message = del_contact(self.username, contact)
-        return send_data(self.sock, message)
+        return send_data(self.sock, message, self.cipher)
 
     def _get_chat(self, contact):
         message = chat(self.username, contact)
-        return send_data(self.sock, message)
+        return send_data(self.sock, message, self.cipher)
 
     def _send_message(self, destination, text):
         message = msg(text, self.username, destination)
-        return send_data(self.sock, message)
+        return send_data(self.sock, message, self.cipher)
 
     def _key_exchange(self, key):
         message = key_exchange(key)
-        send_data(self.sock, message)
+        send_data(self.sock, message, self.cipher)
 
     def connect(self):
         try:
@@ -809,11 +763,11 @@ class Client(Thread, QtCore.QObject):
             self.client_error.emit(str(err))
             return False
 
-        self._authenticate()
-        time.sleep(0.3)
+        # self._authenticate()
+        # time.sleep(0.3)
 
-        self._presence_message()
-        self._get_contacts()
+        # self._presence_message()
+        # self._get_contacts()
         return True
 
     def close(self):
@@ -825,22 +779,30 @@ class Client(Thread, QtCore.QObject):
         self.running_flag = True
 
         while self.running_flag:
-            data = recv_data(self.sock)
+            data = recv_data(self.sock, self.cipher)
             if not data:
                 time.sleep(0.3)
                 continue
 
-            # if is_helo(data):
-            #     session_key = generate_base64_session_key()
-            #     self.cipher = SymmetricCipher(session_key)
-            #     self._key_exchange(session_key.decode())
+            if is_helo(data) is not None:
+                asymmetric_cipher = AsymmetricCipher(is_helo(data))
+                session_key = generate_base64_session_key()
+                crypted_session_key = asymmetric_cipher.encrypt(session_key)
+                self._key_exchange(crypted_session_key.decode())
 
-            # self._precense_message()
-            # self._get_contacts()
+                # cipher must be defined after _key_exchange action
+                self.cipher = SymmetricCipher(session_key)
+
+                time.sleep(0.3)
+                self._authenticate()
+
+                time.sleep(0.3)
+                self._presence_message()
+                self._get_contacts()
 
             # session must be encrypted
-            # if not self.cipher:
-            #     continue
+            if not self.cipher:
+                continue
 
             # error
             if is_error_response(data) is not None:

@@ -5,7 +5,7 @@ from .decorators import log
 
 
 @log
-def helo(publickey):
+def helo(publickey=None):
     """
     Server initiate key exchange with send public key.
     """
@@ -27,7 +27,7 @@ def is_helo(message):
 
 
 @log
-def key_exchange(sessionkey):
+def key_exchange(sessionkey=None):
     """
     Server initiate key exchange with send public key.
     """
@@ -57,7 +57,7 @@ def authenticate(account_name=None, password=None):
     }
 
 
-def is_authenticate(message):
+def is_authenticate(message=None):
     try:
         if message["action"] == "authenticate":
             return message["user"]["account_name"], message["user"]["password"]
