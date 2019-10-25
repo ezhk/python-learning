@@ -99,7 +99,7 @@ class UsersExtension(object):
         self.session = Session(bind=engine)
 
     def authenticate(self, username, password):
-        password_hash = get_text_digest(password, self.salt)
+        password_hash = get_text_digest(f"{username}{password}", self.salt)
 
         user = self.session.query(Users).filter_by(username=username).first()
         if user is None:
