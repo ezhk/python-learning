@@ -10,10 +10,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class AuthorizeDialog(object):
+class AuthDialog(object):
     def __init__(self):
         super().__init__()
         self.username = None
+        self.password = None
 
         self.dialog = QtWidgets.QDialog()
         self.setupUi(self.dialog)
@@ -22,30 +23,46 @@ class AuthorizeDialog(object):
     def get_username(self):
         return self.username
 
+    def get_password(self):
+        return self.password
+
     def authorization_action(self):
         self.username = self.usernameEdit.text()
-        if self.username:
+        self.password = self.passwordEdit.text()
+        if self.username and self.password:
             return self.dialog.close()
 
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle("Sign in failed")
         msg.setIcon(QtWidgets.QMessageBox.Warning)
-        msg.setText("Username cannot be empty")
+        msg.setText("Username and password cannot be empty")
         msg.exec()
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(350, 125)
         self.labelUsername = QtWidgets.QLabel(Dialog)
-        self.labelUsername.setGeometry(QtCore.QRect(40, 30, 61, 16))
+        self.labelUsername.setGeometry(QtCore.QRect(40, 20, 61, 16))
         self.labelUsername.setAlignment(
             QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
         )
         self.labelUsername.setObjectName("labelUsername")
 
         self.usernameEdit = QtWidgets.QLineEdit(Dialog)
-        self.usernameEdit.setGeometry(QtCore.QRect(130, 30, 181, 21))
+        self.usernameEdit.setGeometry(QtCore.QRect(130, 20, 181, 21))
         self.usernameEdit.setObjectName("usernameEdit")
+
+        self.labelPassowrd = QtWidgets.QLabel(Dialog)
+        self.labelPassowrd.setGeometry(QtCore.QRect(40, 50, 61, 16))
+        self.labelPassowrd.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
+        self.labelPassowrd.setObjectName("labelPassowrd")
+
+        self.passwordEdit = QtWidgets.QLineEdit(Dialog)
+        self.passwordEdit.setGeometry(QtCore.QRect(130, 50, 181, 21))
+        self.passwordEdit.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.passwordEdit.setObjectName("passwordEdit")
 
         self.loginButton = QtWidgets.QPushButton(Dialog)
         self.loginButton.setGeometry(QtCore.QRect(50, 80, 113, 32))
@@ -64,5 +81,6 @@ class AuthorizeDialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Authorize"))
         self.labelUsername.setText(_translate("Dialog", "Username"))
+        self.labelPassowrd.setText(_translate("Dialog", "Password"))
         self.loginButton.setText(_translate("Dialog", "Login"))
         self.exitButton.setText(_translate("Dialog", "Exit"))

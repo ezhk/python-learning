@@ -2,7 +2,9 @@ import dis
 
 
 def is_incorrect_methods(instruction, incorrect_methods):
-    return instruction.opname == "LOAD_METHOD" and instruction.argrepr in incorrect_methods
+    return (
+        instruction.opname == "LOAD_METHOD" and instruction.argrepr in incorrect_methods
+    )
 
 
 class ClientVerifier(type):
@@ -13,7 +15,9 @@ class ClientVerifier(type):
             try:
                 for instruction in dis.get_instructions(f_call):
                     if is_incorrect_methods(instruction, self.INCORRECT_METHODS):
-                        raise RuntimeError(f"Client cannot calls {self.INCORRECT_METHODS} methods")
+                        raise RuntimeError(
+                            f"Client cannot calls {self.INCORRECT_METHODS} methods"
+                        )
             except TypeError:
                 pass
 
@@ -37,7 +41,9 @@ class ServerVerifier(type):
             try:
                 for instruction in dis.get_instructions(f_call):
                     if is_incorrect_methods(instruction, self.INCORRECT_METHODS):
-                        raise RuntimeError(f"Server cannot calls {self.INCORRECT_METHODS} methods")
+                        raise RuntimeError(
+                            f"Server cannot calls {self.INCORRECT_METHODS} methods"
+                        )
 
                     if instruction.opname == "LOAD_GLOBAL":
                         load_global.add(instruction.argrepr)

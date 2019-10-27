@@ -24,7 +24,9 @@ class TestUtils(unittest.TestCase):
             utils.is_valid_message({})
         self.assertFalse(utils.is_valid_message({"action": "join"}))
         self.assertTrue(
-            utils.is_valid_message(messages.presence("John Galt", "Кто такой Джон Голт?"))
+            utils.is_valid_message(
+                messages.presence("John Galt", "Кто такой Джон Голт?")
+            )
         )
 
     def test_valid_response(self):

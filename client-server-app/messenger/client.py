@@ -8,7 +8,7 @@ import sys
 sys.path.append(".")
 
 
-from ui.client.autorizeDialog import AuthorizeDialog
+from ui.client.authDialog import AuthDialog
 from ui.client.mainWindow import MainWindow
 
 from jim.classes import Client
@@ -19,15 +19,23 @@ import jim.logger
 if __name__ == "__main__":
     opts = parse_arguments()
     username = opts.username
+    password = None
 
     app = QtWidgets.QApplication(sys.argv)
-    if not username:
-        authorize_gialog = AuthorizeDialog()
+    if not username or not password:
+        auth_gialog = AuthDialog()
         app.exec_()
 
-        username = authorize_gialog.get_username() or sys.exit()
+        username = auth_gialog.get_username() or sys.exit()
+        password = auth_gialog.get_password() or sys.exit()
 
-    client = Client(opts.address, opts.port, username, logger=getLogger("messenger.client"))
+    client = Client(
+        opts.address,
+        opts.port,
+        username,
+        password,
+        logger=getLogger("messenger.client"),
+    )
     main_window = MainWindow(client)
     main_window.bind_signals()
 

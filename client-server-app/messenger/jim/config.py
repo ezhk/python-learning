@@ -13,3 +13,4 @@ CLIENT_LOGFILE = "log/client.log"
 LOGLEVEL = logging.DEBUG
 
 STORAGE = "sqlite:///messenger.sql"
+SALT = "376gizGQvQqaBE3GXzEC7J72PBKBSN0kB5msKOpGIN0o"

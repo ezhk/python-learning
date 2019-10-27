@@ -54,7 +54,10 @@ class TestMessages(unittest.TestCase):
 
     def test_presence(self):
         self.assertEqual(
-            [jim.messages.presence("test", "here")[x] for x in ("user", "type", "action")],
+            [
+                jim.messages.presence("test", "here")[x]
+                for x in ("user", "type", "action")
+            ],
             [self.presence[x] for x in ("user", "type", "action")],
         )
 

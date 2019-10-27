@@ -22,7 +22,9 @@ if __name__ == "__main__":
     process_list = []
 
     while True:
-        action = input("(r)un new process / (c)lose all processes / (s)how clients / (q)uit\n")
+        action = input(
+            "(r)un new process / (c)lose all processes / (s)how clients / (q)uit\n"
+        )
         if action == "r":
             process_list.extend(_run_clients())
             continue

@@ -12,7 +12,9 @@ from . import exceptions
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Messenger application.")
-    parser.add_argument("-a", "--address", dest="address", type=str, default=SERVER_ADDRESS)
+    parser.add_argument(
+        "-a", "--address", dest="address", type=str, default=SERVER_ADDRESS
+    )
     parser.add_argument("-p", "--port", dest="port", type=int, default=SERVER_PORT)
     parser.add_argument("-u", "--username", dest="username", type=str, default=None)
     parser.add_argument("-r", "--readonly", dest="readonly", action="store_true")
@@ -64,7 +66,7 @@ def make_raw_json(python_object):
     return json_string.encode(ENCODING)
 
 
-def send_data(sock, data):
+def send_data(sock, data, cipher_object=None):
     """
     Фникция отправляет сообщение в сокет добавляя
     в начало сообщения его длину, это позволяет
@@ -73,6 +75,9 @@ def send_data(sock, data):
     """
     try:
         data = make_raw_json(data)
+        if cipher_object is not None:
+            data = cipher_object.encrypt(data)
+
         raw_data = struct.pack("I", len(data)) + data
         return sock.send(raw_data)
     except Exception as err:
@@ -80,7 +85,7 @@ def send_data(sock, data):
     return None
 
 
-def recv_data(sock):
+def recv_data(sock, cipher_object=None):
     """
     Финкция сначала читает 4 байта из сокета — длина сообщения,
     а затем само сообщение, декодируем и возвращает разобранный
@@ -91,6 +96,9 @@ def recv_data(sock):
         len_data = struct.unpack("I", len_data)[0]
 
         raw_data = sock.recv(len_data)
+        if cipher_object is not None:
+            raw_data = cipher_object.decrypt(raw_data)
+
         return parse_raw_json(raw_data)
     except Exception as err:
         pass
@@ -115,4 +123,3 @@ def save_server_settings(address, port, storage):
     settings.update({"SERVER": {"Address": address, "Port": port, "Storage": storage}})
     with open("settings.ini", "w") as fh:
         settings.write(fh)
-
