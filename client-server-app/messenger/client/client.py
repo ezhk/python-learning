@@ -18,7 +18,7 @@ import jim.logger
 if __name__ == "__main__":
     opts = parse_arguments()
     username = opts.username
-    password = None
+    password = opts.password
 
     app = QtWidgets.QApplication(sys.argv)
     if not username or not password:

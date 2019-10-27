@@ -12,13 +12,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class AddContactDialog(object):
     def __init__(self, client=None):
+        super().__init__()
+
         self.client = client
 
         self.dialog = QtWidgets.QDialog()
         self.setupUi(self.dialog)
         self.dialog.exec_()
-
-        return super().__init__()
 
     def _add_contact(self):
         self.client._add_contact(self.lineEdit.text())

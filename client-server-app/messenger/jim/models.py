@@ -1,10 +1,7 @@
-import datetime
-
 from sqlalchemy import (
     Column,
     Boolean,
     Integer,
-    BigInteger,
     String,
     DateTime,
     ForeignKey,
@@ -29,7 +26,9 @@ class Users(Base):
     id = Column(Integer, autoincrement=True, primary_key=True)
     username = Column(String(255), index=True, unique=True)
     password = Column(String(256))
-    atime = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
+    atime = Column(
+        DateTime(timezone=True), default=func.now(), onupdate=func.now()
+    )
     is_active = Column(Boolean, default=True)
 
     history = relationship("UsersHistory")

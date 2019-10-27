@@ -12,13 +12,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class DeleteContactDialog(object):
     def __init__(self, client=None):
+        super().__init__()
+
         self.client = client
 
         self.dialog = QtWidgets.QDialog()
         self.setupUi(self.dialog)
         self.dialog.exec_()
-
-        return super().__init__()
 
     def _delete_contact(self):
         self.client._delete_contact(self.usernameBox.currentText())

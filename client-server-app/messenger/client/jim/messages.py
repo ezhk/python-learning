@@ -4,20 +4,11 @@ from .config import ENCODING
 from .decorators import log
 
 
-@log
-def helo(publickey=None):
-    """
-    Server initiate key exchange with send public key.
-    """
-    return {
-        "action": "helo",
-        "time": datetime.datetime.now().timestamp(),
-        "type": "handshake",
-        "publickey": publickey,
-    }
-
-
 def is_helo(message):
+    """
+    Check that received message is helo.
+    """
+
     try:
         if message["action"] == "helo":
             return message["publickey"]
@@ -31,6 +22,7 @@ def key_exchange(sessionkey=None):
     """
     Server initiate key exchange with send public key.
     """
+
     return {
         "action": "key_exchange",
         "time": datetime.datetime.now().timestamp(),
@@ -39,17 +31,14 @@ def key_exchange(sessionkey=None):
     }
 
 
-def is_key_exchange(message):
-    try:
-        if message["action"] == "key_exchange":
-            return message["key"]
-    except Exception:
-        pass
-    return None
-
-
 @log
 def authenticate(account_name=None, password=None):
+    """
+    Return message with auth data:
+    - username
+    - password
+    """
+
     return {
         "action": "authenticate",
         "time": datetime.datetime.now().timestamp(),
@@ -57,17 +46,12 @@ def authenticate(account_name=None, password=None):
     }
 
 
-def is_authenticate(message=None):
-    try:
-        if message["action"] == "authenticate":
-            return message["user"]["account_name"], message["user"]["password"]
-    except Exception:
-        pass
-    return None
-
-
 @log
 def presence(account_name=None, status=None):
+    """
+    Return dict, that contains presence data.
+    """
+
     return {
         "action": "presence",
         "time": datetime.datetime.now().timestamp(),
@@ -76,22 +60,25 @@ def presence(account_name=None, status=None):
     }
 
 
-def is_presence_message(message):
-    try:
-        if message["action"] == "presence":
-            return message["user"]["account_name"]
-    except Exception:
-        pass
-    return None
-
-
 @log
 def probe():
+    """
+    Currently not used.
+    """
+
     return {"action": "probe", "time": datetime.datetime.now().timestamp()}
 
 
 @log
 def msg(message=None, source=None, destination=None):
+    """
+    Return dict with message data:
+    - from message
+    - to message
+    - encoding, by default using UTF-8
+    - message body
+    """
+
     return {
         "action": "msg",
         "time": datetime.datetime.now().timestamp(),
@@ -102,30 +89,11 @@ def msg(message=None, source=None, destination=None):
     }
 
 
-def is_message(message):
-    try:
-        if message["action"] == "msg":
-            return (
-                message["from"],
-                message["to"],
-                message["encoding"],
-                message["message"],
-            )
-    except Exception:
-        pass
-    return None
-
-
-def get_recipient(message):
-    try:
-        return message.get("to", None)
-    except Exception:
-        pass
-    return None
-
-
 @log
 def join(room=None):
+    """
+    Currently not used.
+    """
     return {
         "action": "join",
         "time": datetime.datetime.now().timestamp(),
@@ -135,6 +103,9 @@ def join(room=None):
 
 @log
 def leave(room=None):
+    """
+    Currently not used.
+    """
     return {
         "action": "leave",
         "time": datetime.datetime.now().timestamp(),
@@ -144,20 +115,17 @@ def leave(room=None):
 
 @log
 def quit():
+    """
+    Currently not used.
+    """
     return {"action": "quit"}
 
 
-@log
-def response(status, message="", is_success=True):
-    body = {"response": status, "time": datetime.datetime.now().timestamp()}
-
-    message_desc = {"alert": message} if is_success else {"error": message}
-    body.update(message_desc)
-
-    return body
-
-
 def is_error_response(message):
+    """
+    Check that server-side returns error message.
+    """
+
     try:
         if "error" in message:
             return message["error"]
@@ -168,6 +136,11 @@ def is_error_response(message):
 
 @log
 def get_contacts(account_name=None):
+    """
+    Return dict, that contains request "get_contacts".
+    Used for load user list.
+    """
+
     return {
         "action": "get_contacts",
         "time": datetime.datetime.now().timestamp(),
@@ -176,17 +149,12 @@ def get_contacts(account_name=None):
 
 
 @log
-def is_get_contacts(message):
-    try:
-        if message["action"] == "get_contacts":
-            return message["user"]
-    except Exception:
-        pass
-    return None
-
-
-@log
 def add_contact(account_name=None, contact=None):
+    """
+    Return dict, that contains request "add_contact".
+    Used when user add new contact.
+    """
+
     return {
         "action": "add_contact",
         "time": datetime.datetime.now().timestamp(),
@@ -197,6 +165,11 @@ def add_contact(account_name=None, contact=None):
 
 @log
 def del_contact(account_name=None, contact=None):
+    """
+    Return dict, that contains request "del_contact".
+    Used when user delete new contact.
+    """
+
     return {
         "action": "del_contact",
         "time": datetime.datetime.now().timestamp(),
@@ -205,20 +178,13 @@ def del_contact(account_name=None, contact=None):
     }
 
 
-def is_contact_operation(message):
-    try:
-        if (
-            message["action"] == "add_contact"
-            or message["action"] == "del_contact"
-        ):
-            return message["action"], message["user"], message["contact"]
-    except Exception:
-        pass
-    return None
-
-
 @log
 def chat(source=None, destination=None):
+    """
+    Return dict, that contains request "chat".
+    This call return chat with source and desctination sides.
+    """
+
     return {
         "action": "chat",
         "time": datetime.datetime.now().timestamp(),
@@ -226,11 +192,3 @@ def chat(source=None, destination=None):
         "to": destination,
     }
 
-
-def is_chat(message):
-    try:
-        if message["action"] == "chat":
-            return message["from"], message["to"]
-    except Exception:
-        pass
-    return None

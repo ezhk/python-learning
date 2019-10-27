@@ -60,7 +60,9 @@ class MainWindow(object):
             SettingsDialog()
 
         # exit action
-        self.button_actions.update({"exit": QtWidgets.QAction("Exit", MainWindow)})
+        self.button_actions.update(
+            {"exit": QtWidgets.QAction("Exit", MainWindow)}
+        )
         self.button_actions["exit"].setShortcut("Ctrl+Q")
         self.button_actions["exit"].triggered.connect(_exit_action)
 

@@ -84,22 +84,6 @@ class TestMessages(unittest.TestCase):
             [self.msg[x] for x in ("from", "to", "message", "action")],
         )
 
-    def test_response(self):
-        self.assertEqual(
-            [
-                jim.messages.response(200, "OK")[x]
-                for x in ("response", "alert")
-            ],
-            [self.success_status[x] for x in ("response", "alert")],
-        )
-        self.assertEqual(
-            [
-                jim.messages.response(500, "Internal server error", False)[x]
-                for x in ("response", "error")
-            ],
-            [self.fail_status[x] for x in ("response", "error")],
-        )
-
     def test_get_contanct(self):
         self.assertEqual(
             [

@@ -29,7 +29,9 @@ class SettingsDialog(object):
         msg.setWindowTitle("Save settings")
         try:
             save_server_settings(
-                self.addressEdit.text(), self.portEdit.text(), self.storageEdit.text()
+                self.addressEdit.text(),
+                self.portEdit.text(),
+                self.storageEdit.text(),
             )
             msg.setIcon(QtWidgets.QMessageBox.Information)
             msg.setText("Settings has beed successfully saved")
@@ -60,19 +62,25 @@ class SettingsDialog(object):
         self.labelAddress = QtWidgets.QLabel(Dialog)
         self.labelAddress.setGeometry(QtCore.QRect(90, 20, 51, 21))
         self.labelAddress.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+            QtCore.Qt.AlignRight
+            | QtCore.Qt.AlignTrailing
+            | QtCore.Qt.AlignVCenter
         )
         self.labelAddress.setObjectName("labelAddress")
         self.labelPort = QtWidgets.QLabel(Dialog)
         self.labelPort.setGeometry(QtCore.QRect(110, 60, 31, 21))
         self.labelPort.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+            QtCore.Qt.AlignRight
+            | QtCore.Qt.AlignTrailing
+            | QtCore.Qt.AlignVCenter
         )
         self.labelPort.setObjectName("labelPort")
         self.labelStorage = QtWidgets.QLabel(Dialog)
         self.labelStorage.setGeometry(QtCore.QRect(40, 100, 101, 21))
         self.labelStorage.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+            QtCore.Qt.AlignRight
+            | QtCore.Qt.AlignTrailing
+            | QtCore.Qt.AlignVCenter
         )
         self.labelStorage.setObjectName("labelStorage")
 

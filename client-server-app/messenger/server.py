@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 from logging import getLogger
+import sys
 
 from PyQt5 import QtWidgets, QtCore
-import sys
 
 from ui.server.mainWindow import MainWindow
 

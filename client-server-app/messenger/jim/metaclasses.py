@@ -3,7 +3,8 @@ import dis
 
 def is_incorrect_methods(instruction, incorrect_methods):
     return (
-        instruction.opname == "LOAD_METHOD" and instruction.argrepr in incorrect_methods
+        instruction.opname == "LOAD_METHOD"
+        and instruction.argrepr in incorrect_methods
     )
 
 
@@ -14,14 +15,16 @@ class ClientVerifier(type):
         for f_name, f_call in attrs.items():
             try:
                 for instruction in dis.get_instructions(f_call):
-                    if is_incorrect_methods(instruction, self.INCORRECT_METHODS):
+                    if is_incorrect_methods(
+                        instruction, self.INCORRECT_METHODS
+                    ):
                         raise RuntimeError(
                             f"Client cannot calls {self.INCORRECT_METHODS} methods"
                         )
             except TypeError:
                 pass
 
-        return super().__init__(name, bases, attrs)
+        super().__init__(name, bases, attrs)
 
 
 class ServerVerifier(type):
@@ -40,7 +43,9 @@ class ServerVerifier(type):
         for f_name, f_call in attrs.items():
             try:
                 for instruction in dis.get_instructions(f_call):
-                    if is_incorrect_methods(instruction, self.INCORRECT_METHODS):
+                    if is_incorrect_methods(
+                        instruction, self.INCORRECT_METHODS
+                    ):
                         raise RuntimeError(
                             f"Server cannot calls {self.INCORRECT_METHODS} methods"
                         )
@@ -52,6 +57,8 @@ class ServerVerifier(type):
 
         # it's enought check only once, because for client this metaclass called too.
         if self.IMPORT_GLOBAL - load_global:
-            raise RuntimeError(f"Const {self.IMPORT_GLOBAL} doesn't import globally")
+            raise RuntimeError(
+                f"Const {self.IMPORT_GLOBAL} doesn't import globally"
+            )
 
-        return super().__init__(name, bases, attrs)
+        super().__init__(name, bases, attrs)

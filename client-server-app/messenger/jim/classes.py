@@ -1,16 +1,15 @@
 from logging import getLogger
 from threading import Thread
 import time
-from queue import Queue
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
 
 from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import Session, aliased
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore
 
-from .config import STORAGE, BACKLOG, ENCODING, SALT
+from .config import STORAGE, BACKLOG, SALT
 from .descriptors import Port, Username
 from .exceptions import MessageError
 from .metaclasses import ServerVerifier, ClientVerifier
@@ -60,7 +59,9 @@ class ServerThread(object):
 
         settings = load_server_settings()
         self.server = Server(
-            settings.get("address"), int(settings.get("port")), logger=self.logger
+            settings.get("address"),
+            int(settings.get("port")),
+            logger=self.logger,
         )
         self.thread = Thread(target=self.server.run, daemon=True)
         self.thread.start()
@@ -71,7 +72,7 @@ class ServerThread(object):
             self.server.stop()
             self.thread.join()
         except Exception as err:
-            logger.error(f"Cannot stop server: {err}")
+            self.logger.error(f"Cannot stop server: {err}")
             return False
         return True
 
@@ -107,7 +108,7 @@ class UsersExtension(object):
             try:
                 self.session.add(u_object)
                 self.session.commit()
-            except Exception as err:
+            except Exception:
                 self.session.rollback()
                 return False
             return True
@@ -133,16 +134,22 @@ class UsersExtension(object):
             """
 
             try:
-                user = self.session.query(Users).filter_by(username=client).first()
+                user = (
+                    self.session.query(Users)
+                    .filter_by(username=client)
+                    .first()
+                )
                 if user is None:
                     return False
 
                 (address, port) = socket.getpeername()
-                h_object = UsersHistory(user=user.id, address=address, port=port)
+                h_object = UsersHistory(
+                    user=user.id, address=address, port=port
+                )
                 self.session.add(h_object)
 
                 self.session.commit()
-            except Exception as err:
+            except Exception:
                 self.session.rollback()
                 return False
             return True
@@ -197,10 +204,13 @@ class UsersExtension(object):
             latest_session = user.history[-1]
             # validate latest session data, user might have same address and port
             # this case possible, when user is not logged in
-            if latest_session.address == address and latest_session.port == port:
+            if (
+                latest_session.address == address
+                and latest_session.port == port
+            ):
                 user.is_active = False
                 self.session.commit()
-        except Exception as err:
+        except Exception:
             self.session.rollback()
             return False
         return True
@@ -280,7 +290,7 @@ class UsersExtension(object):
         Group logic, don't used yet.
         """
         if client not in self.groups:
-            self.groups.udpate({client: set()})
+            self.groups.update({client: set()})
         self.groups[client].add(chat)
         return True
 
@@ -303,11 +313,15 @@ class UsersExtension(object):
 
         m_object = None
         if recipient.startswith("#"):
-            destination = self.session.query(Groups).filter_by(name=recipient).first()
+            destination = (
+                self.session.query(Groups).filter_by(name=recipient).first()
+            )
             if destination is None:
                 return None
             m_object = Messages(
-                author=author.id, destination_group=destination.id, content=message
+                author=author.id,
+                destination_group=destination.id,
+                content=message,
             )
         else:
             destination = (
@@ -316,7 +330,9 @@ class UsersExtension(object):
             if destination is None:
                 return None
             m_object = Messages(
-                author=author.id, destination_user=destination.id, content=message
+                author=author.id,
+                destination_user=destination.id,
+                content=message,
             )
 
         self.session.add(m_object)
@@ -343,7 +359,10 @@ class UsersExtension(object):
                 .join(Groups, Groups.id == Messages.destination_group)
                 .filter(Groups.name == recipient)
                 .with_entities(
-                    usersAuthor.username, Groups.name, Messages.content, Messages.ctime
+                    usersAuthor.username,
+                    Groups.name,
+                    Messages.content,
+                    Messages.ctime,
                 )
                 .order_by(Messages.ctime.desc())
                 .limit(50)
@@ -362,7 +381,10 @@ class UsersExtension(object):
         for msg in (
             self.session.query(Messages)
             .join(usersAuthor, usersAuthor.id == Messages.author)
-            .join(usersDestination, usersDestination.id == Messages.destination_user)
+            .join(
+                usersDestination,
+                usersDestination.id == Messages.destination_user,
+            )
             .filter(
                 or_(
                     and_(
@@ -500,8 +522,7 @@ class Server(metaclass=ServerVerifier):
             if self.users_extension.authenticate(*is_authenticate(data)):
                 self.authenticated_clients.add(sock)
                 return
-            else:
-                raise MessageError("Ошибка авторизации")
+            raise MessageError("Ошибка авторизации")
 
         if sock not in self.authenticated_clients:
             raise MessageError("Пользователь должен быть авторизован")
@@ -523,7 +544,9 @@ class Server(metaclass=ServerVerifier):
         # receive contacts
         if is_get_contacts(data) is not None:
             return {
-                "contacts": self.users_extension.get_contacts(is_get_contacts(data))
+                "contacts": self.users_extension.get_contacts(
+                    is_get_contacts(data)
+                )
             }
         # add or delete contacts
         if is_contact_operation(data) is not None:
@@ -579,7 +602,9 @@ class Server(metaclass=ServerVerifier):
                 client_sock.close()
                 continue
 
-            self.logger.debug(f"Получено сообщение от клиента {client_sock}: {data}")
+            self.logger.debug(
+                f"Получено сообщение от клиента {client_sock}: {data}"
+            )
             message = response(400, "Incorrect JSON", False)
             try:
                 if is_valid_message(data):
@@ -590,12 +615,16 @@ class Server(metaclass=ServerVerifier):
                 if processing:
                     message = response(202, processing, True)
             except MessageError as err:
-                self.logger.error(f"Ошибка валидации сообщения от {client_sock}, {err}")
+                self.logger.error(
+                    f"Ошибка валидации сообщения от {client_sock}, {err}"
+                )
                 message = response(400, str(err), False)
 
             try:
                 send_data(
-                    client_sock, message, self.client_ciphers.get(client_sock, None)
+                    client_sock,
+                    message,
+                    self.client_ciphers.get(client_sock, None),
                 )
             except Exception as err:
                 self.logger.debug(
@@ -636,7 +665,9 @@ class Server(metaclass=ServerVerifier):
         """
         for c_sock in list(self.client_sockets):
             if c_sock.fileno() < 0:
-                self.logger.debug(f"Клиент отключился {c_sock}: fd is negative")
+                self.logger.debug(
+                    f"Клиент отключился {c_sock}: fd is negative"
+                )
                 self.client_sockets.remove(c_sock)
                 self.authenticated_clients.remove(c_sock)
 
@@ -645,14 +676,16 @@ class Server(metaclass=ServerVerifier):
         self.running_flag = True
 
         while self.running_flag:
+            print(f"{time.time()}: accept call")
             try:
-                sock, addr = self.sock.accept()
+                sock, _ = self.sock.accept()
                 self.client_sockets.append(sock)
                 self._helo(sock)
-            except OSError as e:
+            except OSError:
                 # timeout exceeded
                 pass
 
+            print(f"{time.time()}: select call")
             try:
                 self.validate_client_sockets()
                 r_clients, w_clients, _ = select(
@@ -663,11 +696,14 @@ class Server(metaclass=ServerVerifier):
                 self.logger.debug(f"Исключение select: {err}")
                 continue
 
+            print(f"{time.time()}: pull requests")
             requests = {}
             if r_clients:
                 requests = self.pull_requests(r_clients)
+            print(f"{time.time()}: push requests")
             if w_clients and requests:
                 self.push_requests(w_clients, requests)
+            print(f"{time.time()}: complete")
 
             time.sleep(0.1)
 
@@ -809,9 +845,14 @@ class Client(Thread, QtCore.QObject):
                 self.client_error.emit(is_error_response(data))
                 continue
 
-            if "action" in data and "msg" in data["action"] and self.active_chat:
+            if (
+                "action" in data
+                and "msg" in data["action"]
+                and self.active_chat
+            ):
                 if data["to"] == self.username or (
-                    data["to"] == self.active_chat and self.active_chat.startswith("#")
+                    data["to"] == self.active_chat
+                    and self.active_chat.startswith("#")
                 ):
                     self._get_chat(self.active_chat)
 
