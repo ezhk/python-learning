@@ -11,7 +11,7 @@ import sys
 
 sys.path.append(".")
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from jim.utils import load_server_settings, save_server_settings
 
 

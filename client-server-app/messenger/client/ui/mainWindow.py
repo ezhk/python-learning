@@ -10,8 +10,6 @@ import sys
 
 sys.path.append(".")
 
-from jim.classes import Client
-
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 

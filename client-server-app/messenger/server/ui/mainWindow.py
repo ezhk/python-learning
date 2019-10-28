@@ -8,7 +8,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 from .historyDialog import HistoryDialog
 from .settingsDialog import SettingsDialog
@@ -92,7 +91,7 @@ class MainWindow(object):
         MainWindow.setCentralWidget(self.usersWidget)
 
         self.toolbar = MainWindow.addToolBar("ToolBar")
-        for name, action in self.button_actions.items():
+        for _, action in self.button_actions.items():
             self.toolbar.addAction(action)
 
         self.label = QtWidgets.QLabel(self.usersWidget)

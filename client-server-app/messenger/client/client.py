@@ -10,9 +10,9 @@ from PyQt5 import QtWidgets
 from ui.authDialog import AuthDialog
 from ui.mainWindow import MainWindow
 
+import jim.logger
 from jim.classes import Client
 from jim.utils import parse_arguments
-import jim.logger
 
 
 if __name__ == "__main__":
