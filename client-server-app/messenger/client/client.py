@@ -7,8 +7,8 @@ sys.path.append(".")
 
 from PyQt5 import QtWidgets
 
-from ui.client.authDialog import AuthDialog
-from ui.client.mainWindow import MainWindow
+from ui.authDialog import AuthDialog
+from ui.mainWindow import MainWindow
 
 from jim.classes import Client
 from jim.utils import parse_arguments
