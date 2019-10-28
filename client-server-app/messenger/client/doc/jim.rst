@@ -8,7 +8,7 @@ jim package
 classes.py
 ----------
 
-.. automodule:: jim.classes
+.. autoclass:: jim.classes.Client
     :members:
 
 config.py
