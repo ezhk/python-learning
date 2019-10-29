@@ -12,7 +12,7 @@ django-debug-toolbar-template-profiler==1.0.2
 django-extensions==2.1.7
 pydotplus==2.0.2
 
-pillow==6.0.0
+pillow==6.2.0
 pip-chill==0.1.8
 psycopg2==2.8.2
 requests>=2.21.0
