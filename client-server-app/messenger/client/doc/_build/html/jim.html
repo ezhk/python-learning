@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>jim package &#8212; документация JSON instant messenger client </title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="tests scripts" href="tests.html" />
+    <link rel="prev" title="Scripts" href="scripts.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="jim-package">
+<h1>jim package<a class="headerlink" href="#jim-package" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Пакет, включающий в себя набор модулей,
+позволяющих отрисовывать и обрабатывать
+сообщения на клиентской стороне.</p>
+<div class="section" id="classes-py">
+<h2>classes.py<a class="headerlink" href="#classes-py" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="class">
+<dt id="jim.classes.Client">
+<em class="property">class </em><code class="sig-prename descclassname">jim.classes.</code><code class="sig-name descname">Client</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">port</em>, <em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.Client" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Class define client object, that based on Thread.</p>
+<dl class="simple">
+<dt>Contains different methods for recv and send messages,</dt><dd><p>all this methods are internal.</p>
+</dd>
+</dl>
+<p>External methods:</p>
+<ul class="simple">
+<li><p>connect, open socket to server</p></li>
+<li><p>close, close earlier openned socket</p></li>
+<li><p>run, called, when Thread is starting,
+infinite read data from socket while
+running flas is True</p></li>
+<li><p>stop, set running flag to False</p></li>
+</ul>
+<dl class="method">
+<dt id="jim.classes.Client.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.Client.close" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Close client socket with server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.Client.connect">
+<code class="sig-name descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.Client.connect" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Method initialize connect to serverside
+with socket.connect() call.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.Client.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.Client.run" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Method representing the thread’s activity.
+In this thread client always read data from socket
+while special flag set to True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.Client.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.Client.stop" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Method set running flag to false and thread stays is possible for join.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.config">
+<span id="config-py"></span><h2>config.py<a class="headerlink" href="#module-jim.config" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Module describes some client configuration contants.</p>
+<p>Recommends for changing only:</p>
+<ul class="simple">
+<li><p>CLIENT_LOGFILE, define path to client logs</p></li>
+<li><p>LOGLEVEL, default level is debug</p></li>
+</ul>
+</div>
+<div class="section" id="module-jim.decorators">
+<span id="decorators-py"></span><h2>decorators.py<a class="headerlink" href="#module-jim.decorators" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Module describes decorators.</p>
+<dl class="function">
+<dt id="jim.decorators.log">
+<code class="sig-prename descclassname">jim.decorators.</code><code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.decorators.log" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Function-decorator creates record about called function.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.descriptors">
+<span id="descriptors-py"></span><h2>descriptors.py<a class="headerlink" href="#module-jim.descriptors" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="class">
+<dt id="jim.descriptors.Port">
+<em class="property">class </em><code class="sig-prename descclassname">jim.descriptors.</code><code class="sig-name descname">Port</code><a class="headerlink" href="#jim.descriptors.Port" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Descriptor check port range,
+that must be in 1024-65535 range.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="jim.descriptors.Username">
+<em class="property">class </em><code class="sig-prename descclassname">jim.descriptors.</code><code class="sig-name descname">Username</code><a class="headerlink" href="#jim.descriptors.Username" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Descriptor checks username:
+- max username len &lt; 26
+- contains only ASCII symbols</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.messages">
+<span id="messages-py"></span><h2>messages.py<a class="headerlink" href="#module-jim.messages" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="function">
+<dt id="jim.messages.is_error_response">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_error_response</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_error_response" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Check that server-side returns error message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_helo">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_helo</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_helo" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Check that received message is helo.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.security">
+<span id="security-py"></span><h2>security.py<a class="headerlink" href="#module-jim.security" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="class">
+<dt id="jim.security.AsymmetricCipher">
+<em class="property">class </em><code class="sig-prename descclassname">jim.security.</code><code class="sig-name descname">AsymmetricCipher</code><span class="sig-paren">(</span><em class="sig-param">public_key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.AsymmetricCipher" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Class used for trasnport session key:
+session key = get_random_bytes(32)</p>
+<dl class="method">
+<dt id="jim.security.AsymmetricCipher.decrypt">
+<code class="sig-name descname">decrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.AsymmetricCipher.decrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Decrypt binady data with private key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.security.AsymmetricCipher.encrypt">
+<code class="sig-name descname">encrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.AsymmetricCipher.encrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Crypt binady data with public key.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jim.security.SymmetricCipher">
+<em class="property">class </em><code class="sig-prename descclassname">jim.security.</code><code class="sig-name descname">SymmetricCipher</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.SymmetricCipher" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Class creates logic, that let use
+symmetric ciphers, based on AES.</p>
+<dl class="method">
+<dt id="jim.security.SymmetricCipher.decrypt">
+<code class="sig-name descname">decrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.SymmetricCipher.decrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return your cripted message as a decrypted binary data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.security.SymmetricCipher.encrypt">
+<code class="sig-name descname">encrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.SymmetricCipher.encrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Crypt your binary message.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.security.generate_base64_session_key">
+<code class="sig-prename descclassname">jim.security.</code><code class="sig-name descname">generate_base64_session_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.generate_base64_session_key" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Generate random bytes range with length 32 sybmols.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.utils">
+<span id="utils-py"></span><h2>utils.py<a class="headerlink" href="#module-jim.utils" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="function">
+<dt id="jim.utils.make_raw_json">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">make_raw_json</code><span class="sig-paren">(</span><em class="sig-param">python_object</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.make_raw_json" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Принимает объект python и делает из него JSON
+преставление в бинрном виде (с помощью encode).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.parse_raw_json">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">parse_raw_json</code><span class="sig-paren">(</span><em class="sig-param">binary_json</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.parse_raw_json" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Принимает на вход бинарный объект
+и конвертирует его в python представление,
+или возвращает пустой словарь.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.recv_data">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">recv_data</code><span class="sig-paren">(</span><em class="sig-param">sock</em>, <em class="sig-param">cipher_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.recv_data" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Финкция сначала читает 4 байта из сокета — длина сообщения,
+а затем само сообщение, декодируем и возвращает разобранный
+json в виде структуры данных python.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.send_data">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">send_data</code><span class="sig-paren">(</span><em class="sig-param">sock</em>, <em class="sig-param">data</em>, <em class="sig-param">cipher_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.send_data" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Функция отправляет сообщение в сокет добавляя
+в начало сообщения его длину, это позволяет
+вычитывать из сокета в recv_data сначала 4 байта —
+длина сообщения, а потом само сообщение по длине.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">JSON instant messenger client</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">jim package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#classes-py">classes.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.config">config.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.decorators">decorators.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.descriptors">descriptors.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.messages">messages.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.security">security.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.utils">utils.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests scripts</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="scripts.html" title="предыдущая глава">Scripts</a></li>
+      <li>Next: <a href="tests.html" title="следующая глава">tests scripts</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Andrey Kiselev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/jim.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
