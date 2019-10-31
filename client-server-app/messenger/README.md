@@ -35,3 +35,26 @@
   
 Теперь в любой из клиентских частей мы можем отправлять сообщения  
 перейдя в соответствующий чат с необходимым пользователем.
+
+# Upload пакетов в репозиторий
+
+Созаем `~/.pypirc`
+
+    [distutils]
+    index-servers=
+        pypi
+
+    [pypi]
+    repository: https://upload.pypi.org/legacy/
+    username: username
+
+    [testpypi]
+    repository: https://testpypi.python.org/pypi
+    username: username
+
+Собираем и заливаем в репозиторий:
+
+```
+$ python setup.py clean bdist_wheel
+$ twine upload dist/*
+```
