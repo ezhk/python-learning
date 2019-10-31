@@ -7,7 +7,7 @@ setup(
     description="JSON instant messenger server, learning project",
     author="Andrey Kiselev",
     author_email="kiselevandrew@yandex.ru",
-    version="0.1a1",
+    version="0.1a2",
     packages=find_packages(),
     scripts=["server.py"],
     install_requires=[
