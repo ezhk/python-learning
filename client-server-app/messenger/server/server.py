@@ -5,6 +5,9 @@ import sys
 
 from PyQt5 import QtWidgets, QtCore
 
+# PyInstaller depends
+import sqlalchemy.ext.baked
+
 from ui.mainWindow import MainWindow
 
 import jim.logger
