@@ -1,0 +1,548 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>jim package &#8212; документация JSON instant messenger server </title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="tests scripts" href="tests.html" />
+    <link rel="prev" title="Scripts" href="scripts.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="jim-package">
+<h1>jim package<a class="headerlink" href="#jim-package" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Пакет, включающий в себя набор модулей,
+позволяющих отрисовывать и обрабатывать
+сообщения на клиентской стороне.</p>
+<div class="section" id="module-jim.classes">
+<span id="classes-py"></span><h2>classes.py<a class="headerlink" href="#module-jim.classes" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="class">
+<dt id="jim.classes.ServerThread">
+<em class="property">class </em><code class="sig-prename descclassname">jim.classes.</code><code class="sig-name descname">ServerThread</code><span class="sig-paren">(</span><em class="sig-param">logger</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.ServerThread" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Running server object as a thread.</p>
+<dl class="method">
+<dt id="jim.classes.ServerThread.alive">
+<code class="sig-name descname">alive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.ServerThread.alive" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return thread alive status, boolean.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.ServerThread.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.ServerThread.start" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Read server settings and run Server object
+in a thread and store output in self variable.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.ServerThread.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.ServerThread.stop" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Calls stop for early running thread and join it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jim.classes.UsersExtension">
+<em class="property">class </em><code class="sig-prename descclassname">jim.classes.</code><code class="sig-name descname">UsersExtension</code><a class="headerlink" href="#jim.classes.UsersExtension" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Class abstraction above user model in SQLAlchemy.</p>
+<dl class="method">
+<dt id="jim.classes.UsersExtension.active_users">
+<em class="property">property </em><code class="sig-name descname">active_users</code><a class="headerlink" href="#jim.classes.UsersExtension.active_users" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return dict with active users like a</p>
+<blockquote>
+<div><p>{
+«username»: &lt;value&gt;,
+«address»: &lt;value&gt;,
+«port»: &lt;value&gt;,
+«atime»: &lt;value&gt;
+}</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.all_sockets">
+<em class="property">property </em><code class="sig-name descname">all_sockets</code><a class="headerlink" href="#jim.classes.UsersExtension.all_sockets" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return sockets dict with users connections.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.authenticate">
+<code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.authenticate" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Validate user password and create user if doesn’t exist.
+Function calculate hash from string user + passwd + salt.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.contact_operation">
+<code class="sig-name descname">contact_operation</code><span class="sig-paren">(</span><em class="sig-param">action</em>, <em class="sig-param">user</em>, <em class="sig-param">input_contact</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.contact_operation" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Function add or del link between users in contacts
+if users exist. Operation depends on action
+«add_contact» or «del_contact».</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.disconnect">
+<code class="sig-name descname">disconnect</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">port</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.disconnect" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Try to make disconnected user is inactive.
+Found in history database last session with
+current address and port, set this user flag
+is_active to False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.get_chat">
+<code class="sig-name descname">get_chat</code><span class="sig-paren">(</span><em class="sig-param">recipient</em>, <em class="sig-param">sender=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_chat" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return chat dialog between users or group.
+Messages limit in request = 50.
+Answer is a dict</p>
+<blockquote>
+<div><p>{
+«from»: sender,
+«to»: recipient,
+«text»: text,
+«ctime»: ctime.isoformat(),
+}</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.get_contacts">
+<code class="sig-name descname">get_contacts</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_contacts" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Get contact usernames by username-owner.
+Background it called SQL query like a:</p>
+<blockquote>
+<div><p>SELECT u2.username FROM contacts
+JOIN users ON users.id = contacts.owner
+JOIN users AS u2 ON u2.id = contacts.contact
+WHERE users.username = user;</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.get_socket">
+<code class="sig-name descname">get_socket</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_socket" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return socket data from internal dict «sockets».
+Record in this «sockets» will be added when user
+will be connected to server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.is_active">
+<code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.is_active" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return boolean value and check that user exists
+and active (is_active firld is True)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.join">
+<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">chat</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.join" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Group logic, don’t used yet.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.leave">
+<code class="sig-name descname">leave</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">chat</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.leave" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Group logic, don’t used yet.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.presence">
+<code class="sig-name descname">presence</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">socket</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.presence" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Create and save user history when
+received presence message type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.put_message">
+<code class="sig-name descname">put_message</code><span class="sig-paren">(</span><em class="sig-param">sender</em>, <em class="sig-param">recipient</em>, <em class="sig-param">encoding</em>, <em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.put_message" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Offline message logic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.quit">
+<code class="sig-name descname">quit</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.quit" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Currently not used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.update_atime">
+<code class="sig-name descname">update_atime</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.update_atime" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Function call update with empty object,
+it causes update atime field in database.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.UsersExtension.users_history">
+<em class="property">property </em><code class="sig-name descname">users_history</code><a class="headerlink" href="#jim.classes.UsersExtension.users_history" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return users login history, presented as a dict:</p>
+<blockquote>
+<div><p>{
+«username»: &lt;value&gt;,
+«address»: &lt;value&gt;,
+«port»: &lt;value&gt;,
+«ctime»: &lt;value&gt;
+}</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.config">
+<span id="config-py"></span><h2>config.py<a class="headerlink" href="#module-jim.config" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Module describes server configuration.</p>
+<p>Recommends for changing only:</p>
+<ul class="simple">
+<li><p>SERVER_ADDRESS, IPaddress, where server will be listened</p></li>
+<li><p>SERVER_PORT, like a server address, but a port</p></li>
+<li><p>SERVER_LOGFILE, define path to client logs</p></li>
+<li><p>LOGLEVEL, default level is debug</p></li>
+<li><p>SALT, it’s secure value, YOU MUST CHANGED IT IN PRODUCTION</p></li>
+</ul>
+</div>
+<div class="section" id="module-jim.decorators">
+<span id="decorators-py"></span><h2>decorators.py<a class="headerlink" href="#module-jim.decorators" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Module describes decorators.</p>
+<dl class="function">
+<dt id="jim.decorators.log">
+<code class="sig-prename descclassname">jim.decorators.</code><code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.decorators.log" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Function-decorator creates record about called function.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.descriptors">
+<span id="descriptors-py"></span><h2>descriptors.py<a class="headerlink" href="#module-jim.descriptors" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="class">
+<dt id="jim.descriptors.Port">
+<em class="property">class </em><code class="sig-prename descclassname">jim.descriptors.</code><code class="sig-name descname">Port</code><a class="headerlink" href="#jim.descriptors.Port" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Descriptor check port range,
+that must be in 1024-65535 range.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.messages">
+<span id="messages-py"></span><h2>messages.py<a class="headerlink" href="#module-jim.messages" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="function">
+<dt id="jim.messages.get_contacts">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">get_contacts</code><span class="sig-paren">(</span><em class="sig-param">account_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.get_contacts" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return dict, that contains request «get_contacts».
+Used for load user list.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.get_recipient">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">get_recipient</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.get_recipient" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Function try to read recipient from data
+or return None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_authenticate">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_authenticate</code><span class="sig-paren">(</span><em class="sig-param">message=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_authenticate" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Checks that message has authenticate data.
+Return (username, password) or None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_chat">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_chat</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_chat" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Checks that message has chat message.
+Return (from, to) or None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_contact_operation">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_contact_operation</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_contact_operation" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Checks that message has operation with contacts (add/del).
+Return (action, user, contact) or None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_key_exchange">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_key_exchange</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_key_exchange" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Checks that message has key_exchange data.
+Return key or None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_message">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_message</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_message" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Checks that message has msg data.
+Return (from, to, encoding, message) or None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_presence_message">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_presence_message</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_presence_message" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Checks that message has presence data.
+Return username or None.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.metaclasses">
+<span id="metaclasses-py"></span><h2>metaclasses.py<a class="headerlink" href="#module-jim.metaclasses" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="class">
+<dt id="jim.metaclasses.ServerVerifier">
+<em class="property">class </em><code class="sig-prename descclassname">jim.metaclasses.</code><code class="sig-name descname">ServerVerifier</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">bases</em>, <em class="sig-param">attrs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.metaclasses.ServerVerifier" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Metaclass verify:</p>
+<ul class="simple">
+<li><p>class doesn’t contain connect call in methods</p></li>
+<li><p>class contains «SOCK_STREAM» and «AF_INET» in global import,
+but doesn’t validate, that these constans will be used</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.models">
+<span id="models-py"></span><h2>models.py<a class="headerlink" href="#module-jim.models" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Models contains user presentation in database.</p>
+<dl class="class">
+<dt id="jim.models.Contacts">
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Contacts</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Contacts" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="jim.models.GroupMembers">
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">GroupMembers</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.GroupMembers" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="jim.models.Groups">
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Groups</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Groups" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="jim.models.Messages">
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Messages</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Messages" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="jim.models.Users">
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Users</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Users" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="jim.models.UsersHistory">
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">UsersHistory</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.UsersHistory" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-jim.security">
+<span id="security-py"></span><h2>security.py<a class="headerlink" href="#module-jim.security" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="class">
+<dt id="jim.security.AsymmetricCipher">
+<em class="property">class </em><code class="sig-prename descclassname">jim.security.</code><code class="sig-name descname">AsymmetricCipher</code><span class="sig-paren">(</span><em class="sig-param">public_key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.AsymmetricCipher" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Class used for trasnport session key:
+session key = get_random_bytes(32)</p>
+<dl class="method">
+<dt id="jim.security.AsymmetricCipher.decrypt">
+<code class="sig-name descname">decrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.AsymmetricCipher.decrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Decrypt binary data with public key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.security.AsymmetricCipher.encrypt">
+<code class="sig-name descname">encrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.AsymmetricCipher.encrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Crypt binary data with public key.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jim.security.SymmetricCipher">
+<em class="property">class </em><code class="sig-prename descclassname">jim.security.</code><code class="sig-name descname">SymmetricCipher</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.SymmetricCipher" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Class creates logic, that let use
+symmetric ciphers, based on AES.</p>
+<dl class="method">
+<dt id="jim.security.SymmetricCipher.decrypt">
+<code class="sig-name descname">decrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.SymmetricCipher.decrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return your cripted message as a decrypted binary data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.security.SymmetricCipher.encrypt">
+<code class="sig-name descname">encrypt</code><span class="sig-paren">(</span><em class="sig-param">binary_message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.SymmetricCipher.encrypt" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Crypt your binary message.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.security.get_text_digest">
+<code class="sig-prename descclassname">jim.security.</code><code class="sig-name descname">get_text_digest</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">salt=''</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.security.get_text_digest" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return text digest combined with salt value.
+Uses SHA-256 algorithm.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jim.utils">
+<span id="utils-py"></span><h2>utils.py<a class="headerlink" href="#module-jim.utils" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="function">
+<dt id="jim.utils.is_valid_message">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">is_valid_message</code><span class="sig-paren">(</span><em class="sig-param">msg</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.is_valid_message" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Function check that received message is correct.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.load_server_settings">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">load_server_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.load_server_settings" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Func returns serer settins from settings.ini
+presented as a dict:</p>
+<blockquote>
+<div><p>{
+«address»: &lt;value&gt;,
+«port»: &lt;value&gt;,
+«storage»: &lt;value&gt;,
+}</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.make_raw_json">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">make_raw_json</code><span class="sig-paren">(</span><em class="sig-param">python_object</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.make_raw_json" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Принимает объект python и делает из него JSON
+преставление в бинрном виде (с помощью encode).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.parse_raw_json">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">parse_raw_json</code><span class="sig-paren">(</span><em class="sig-param">binary_json</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.parse_raw_json" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Принимает на вход бинарный объект
+и конвертирует его в python представление,
+или возвращает пустой словарь.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.recv_data">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">recv_data</code><span class="sig-paren">(</span><em class="sig-param">sock</em>, <em class="sig-param">cipher_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.recv_data" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Финкция сначала читает 4 байта из сокета — длина сообщения,
+а затем само сообщение, декодируем и возвращает разобранный
+json в виде структуры данных python.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.save_server_settings">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">save_server_settings</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">port</em>, <em class="sig-param">storage</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.save_server_settings" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Func stores server settings (address, port, storage)
+into sessings.ini.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.utils.send_data">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">send_data</code><span class="sig-paren">(</span><em class="sig-param">sock</em>, <em class="sig-param">data</em>, <em class="sig-param">cipher_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.send_data" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Функция отправляет сообщение в сокет добавляя
+в начало сообщения его длину, это позволяет
+вычитывать из сокета в recv_data сначала 4 байта —
+длина сообщения, а потом само сообщение по длине.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">JSON instant messenger server</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">jim package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.classes">classes.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.config">config.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.decorators">decorators.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.descriptors">descriptors.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.messages">messages.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.metaclasses">metaclasses.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.models">models.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.security">security.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-jim.utils">utils.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests scripts</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="scripts.html" title="предыдущая глава">Scripts</a></li>
+      <li>Next: <a href="tests.html" title="следующая глава">tests scripts</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Andrey Kiselev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/jim.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

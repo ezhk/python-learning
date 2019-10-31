@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Scripts &#8212; документация JSON instant messenger client </title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="jim package" href="jim.html" />
+    <link rel="prev" title="Welcome to JSON instant messenger client’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="scripts">
+<h1>Scripts<a class="headerlink" href="#scripts" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="client-py">
+<h2>client.py<a class="headerlink" href="#client-py" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Основная часть клиентского пакета — запускает GUI и
+в потоке забускает обратку сообщений.</p>
+<p>Справка по использованию:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">client</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="n">PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">P</span> <span class="n">PASSWORD</span><span class="p">]</span>
+
+<span class="n">Messenger</span> <span class="n">application</span><span class="o">.</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+<span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+<span class="o">-</span><span class="n">a</span> <span class="n">ADDRESS</span><span class="p">,</span> <span class="o">--</span><span class="n">address</span> <span class="n">ADDRESS</span>
+<span class="o">-</span><span class="n">p</span> <span class="n">PORT</span><span class="p">,</span> <span class="o">--</span><span class="n">port</span> <span class="n">PORT</span>
+<span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">,</span> <span class="o">--</span><span class="n">username</span> <span class="n">USERNAME</span>
+<span class="o">-</span><span class="n">P</span> <span class="n">PASSWORD</span><span class="p">,</span> <span class="o">--</span><span class="n">password</span> <span class="n">PASSWORD</span>
+</pre></div>
+</div>
+<p>Как запускается клиентская часть:</p>
+<ul>
+<li><p>если не использовались ключи, то вы увидите диалоговое окно в вводом логина и пароля</p></li>
+<li><p>затем создается thread, работающий с сервером и параллельно запускается окно чатов</p></li>
+<li><p>в основном обраточике (треде), происходит сначала шифрование канала:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>сервер при соединении отправляет свой публичный ключи</p></li>
+<li><p>клиент генерирует случайную последовательность (которая в дальнейшем является сессионым ключом)</p></li>
+<li><p>клиент шифрует открытым ключом сессионный и отправляет на сервер</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>затем клиент шлет presence сообщение и запрашивает список контактов</p></li>
+</ul>
+<p>В дальнешем при получении сообщение в случае активности текущего чата загружается вся последняя история чата.</p>
+</div>
+<div class="section" id="multiple-client-py">
+<h2>multiple-client.py<a class="headerlink" href="#multiple-client-py" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Не более чем обвязка с Popen, которая позволяет удобно запускать несколько клиентов и их останавливать.</p>
+<p>Опции:</p>
+<ul class="simple">
+<li><p><strong>r</strong> (run) — запустить ещё один клиентский процесс</p></li>
+<li><p><strong>c</strong> (close all processes) — закрывает все клиенские процессы</p></li>
+<li><p><strong>s</strong> (show clients) — показывает список клиентов в служебном виде</p></li>
+<li><p><strong>q</strong> (quit) — выход из программы, но сначала надо закрыть все процессы</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">JSON instant messenger client</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#client-py">client.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiple-client-py">multiple-client.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jim.html">jim package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests scripts</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="предыдущая глава">Welcome to JSON instant messenger client’s documentation!</a></li>
+      <li>Next: <a href="jim.html" title="следующая глава">jim package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Andrey Kiselev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/scripts.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
