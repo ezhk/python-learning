@@ -90,5 +90,5 @@ class Messages(Base):
 
 
 def create_db():
-    engine = create_engine(STORAGE, echo=True)
+    engine = create_engine(STORAGE, echo=False)
     Base.metadata.create_all(engine)

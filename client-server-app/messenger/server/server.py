@@ -5,11 +5,15 @@ import sys
 
 from PyQt5 import QtWidgets, QtCore
 
+# PyInstaller depends
+import sqlalchemy.ext.baked
+
 from ui.mainWindow import MainWindow
 
 import jim.logger
 from jim.config import SERVER_ADDRESS, SERVER_PORT
 from jim.classes import ServerThread, UsersExtension
+from jim.models import create_db
 from jim.utils import load_server_settings
 
 
@@ -23,6 +27,8 @@ def update_main_buttons(server, main_window):
 
 
 if __name__ == "__main__":
+    create_db()
+
     logger = getLogger("messenger.server")
     server = ServerThread(logger=logger)
     user_extenstion = UsersExtension()
