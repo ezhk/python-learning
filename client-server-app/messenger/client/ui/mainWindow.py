@@ -11,10 +11,11 @@ import sys
 sys.path.append(".")
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon, QFont
 
 from .addContactDialog import AddContactDialog
 from .deleteContactDialog import DeleteContactDialog
+from .imageEditorDialog import ImageEditorDialog
 
 
 class MainWindow(QtCore.QObject):
@@ -81,6 +82,7 @@ class MainWindow(QtCore.QObject):
 
         # fix clean area
         self.messageEdit.clear()
+        self.messageEdit.repaint()
         self.client._get_chat(self.client.active_chat)
 
     def add_contact(self):
@@ -88,6 +90,9 @@ class MainWindow(QtCore.QObject):
 
     def remove_contact(self):
         DeleteContactDialog(self.client)
+
+    def add_file(self):
+        ImageEditorDialog()
 
     def select_contact_user(self):
         # clean chat view and enable Send button
@@ -99,6 +104,19 @@ class MainWindow(QtCore.QObject):
 
         self.client._get_chat(self.client.active_chat)
 
+    def set_text(self, font_type):
+        font = QFont()
+
+        if font_type == "bold":
+            font.setBold(True)
+        elif font_type == "italic":
+            font.setItalic(True)
+        elif font_type == "undelined":
+            font.setUnderline(True)
+
+        self.messageEdit.setFont(font)
+        self.messageEdit.repaint()
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(810, 630)
@@ -106,6 +124,7 @@ class MainWindow(QtCore.QObject):
         self.exitMenu = QtWidgets.QAction("Exit", MainWindow)
         self.exitMenu.triggered.connect(QtWidgets.qApp.exit)
         self.toolbar = MainWindow.addToolBar("ToolBar")
+        self.toolbar.setMovable(False)
         self.toolbar.addAction(self.exitMenu)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -144,6 +163,26 @@ class MainWindow(QtCore.QObject):
         self.messageEdit.setObjectName("messageEdit")
         self.messageEdit.setEnabled(False)
 
+        self.addFileButton = QtWidgets.QPushButton(self.centralwidget)
+        self.addFileButton.setGeometry(QtCore.QRect(280, 560, 36, 32))
+        self.addFileButton.setObjectName("addFileButton")
+        self.addFileButton.clicked.connect(self.add_file)
+
+        self.undelinedButton = QtWidgets.QPushButton(self.centralwidget)
+        self.undelinedButton.setGeometry(QtCore.QRect(320, 560, 31, 32))
+        self.undelinedButton.setObjectName("undelinedButton")
+        self.undelinedButton.clicked.connect(
+            lambda: self.set_text("undelined")
+        )
+        self.italicButton = QtWidgets.QPushButton(self.centralwidget)
+        self.italicButton.setGeometry(QtCore.QRect(350, 560, 31, 32))
+        self.italicButton.setObjectName("italicButton")
+        self.italicButton.clicked.connect(lambda: self.set_text("italic"))
+        self.boldButton = QtWidgets.QPushButton(self.centralwidget)
+        self.boldButton.setGeometry(QtCore.QRect(380, 560, 31, 32))
+        self.boldButton.setObjectName("boldButton")
+        self.boldButton.clicked.connect(lambda: self.set_text("bold"))
+
         self.sendButton = QtWidgets.QPushButton(self.centralwidget)
         self.sendButton.setGeometry(QtCore.QRect(690, 560, 113, 41))
         self.sendButton.setObjectName("sendButton")
@@ -160,6 +199,20 @@ class MainWindow(QtCore.QObject):
         self.contactsLabel.setText(_translate("MainWindow", "Contacts"))
         self.addContactButton.setText(_translate("MainWindow", "Add"))
         self.removeContactButton.setText(_translate("MainWindow", "Remove"))
+
+        self.addFileButton.setText(_translate("MainWindow", "\U0001F4F7"))
+
+        self.undelinedButton.setText(_translate("MainWindow", "U"))
+        underline_font = QFont()
+        underline_font.setUnderline(True)
+        self.undelinedButton.setFont(underline_font)
+
+        self.italicButton.setText(_translate("MainWindow", "I"))
+        self.italicButton.setFont(QFont("monospace", italic=True))
+        self.boldButton.setText(_translate("MainWindow", "B"))
+        self.boldButton.setFont(QFont("monospace", weight=QFont.Bold))
+
         self.sendButton.setText(_translate("MainWindow", "Send"))
+
         self.chatLabel.setText(_translate("MainWindow", "Chat"))
         self.messageLabel.setText(_translate("MainWindow", "Message"))
