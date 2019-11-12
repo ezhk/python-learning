@@ -113,12 +113,16 @@ class ImageEditorDialog(object):
         self.grayscaleButton = QtWidgets.QPushButton(imageEditor)
         self.grayscaleButton.setGeometry(QtCore.QRect(250, 500, 91, 32))
         self.grayscaleButton.setObjectName("grayscaleButton")
-        self.grayscaleButton.clicked.connect(lambda: self.convert_image("grayscale"))
+        self.grayscaleButton.clicked.connect(
+            lambda: self.convert_image("grayscale")
+        )
 
         self.negativeButton = QtWidgets.QPushButton(imageEditor)
         self.negativeButton.setGeometry(QtCore.QRect(360, 500, 91, 32))
         self.negativeButton.setObjectName("negativeButton")
-        self.negativeButton.clicked.connect(lambda: self.convert_image("negative"))
+        self.negativeButton.clicked.connect(
+            lambda: self.convert_image("negative")
+        )
 
         self.retranslateUi(imageEditor)
         QtCore.QMetaObject.connectSlotsByName(imageEditor)
