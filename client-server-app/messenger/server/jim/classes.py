@@ -796,7 +796,7 @@ class Server(metaclass=ServerVerifier):
             try:
                 self.validate_client_sockets()
                 r_clients, w_clients, _ = select(
-                    self.client_sockets, self.client_sockets, [], 0.3
+                    self.client_sockets, self.client_sockets, [], 0.5
                 )
             except Exception as err:
                 # received exception when client disconnect
@@ -808,8 +808,6 @@ class Server(metaclass=ServerVerifier):
                 requests = self.pull_requests(r_clients)
             if w_clients and requests:
                 self.push_requests(w_clients, requests)
-
-            time.sleep(0.1)
 
         self.sock.close()
 
