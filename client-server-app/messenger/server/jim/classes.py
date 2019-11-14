@@ -364,7 +364,7 @@ class UsersExtension(object):
         user = self.session.query(Users).filter_by(username=client).first()
         return {
             "username": user.username,
-            "userpic": user.userpic.decode(),
+            "userpic": user.userpic.decode() if user.userpic else None,
             "atime": user.atime.isoformat(),
             "is_active": user.is_active,
         }
