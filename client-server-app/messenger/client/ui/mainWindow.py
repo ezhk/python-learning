@@ -6,13 +6,25 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+from binascii import unhexlify
+from io import BytesIO
 import sys
 
 sys.path.append(".")
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QIcon, QFont
+from PIL import Image
+from PIL.ImageQt import ImageQt
 
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtGui import (
+    QStandardItemModel,
+    QStandardItem,
+    QIcon,
+    QFont,
+    QPixmap,
+)
+
+from .userpicEditorDialog import UserpicEditorDialog
 from .addContactDialog import AddContactDialog
 from .deleteContactDialog import DeleteContactDialog
 from .imageEditorDialog import ImageEditorDialog
@@ -69,10 +81,31 @@ class MainWindow(QtCore.QObject):
                 self.chat_model.appendRow(item)
             self.chatView.setModel(self.chat_model)
 
+        def _process_profile(self, profile):
+            if profile is None:
+                return
+            self.usernameLabel.setText(
+                profile.get("username", "anonimous").capitalize()
+            )
+
+            if profile.get("userpic", None) is None:
+                image = Image.open("ui/images/userpic.png")
+                image = image.resize((30, 30), Image.BILINEAR)
+            else:
+                raw_image = unhexlify(profile.get("userpic").encode())
+                stream = BytesIO(raw_image)
+                image = Image.open(stream)
+
+            qt_image = ImageQt(image.convert("RGBA"))
+            pixmap = QPixmap.fromImage(qt_image)
+            self.userpicLabel.setPixmap(pixmap)
+
         if data.get("action", "") == "update_contacts":
             _process_contacts(self, self.client.contacts)
         if data.get("action", "") == "update_chat":
             _process_chat(self, self.client.chat)
+        if data.get("action", "") == "update_profile":
+            _process_profile(self, self.client.user_profile)
 
     def send_message(self):
         text = self.messageEdit.toPlainText()
@@ -84,6 +117,9 @@ class MainWindow(QtCore.QObject):
         self.messageEdit.clear()
         self.messageEdit.repaint()
         self.client._get_chat(self.client.active_chat)
+
+    def update_userpic(self, event):
+        UserpicEditorDialog(self.client)
 
     def add_contact(self):
         AddContactDialog(self.client)
@@ -130,11 +166,21 @@ class MainWindow(QtCore.QObject):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
+        self.userpicLabel = QtWidgets.QLabel(self.centralwidget)
+        self.userpicLabel.setGeometry(QtCore.QRect(20, 5, 30, 30))
+        self.userpicLabel.setObjectName("userpicLabel")
+        self.userpicLabel.mousePressEvent = self.update_userpic
+
+        self.usernameLabel = QtWidgets.QLabel(self.centralwidget)
+        self.usernameLabel.setGeometry(QtCore.QRect(60, 10, 181, 21))
+        self.usernameLabel.setText("Anonimous")
+        self.usernameLabel.setObjectName("usernameLabel")
+
         self.contactsLabel = QtWidgets.QLabel(self.centralwidget)
-        self.contactsLabel.setGeometry(QtCore.QRect(20, 10, 59, 16))
+        self.contactsLabel.setGeometry(QtCore.QRect(10, 40, 59, 16))
         self.contactsLabel.setObjectName("contactsLabel")
         self.contactsView = QtWidgets.QListView(self.centralwidget)
-        self.contactsView.setGeometry(QtCore.QRect(10, 30, 231, 521))
+        self.contactsView.setGeometry(QtCore.QRect(10, 60, 231, 491))
         self.contactsView.setObjectName("contactsView")
         self.contactsView.doubleClicked.connect(self.select_contact_user)
 
@@ -196,6 +242,12 @@ class MainWindow(QtCore.QObject):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Client"))
+
+        username_font = QFont()
+        username_font.setPointSize(15)
+        username_font.setBold(True)
+        self.usernameLabel.setFont(username_font)
+
         self.contactsLabel.setText(_translate("MainWindow", "Contacts"))
         self.addContactButton.setText(_translate("MainWindow", "Add"))
         self.removeContactButton.setText(_translate("MainWindow", "Remove"))

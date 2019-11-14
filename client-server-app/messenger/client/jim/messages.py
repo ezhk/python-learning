@@ -179,6 +179,20 @@ def del_contact(account_name=None, contact=None):
 
 
 @log
+def update_userpic(account_name=None, image=None):
+    """
+    Return dict, that contains userpic binary image.
+    """
+
+    return {
+        "action": "update_userpic",
+        "time": datetime.datetime.now().timestamp(),
+        "user": account_name,
+        "userpic": image,
+    }
+
+
+@log
 def chat(source=None, destination=None):
     """
     Return dict, that contains request "chat".
