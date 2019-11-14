@@ -47,6 +47,8 @@ class UserpicEditorDialog(object):
         image_path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self.dialog, "Open userpic image"
         )
+        if not image_path:
+            return
         self.image = Image.open(image_path)
         self._draw_image(self.image, True)
 
@@ -76,6 +78,7 @@ class UserpicEditorDialog(object):
             image = image.resize((30, 30), Image.BILINEAR)
             image.save(output, format="PNG")
             self.client._upload_userpic(hexlify(output.getvalue()).decode())
+        self.dialog.close()
 
     def setupUi(self, userpicDialog):
         userpicDialog.setObjectName("userpicDialog")
