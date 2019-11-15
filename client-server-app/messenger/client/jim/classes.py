@@ -189,16 +189,29 @@ class Client(Thread, QtCore.QObject):
                 self.client_error.emit(is_error_response(data))
                 continue
 
-            if (
-                "action" in data
-                and "msg" in data["action"]
-                and self.active_chat
-            ):
-                if data["to"] == self.username or (
-                    data["to"] == self.active_chat
-                    and self.active_chat.startswith("#")
+            if "action" in data and "msg" in data["action"]:
+                # if notification for current active tab
+                if self.active_chat and (
+                    (
+                        data["to"] == self.username
+                        and data["from"] == self.active_chat
+                    )
+                    or (
+                        data["to"] == self.active_chat
+                        and self.active_chat.startswith("#")
+                    )
                 ):
                     self._get_chat(self.active_chat)
+                    continue
+
+                # show notification about background message
+                self.server_message.emit(
+                    {
+                        "action": "background_message",
+                        "from": data["from"],
+                        "message": data["message"],
+                    }
+                )
 
             if "alert" in data:
                 if "contacts" in data["alert"]:
