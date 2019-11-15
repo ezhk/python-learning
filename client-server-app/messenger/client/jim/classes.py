@@ -16,6 +16,7 @@ from .messages import (
     get_contacts,
     add_contact,
     del_contact,
+    update_userpic,
     is_error_response,
 )
 from .security import (
@@ -72,6 +73,7 @@ class Client(Thread, QtCore.QObject):
 
         self.current_chat = None
         self.contacts = []
+        self.user_profile = None
 
     @property
     def active_chat(self):
@@ -118,6 +120,10 @@ class Client(Thread, QtCore.QObject):
     def _key_exchange(self, key):
         message = key_exchange(key)
         send_data(self.sock, message, self.cipher)
+
+    def _upload_userpic(self, image_bytes):
+        message = update_userpic(self.username, image_bytes)
+        return send_data(self.sock, message, self.cipher)
 
     def connect(self):
         """
@@ -201,6 +207,9 @@ class Client(Thread, QtCore.QObject):
                 if "chat" in data["alert"]:
                     self.chat = data["alert"]["chat"]
                     self.server_message.emit({"action": "update_chat"})
+                if "user_profile" in data["alert"]:
+                    self.user_profile = data["alert"]["user_profile"]
+                    self.server_message.emit({"action": "update_profile"})
         self.close()
 
     def stop(self):

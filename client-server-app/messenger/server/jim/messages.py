@@ -271,6 +271,34 @@ def del_contact(account_name=None, contact=None):
     }
 
 
+@log
+def update_userpic(account_name=None, image=None):
+    """
+    Return dict, that contains userpic binary image.
+    """
+
+    return {
+        "action": "update_userpic",
+        "time": datetime.datetime.now().timestamp(),
+        "user": account_name,
+        "userpic": image,
+    }
+
+
+def is_update_userpic(message):
+    """
+    Checks that message has userpic data.
+    Return username and hexlified userpic or None.
+    """
+
+    try:
+        if message["action"] == "update_userpic":
+            return message["user"], message["userpic"]
+    except Exception:
+        pass
+    return None
+
+
 def is_contact_operation(message):
     """
     Checks that message has operation with contacts (add/del).

@@ -143,6 +143,21 @@ WHERE users.username = user;</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="jim.classes.UsersExtension.get_profile">
+<code class="sig-name descname">get_profile</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_profile" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Return user detail information:
+models Users without password data:</p>
+<blockquote>
+<div><p>{
+«username»: user.username,
+«userpic»: user.userpic,
+«atime»: user.atime,
+«is_active»: user.is_active,
+}</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
 <dt id="jim.classes.UsersExtension.get_socket">
 <code class="sig-name descname">get_socket</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_socket" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Return socket data from internal dict «sockets».
@@ -300,6 +315,13 @@ Return (from, to, encoding, message) or None.</p>
 <code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_presence_message</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_presence_message" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Checks that message has presence data.
 Return username or None.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="jim.messages.is_update_userpic">
+<code class="sig-prename descclassname">jim.messages.</code><code class="sig-name descname">is_update_userpic</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.messages.is_update_userpic" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Checks that message has userpic data.
+Return username and hexlified userpic or None.</p>
 </dd></dl>
 
 </div>

@@ -8,6 +8,7 @@ from sqlalchemy import (
     Integer,
     String,
     DateTime,
+    BLOB,
     ForeignKey,
     Index,
     MetaData,
@@ -30,6 +31,8 @@ class Users(Base):
     id = Column(Integer, autoincrement=True, primary_key=True)
     username = Column(String(255), index=True, unique=True)
     password = Column(String(256))
+    userpic = Column(BLOB, nullable=True)
+
     atime = Column(
         DateTime(timezone=True), default=func.now(), onupdate=func.now()
     )

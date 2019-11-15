@@ -20,6 +20,7 @@ from .messages import (
     is_chat,
     is_get_contacts,
     is_contact_operation,
+    is_update_userpic,
     get_recipient,
     response,
 )
@@ -347,6 +348,38 @@ class UsersExtension(object):
         self.groups[client].add(chat)
         return True
 
+    def get_profile(self, client):
+        """
+        Return user detail information:
+        models Users without password data:
+
+            {
+            "username": user.username,
+            "userpic": user.userpic,
+            "atime": user.atime,
+            "is_active": user.is_active,
+            }
+        """
+
+        user = self.session.query(Users).filter_by(username=client).first()
+        return {
+            "username": user.username,
+            "userpic": user.userpic.decode() if user.userpic else None,
+            "atime": user.atime.isoformat(),
+            "is_active": user.is_active,
+        }
+
+    def update_userpic(self, client, userpic):
+        try:
+            self.session.query(Users).filter_by(username=client).update(
+                {"userpic": userpic.encode()}
+            )
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
+        return True
+
     def leave(self, client, chat):
         """
         Group logic, don't used yet.
@@ -607,8 +640,16 @@ class Server(metaclass=ServerVerifier):
 
         # online message
         if is_presence_message(data) is not None:
-            self.users_extension.presence(is_presence_message(data), sock)
-            return
+            username = is_presence_message(data)
+            self.users_extension.presence(username, sock)
+            return {"user_profile": self.users_extension.get_profile(username)}
+
+        # update userpic
+        if is_update_userpic(data) is not None:
+            username, image = is_update_userpic(data)
+
+            self.users_extension.update_userpic(username, image)
+            return {"user_profile": self.users_extension.get_profile(username)}
 
         # client message
         if is_message(data) is not None:
