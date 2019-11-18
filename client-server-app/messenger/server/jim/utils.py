@@ -73,53 +73,24 @@ def make_raw_json(python_object):
     return json_string.encode(ENCODING)
 
 
-async def send_data(sock, data, cipher_object=None, loop=None):
-    """
-    Функция отправляет сообщение в сокет добавляя
-    в начало сообщения его длину, это позволяет
-    вычитывать из сокета в recv_data сначала 4 байта —
-    длина сообщения, а потом само сообщение по длине.
-    """
+def conv_data_to_bytes(data, cipher_object=None):
+    data = make_raw_json(data)
+    if cipher_object is not None:
+        data = cipher_object.encrypt(data)
 
-    try:
-        if loop is None:
-            loop = new_event_loop()
-            set_event_loop(loop)
-
-        data = make_raw_json(data)
-        if cipher_object is not None:
-            data = cipher_object.encrypt(data)
-
-        raw_data = struct.pack("I", len(data)) + data
-        return await loop.sock_sendall(sock, raw_data)
-    except Exception:
-        pass
-    return None
+    raw_data = struct.pack("I", len(data)) + data
+    return raw_data
 
 
-async def recv_data(sock, cipher_object=None, loop=None):
-    """
-    Финкция сначала читает 4 байта из сокета — длина сообщения,
-    а затем само сообщение, декодируем и возвращает разобранный
-    json в виде структуры данных python.
-    """
+def conv_bytes_to_data(data, cipher_object=None):
+    len_data = data[:4]
+    len_data = struct.unpack("I", len_data)[0]
 
-    try:
-        if loop is None:
-            loop = new_event_loop()
-            set_event_loop(loop)
+    raw_data = data[4 : 4 + len_data]
+    if cipher_object is not None:
+        raw_data = cipher_object.decrypt(raw_data)
 
-        len_data = await loop.sock_recv(sock, 4)
-        len_data = struct.unpack("I", len_data)[0]
-
-        raw_data = await loop.sock_recv(sock, len_data)
-        if cipher_object is not None:
-            raw_data = cipher_object.decrypt(raw_data)
-
-        return parse_raw_json(raw_data)
-    except Exception:
-        pass
-    return None
+    return parse_raw_json(raw_data)
 
 
 def load_server_settings():
