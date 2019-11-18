@@ -123,7 +123,6 @@ class UsersExtension(object):
             user.is_active = True
             self.session.commit()
         except Exception:
-            print("here")
             self.session.rollback()
             return False
 
