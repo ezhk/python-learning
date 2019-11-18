@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+from asyncio import new_event_loop, set_event_loop
 import configparser
 import json
 import struct
@@ -72,7 +73,7 @@ def make_raw_json(python_object):
     return json_string.encode(ENCODING)
 
 
-def send_data(sock, data, cipher_object=None):
+async def send_data(sock, data, cipher_object=None, loop=None):
     """
     Функция отправляет сообщение в сокет добавляя
     в начало сообщения его длину, это позволяет
@@ -81,18 +82,22 @@ def send_data(sock, data, cipher_object=None):
     """
 
     try:
+        if loop is None:
+            loop = new_event_loop()
+            set_event_loop(loop)
+
         data = make_raw_json(data)
         if cipher_object is not None:
             data = cipher_object.encrypt(data)
 
         raw_data = struct.pack("I", len(data)) + data
-        return sock.send(raw_data)
+        return await loop.sock_sendall(sock, raw_data)
     except Exception:
         pass
     return None
 
 
-def recv_data(sock, cipher_object=None):
+async def recv_data(sock, cipher_object=None, loop=None):
     """
     Финкция сначала читает 4 байта из сокета — длина сообщения,
     а затем само сообщение, декодируем и возвращает разобранный
@@ -100,10 +105,14 @@ def recv_data(sock, cipher_object=None):
     """
 
     try:
-        len_data = sock.recv(4)
+        if loop is None:
+            loop = new_event_loop()
+            set_event_loop(loop)
+
+        len_data = await loop.sock_recv(sock, 4)
         len_data = struct.unpack("I", len_data)[0]
 
-        raw_data = sock.recv(len_data)
+        raw_data = await loop.sock_recv(sock, len_data)
         if cipher_object is not None:
             raw_data = cipher_object.decrypt(raw_data)
 

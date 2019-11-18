@@ -42,6 +42,7 @@ if __name__ == "__main__":
     # update buttons behaviour
     timer = QtCore.QTimer()
     timer.timeout.connect(lambda: update_main_buttons(server, main_window))
+    timer.timeout.connect(lambda: main_window.refresh_mainwindow())
     timer.start(500)
 
     sys.exit(app.exec())

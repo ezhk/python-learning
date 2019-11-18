@@ -27,8 +27,7 @@ class ImageEditorDialog(object):
             self.dialog, "Open image"
         )
         pixmap = QtGui.QPixmap(self.image_path)
-        # self.imageLabel.resize(300, 300)
-        self.imageLabel.setPixmap(pixmap)
+        self.imageLabel.setPixmap(pixmap.scaled(441, 441))
 
     def convert_image(self, filter_name=None):
         def _filter_sephia(r, g, b):

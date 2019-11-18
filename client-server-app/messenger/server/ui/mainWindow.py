@@ -45,12 +45,17 @@ class MainWindow(object):
             table.appendRow(row)
         return table
 
+    def refresh_mainwindow(self):
+        self.activeUsersView.setModel(self.get_active_users_model())
+
+        # resize columns magic
+        self.activeUsersView.horizontalHeader().setStretchLastSection(False)
+        self.activeUsersView.resizeColumnsToContents()
+        self.activeUsersView.horizontalHeader().setStretchLastSection(True)
+
     def define_button_actions(self, MainWindow):
         def _exit_action():
             QtWidgets.qApp.quit()
-
-        def _refresh_action():
-            self.activeUsersView.setModel(self.get_active_users_model())
 
         def _history_action():
             HistoryDialog(self.users_extension)
@@ -65,19 +70,13 @@ class MainWindow(object):
         self.button_actions["exit"].setShortcut("Ctrl+Q")
         self.button_actions["exit"].triggered.connect(_exit_action)
 
-        # refresh action
-        self.button_actions.update(
-            {"refresh": QtWidgets.QAction("Refresh", MainWindow)}
-        )
-        self.button_actions["refresh"].triggered.connect(_refresh_action)
-
-        # refresh action
+        # history action
         self.button_actions.update(
             {"history": QtWidgets.QAction("History", MainWindow)}
         )
         self.button_actions["history"].triggered.connect(_history_action)
 
-        # refresh action
+        # settings action
         self.button_actions.update(
             {"settings": QtWidgets.QAction("Settings", MainWindow)}
         )
@@ -101,7 +100,6 @@ class MainWindow(object):
         self.activeUsersView = QtWidgets.QTableView(self.usersWidget)
         self.activeUsersView.setGeometry(QtCore.QRect(10, 40, 461, 501))
         self.activeUsersView.setObjectName("activeUsersView")
-        self.activeUsersView.horizontalHeader().setStretchLastSection(True)
 
         # fill table by users data
         self.activeUsersView.setModel(self.get_active_users_model())

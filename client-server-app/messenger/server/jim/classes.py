@@ -4,6 +4,8 @@ import time
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
 
+import asyncio
+
 from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import Session, aliased
 
@@ -609,10 +611,14 @@ class Server(metaclass=ServerVerifier):
 
         self.running_flag = None
 
+        self.ioloop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.ioloop)
+
     def __del__(self):
         try:
             self.stop()
             self.sock.close()
+            self.ioloop.close()
         except Exception:
             pass
 
@@ -674,7 +680,7 @@ class Server(metaclass=ServerVerifier):
 
         return None
 
-    def _process_output_message(self, data, sock):
+    async def _process_output_message(self, data, sock):
         """
         Internal func that get recipient in message,
         find active socket and push message to user.
@@ -687,10 +693,17 @@ class Server(metaclass=ServerVerifier):
                 self.users_extension.is_active(username)
                 and self.users_extension.get_socket(username) == sock
             ):
-                send_data(sock, data, self.client_ciphers.get(sock, None))
+                await send_data(
+                    sock,
+                    data,
+                    self.client_ciphers.get(sock, None),
+                    self.ioloop,
+                )
                 sended += 1
         else:
-            send_data(sock, data, self.client_ciphers.get(sock, None))
+            await send_data(
+                sock, data, self.client_ciphers.get(sock, None), self.ioloop
+            )
             sended += 1
         return sended
 
@@ -705,70 +718,92 @@ class Server(metaclass=ServerVerifier):
         self.sock.settimeout(self.timeout)
         self.sock.setblocking(0)
 
-    def pull_requests(self, r_clients):
+    async def _pull_messages(self, client_sock):
         """
-        Read messages from read sockets, returned by select action.
+        Async read data from socket and collect answers for clients.
         Here call internal function _process_input_message.
         """
 
-        def _disconnect_client(self, c_socket):
+        def _disconnect_client(c_socket):
+            """
+            Function call when socket doesn't work correct:
+            dicronnect event will be processed here.
+            """
+
             try:
+                self.logger.debug(f"Client exit {client_sock}: {err}")
                 self.users_extension.disconnect(*c_socket.getpeername())
 
                 self.authenticated_clients.remove(c_socket)
                 self.client_sockets.remove(c_socket)
+                c_socket.close()
             except Exception:
                 return False
             return True
 
-        requests = {}
-        for client_sock in r_clients:
-            try:
-                data = recv_data(
-                    client_sock, self.client_ciphers.get(client_sock, None)
-                )
-                if data is None:
-                    raise MessageError("Получено сообщение None")
-            except Exception as err:
-                self.logger.debug(f"Клиент отключился {client_sock}: {err}")
-                _disconnect_client(self, client_sock)
-                client_sock.close()
-                continue
+        async def _read_data(c_socket):
+            """
+            Try to recv data from client socket.
+            """
 
-            self.logger.debug(
-                f"Получено сообщение от клиента {client_sock}: {data}"
+            data = await recv_data(
+                c_socket, self.client_ciphers.get(c_socket, None), self.ioloop
             )
-            message = response(400, "Incorrect JSON", False)
-            try:
-                if is_valid_message(data):
-                    message = response(202, "Accepted", True)
-                    requests[client_sock] = data
+            if data is None:
+                raise MessageError("Received message None")
+            return data
 
-                processing = self._process_input_message(data, client_sock)
-                if processing:
-                    message = response(202, processing, True)
-            except MessageError as err:
-                self.logger.error(
-                    f"Ошибка валидации сообщения от {client_sock}, {err}"
-                )
-                message = response(400, str(err), False)
+        answer = {}
+        try:
+            data = await _read_data(client_sock)
+        except Exception as err:
+            _disconnect_client(client_sock)
+            return answer
 
-            try:
-                send_data(
-                    client_sock,
-                    message,
-                    self.client_ciphers.get(client_sock, None),
-                )
-            except Exception as err:
-                self.logger.debug(
-                    f"Клиент отключился при подтверждении {client_sock}: {err}"
-                )
-                self.users_extension.disconnect(*client_sock.getpeername())
+        self.logger.debug(f"Recv client msg {client_sock}: {data}")
+        message = response(400, "Incorrect JSON", False)
+        try:
+            if is_valid_message(data):
+                message = response(202, "Accepted", True)
+                answer[client_sock] = data
 
-                self.authenticated_clients.remove(client_sock)
-                self.client_sockets.remove(client_sock)
-                client_sock.close()
+            processing = self._process_input_message(data, client_sock)
+            if processing:
+                message = response(202, processing, True)
+        except MessageError as err:
+            self.logger.error(f"Validation message error {client_sock}, {err}")
+            message = response(400, str(err), False)
 
+        try:
+            await send_data(
+                client_sock,
+                message,
+                self.client_ciphers.get(client_sock, None),
+                self.ioloop,
+            )
+        except Exception as err:
+            _disconnect_client(client_sock)
+
+        return answer
+
+    def pull_requests(self, r_clients):
+        """
+        Read messages from client sockets, returned by select action.
+        Here call async function _pull_messages.
+        """
+
+        tasks = [
+            self.ioloop.create_task(self._pull_messages(client))
+            for client in r_clients
+        ]
+        wait_tasks = asyncio.wait(tasks)
+        results = self.ioloop.run_until_complete(wait_tasks)
+
+        requests = {}
+        for result in results:
+            while result:
+                value = result.pop()
+                requests.update(value.result())
         return requests
 
     def push_requests(self, w_clients, requests):
@@ -777,12 +812,16 @@ class Server(metaclass=ServerVerifier):
         Here call internal function _process_output_message.
         """
 
-        sended = 0
-        for client in w_clients:
+        async def push_messages(client, requests):
+            """
+            Internal async function with message processing.
+            """
+
+            sended = 0
             try:
                 for req in requests.values():
                     # reply to clients only messages
-                    sended += self._process_output_message(req, client)
+                    sended += await self._process_output_message(req, client)
             except Exception as err:
                 self.logger.debug(f"Клиент отключился {client}: {err}")
                 self.users_extension.disconnect(*client.getpeername())
@@ -790,8 +829,18 @@ class Server(metaclass=ServerVerifier):
                 self.authenticated_clients.remove(client)
                 self.client_sockets.remove(client)
                 client.close()
-                continue
-        return sended
+
+                return False
+            return sended
+
+        tasks = [
+            self.ioloop.create_task(push_messages(client, requests))
+            for client in w_clients
+        ]
+        wait_tasks = asyncio.wait(tasks)
+        self.ioloop.run_until_complete(wait_tasks)
+
+        return True
 
     def _helo(self, c_socket):
         """
@@ -800,7 +849,7 @@ class Server(metaclass=ServerVerifier):
         """
 
         helo_message = helo(self.cipher.public_key.decode())
-        send_data(c_socket, helo_message)
+        asyncio.run(send_data(c_socket, helo_message))
 
     def validate_client_sockets(self):
         """

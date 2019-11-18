@@ -57,6 +57,13 @@ class MainWindow(QtCore.QObject):
         self.message.exec()
         self.window_object.close()
 
+    def process_background(self, sender, message):
+        self.message.setWindowTitle("Received message")
+        self.message.setIcon(QtWidgets.QMessageBox.Information)
+        self.message.setText(f"New message from {sender.capitalize()}")
+        self.message.setDetailedText(message)
+        self.message.exec()
+
     @QtCore.pyqtSlot(dict)
     def process_server_message(self, data):
         """
@@ -100,12 +107,19 @@ class MainWindow(QtCore.QObject):
             pixmap = QPixmap.fromImage(qt_image)
             self.userpicLabel.setPixmap(pixmap)
 
+        def _process_backgroud_message(self, sender, message):
+            self.process_background(sender, message)
+
         if data.get("action", "") == "update_contacts":
             _process_contacts(self, self.client.contacts)
         if data.get("action", "") == "update_chat":
             _process_chat(self, self.client.chat)
         if data.get("action", "") == "update_profile":
             _process_profile(self, self.client.user_profile)
+        if data.get("action", "") == "background_message":
+            _process_backgroud_message(
+                self, data.get("from"), data.get("message")
+            )
 
     def send_message(self):
         text = self.messageEdit.toPlainText()
