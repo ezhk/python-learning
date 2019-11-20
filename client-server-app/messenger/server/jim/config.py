@@ -12,9 +12,6 @@ Recommends for changing only:
 
 import logging
 
-BACKLOG = 1024
-BUFSIZE = 4096
-
 SERVER_ADDRESS = "127.0.0.1"
 SERVER_PORT = 7777
 
@@ -25,3 +22,5 @@ LOGLEVEL = logging.DEBUG
 
 STORAGE = "sqlite:///messenger.sql"
 SALT = "376gizGQvQqaBE3GXzEC7J72PBKBSN0kB5msKOpGIN0o"
+
+ENABLE_FILTER = False

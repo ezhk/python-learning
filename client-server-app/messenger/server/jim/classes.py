@@ -1,15 +1,14 @@
+import asyncio
 from logging import getLogger
 from threading import Thread
 import time
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
 
-import asyncio
-
 from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import Session, aliased
 
-from .config import STORAGE, BACKLOG, SALT
+from .config import STORAGE, SALT, ENABLE_FILTER
 from .descriptors import Port
 from .exceptions import MessageError
 from .metaclasses import ServerVerifier
@@ -26,7 +25,14 @@ from .messages import (
     get_recipient,
     response,
 )
-from .models import Users, UsersHistory, Contacts, Groups, Messages
+from .models import (
+    Users,
+    UsersHistory,
+    Contacts,
+    Groups,
+    GroupMembers,
+    Messages,
+)
 from .security import AsymmetricCipher, SymmetricCipher, get_text_digest
 from .utils import (
     is_valid_message,
@@ -43,7 +49,12 @@ class UsersExtension(object):
 
     def __init__(self):
         self.salt = SALT
-        self.groups = {}
+
+        self.profanity = lambda message: False
+        if ENABLE_FILTER:
+            module = __import__("profanity_check")
+            predict = getattr(module, "predict")
+            self.profanity = lambda message: predict([message]).max()
 
         engine = create_engine(
             STORAGE,
@@ -270,14 +281,121 @@ class UsersExtension(object):
             )
         return history
 
+    def _create_group(self, group_name):
+        group = self.session.query(Groups).filter_by(name=group_name).first()
+        if group:
+            return group
+
+        g_object = Groups(name=group_name)
+        try:
+            self.session.add(g_object)
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            raise RuntimeError("group cannot be created")
+        return g_object
+
     def join(self, client, chat):
         """
         Group logic, don't used yet.
         """
 
-        if client not in self.groups:
-            self.groups.update({client: set()})
-        self.groups[client].add(chat)
+        user = self.session.query(Users).filter_by(username=client).first()
+        if not user:
+            return False
+        group = self._create_group(chat)
+
+        exist_record = self.session.query(GroupMembers).filter_by(
+            user=user.id, group=group.id
+        )
+        if exist_record.count():
+            return True
+
+        try:
+            gm_object = GroupMembers(user=user.id, group=group.id)
+            self.session.add(gm_object)
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
+        return True
+
+    def leave(self, client, chat):
+        """
+        Group logic, don't used yet.
+        """
+
+        user = self.session.query(Users).filter_by(username=client).first()
+        if not user:
+            return False
+        group = self.session.query(Groups).filter_by(name=chat).first()
+        if not group:
+            return True
+
+        exist_record = self.session.query(GroupMembers).filter_by(
+            user=user.id, group=group.id
+        )
+        if not exist_record.count():
+            return True
+
+        try:
+            exist_record.delete()
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
+        return True
+
+    def _get_defined_users(self, users=[]):
+        db_users = (
+            self.session.query(Users).filter(Users.username.in_(users)).all()
+        )
+        db_users = sorted(db_users, key=lambda u: users.index(u.username))
+        return db_users
+
+    def add_contact(self, owner, contact):
+        """
+        Function add link between user and contact in contact list.
+        Also it validates that both accounts exist.
+        """
+
+        users = self._get_defined_users([owner, contact])
+        if len(users) != 2:
+            return None
+        owner, contact = users
+        exist_contact = self.session.query(Contacts).filter_by(
+            owner=owner.id, contact=contact.id
+        )
+        if exist_contact.count():
+            return True
+
+        try:
+            c_object = Contacts(owner=owner.id, contact=contact.id)
+            self.session.add(c_object)
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
+        return True
+
+    def del_contact(self, owner, contact):
+        users = self._get_defined_users([owner, contact])
+        if len(users) != 2:
+            return None
+        owner, contact = users
+        exist_contact = self.session.query(Contacts).filter_by(
+            owner=owner.id, contact=contact.id
+        )
+
+        if not exist_contact.count():
+            return True
+
+        try:
+            exist_contact.delete()
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
         return True
 
     def get_profile(self, client):
@@ -310,15 +428,6 @@ class UsersExtension(object):
         except Exception:
             self.session.rollback()
             return False
-        return True
-
-    def leave(self, client, chat):
-        """
-        Group logic, don't used yet.
-        """
-        if client not in self.groups:
-            return False
-        self.groups[client].remove(chat)
         return True
 
     def put_message(self, sender, recipient, encoding, message):
@@ -358,7 +467,12 @@ class UsersExtension(object):
         self.session.commit()
         return True
 
-    def get_chat(self, recipient, sender=None):
+    def censored_message(self, message):
+        if self.profanity(message):
+            return "<censored>"
+        return message
+
+    def get_chat(self, whom, source=None):
         """
         Return chat dialog between users or group.
         Messages limit in request = 50.
@@ -374,18 +488,18 @@ class UsersExtension(object):
 
         messages = []
 
-        if not recipient:
+        if not whom:
             return messages
 
         usersAuthor = aliased(Users)
         usersDestination = aliased(Users)
 
-        if recipient.startswith("#"):
+        if source.startswith("#"):
             for msg in (
                 self.session.query(Messages)
                 .join(usersAuthor, usersAuthor.id == Messages.author)
                 .join(Groups, Groups.id == Messages.destination_group)
-                .filter(Groups.name == recipient)
+                .filter(Groups.name == source)
                 .with_entities(
                     usersAuthor.username,
                     Groups.name,
@@ -401,10 +515,11 @@ class UsersExtension(object):
                     {
                         "from": user,
                         "to": group,
-                        "text": text,
+                        "text": self.censored_message(text),
                         "ctime": ctime.isoformat(),
                     }
                 )
+            return messages
 
         for msg in (
             self.session.query(Messages)
@@ -416,12 +531,12 @@ class UsersExtension(object):
             .filter(
                 or_(
                     and_(
-                        usersAuthor.username == sender,
-                        usersDestination.username == recipient,
+                        usersAuthor.username == source,
+                        usersDestination.username == whom,
                     ),
                     and_(
-                        usersAuthor.username == recipient,
-                        usersDestination.username == sender,
+                        usersAuthor.username == whom,
+                        usersDestination.username == source,
                     ),
                 )
             )
@@ -440,12 +555,23 @@ class UsersExtension(object):
                 {
                     "from": sender,
                     "to": recipient,
-                    "text": text,
+                    "text": self.censored_message(text),
                     "ctime": ctime.isoformat(),
                 }
             )
 
         return messages
+
+    def get_group_members(self, name):
+        members = (
+            self.session.query(GroupMembers)
+            .join(Groups, Groups.id == GroupMembers.group)
+            .join(Users, Users.id == GroupMembers.user)
+            .filter(Groups.name == name)
+            .with_entities(Users.username)
+            .all()
+        )
+        return [member.username for member in members]
 
     def get_contacts(self, user):
         """
@@ -471,40 +597,43 @@ class UsersExtension(object):
             .all()
         )
 
-        return [contact.username for contact in contacts]
+        groups = (
+            self.session.query(GroupMembers)
+            .join(Groups, Groups.id == GroupMembers.group)
+            .join(Users, Users.id == GroupMembers.user)
+            .filter(Users.username == user)
+            .with_entities(Groups.name)
+            .all()
+        )
+
+        contacts = [contact.username for contact in contacts]
+        groups = [group.name for group in groups]
+        return contacts + groups
 
     def contact_operation(self, action, user, input_contact):
         """
-        Function add or del link between users in contacts
-        if users exist. Operation depends on action
-        "add_contact" or "del_contact".
+        Function add or del link between users/groups in contacts
+        if users exist (if group doesn't exist, it wil be created).
+        Operation depends on action "add_contact" or "del_contact".
         """
-        users = self.session.query(Users).filter(
-            or_(Users.username == user, Users.username == input_contact)
-        )
-        if users.count() != 2:
-            return None
 
-        owner, contact = users[0], users[1]
-        if users[0].username == input_contact:
-            owner, contact = users[1], users[0]
+        def _process_group_operation(self, action, user, group):
+            if action == "add_contact":
+                return self.join(user, group)
+            if action == "del_contact":
+                return self.leave(user, group)
+            return False
 
-        exist_contact = self.session.query(Contacts).filter_by(
-            owner=owner.id, contact=contact.id
-        )
+        def _process_user_operation(self, action, user, contact):
+            if action == "add_contact":
+                return self.add_contact(user, contact)
+            if action == "del_contact":
+                return self.del_contact(user, contact)
+            return False
 
-        if not exist_contact.count() and action == "add_contact":
-            c_object = Contacts(owner=owner.id, contact=contact.id)
-            self.session.add(c_object)
-            self.session.commit()
-            return True
-
-        if exist_contact.count() and action == "del_contact":
-            exist_contact.delete()
-            self.session.commit()
-            return True
-
-        return False
+        if input_contact.startswith("#"):
+            return _process_group_operation(self, action, user, input_contact)
+        return _process_user_operation(self, action, user, input_contact)
 
 
 class AsyncioServer(asyncio.Protocol):
@@ -566,6 +695,17 @@ class AsyncioServer(asyncio.Protocol):
             return {"user_profile": self.users_extension.get_profile(username)}
         return None
 
+    def _send_message_to(self, username, data):
+        if (
+            self.users_extension.is_active(username)
+            and username in self._transport_per_user
+        ):
+            transport = self._transport_per_user[username]
+            cipher = self._ciphers.get(transport, None)
+            transport.write(conv_data_to_bytes(data, cipher))
+            return True
+        return False
+
     def _user_messages(self, data):
         # load chat history
         if is_chat(data) is not None:
@@ -577,15 +717,14 @@ class AsyncioServer(asyncio.Protocol):
 
         # deliver message to destination
         if get_recipient(data) is not None:
-            username = get_recipient(data)
-            if (
-                self.users_extension.is_active(username)
-                and username in self._transport_per_user
-            ):
-                transport = self._transport_per_user[username]
-                cipher = self._ciphers.get(transport, None)
-                transport.write(conv_data_to_bytes(data, cipher))
-            return True
+            recipient = get_recipient(data)
+
+            if recipient.startswith("#"):
+                sended = 0
+                for u in self.users_extension.get_group_members(recipient):
+                    sended += self._send_message_to(u, data)
+
+            return self._send_message_to(recipient, data)
         return None
 
     def _user_contacts(self, data):
