@@ -1,15 +1,14 @@
+import asyncio
 from logging import getLogger
 from threading import Thread
 import time
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
 
-import asyncio
-
 from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import Session, aliased
 
-from .config import STORAGE, BACKLOG, SALT
+from .config import STORAGE, SALT, ENABLE_FILTER
 from .descriptors import Port
 from .exceptions import MessageError
 from .metaclasses import ServerVerifier
@@ -26,65 +25,21 @@ from .messages import (
     get_recipient,
     response,
 )
-from .models import Users, UsersHistory, Contacts, Groups, Messages
+from .models import (
+    Users,
+    UsersHistory,
+    Contacts,
+    Groups,
+    GroupMembers,
+    Messages,
+)
 from .security import AsymmetricCipher, SymmetricCipher, get_text_digest
-from .utils import is_valid_message, send_data, recv_data, load_server_settings
-
-
-class ServerThread(object):
-    """
-    Running server object as a thread.
-    """
-
-    def __init__(self, logger):
-        super().__init__()
-        self.server = None
-        self.thread = None
-
-        self.logger = logger
-
-    def start(self):
-        """
-        Read server settings and run Server object
-        in a thread and store output in self variable.
-        """
-
-        if self.thread and self.thread.is_alive():
-            return False
-
-        settings = load_server_settings()
-        self.server = Server(
-            settings.get("address"),
-            int(settings.get("port")),
-            logger=self.logger,
-        )
-        self.thread = Thread(target=self.server.run, daemon=True)
-        self.thread.start()
-        return True
-
-    def stop(self):
-        """
-        Calls stop for early running thread and join it.
-        """
-
-        try:
-            self.server.stop()
-            self.thread.join()
-        except Exception as err:
-            self.logger.error(f"Cannot stop server: {err}")
-            return False
-        return True
-
-    def alive(self):
-        """
-        Return thread alive status, boolean.
-        """
-
-        try:
-            return self.thread.is_alive()
-        except Exception:
-            pass
-        return False
+from .utils import (
+    is_valid_message,
+    load_server_settings,
+    conv_data_to_bytes,
+    conv_bytes_to_data,
+)
 
 
 class UsersExtension(object):
@@ -93,13 +48,20 @@ class UsersExtension(object):
     """
 
     def __init__(self):
-        self.sockets = {}
-        self.groups = {}
-        self.delayed_messages = {}
-
         self.salt = SALT
 
-        engine = create_engine(STORAGE, pool_recycle=3600, echo=False)
+        self.profanity = lambda message: False
+        if ENABLE_FILTER:
+            module = __import__("profanity_check")
+            predict = getattr(module, "predict")
+            self.profanity = lambda message: predict([message]).max()
+
+        engine = create_engine(
+            STORAGE,
+            pool_recycle=3600,
+            echo=False,
+            connect_args={"check_same_thread": False},
+        )
         self.session = Session(bind=engine)
 
     def authenticate(self, username, password):
@@ -130,13 +92,13 @@ class UsersExtension(object):
             return True
         return False
 
-    def presence(self, client, socket):
+    def presence(self, client, address, port):
         """
         Create and save user history when
         received presence message type.
         """
 
-        def _save_history(client, socket):
+        def _save_history(client, address, port):
             """
             Internal method, that save login history by user.
             """
@@ -150,7 +112,6 @@ class UsersExtension(object):
                 if user is None:
                     return False
 
-                (address, port) = socket.getpeername()
                 h_object = UsersHistory(
                     user=user.id, address=address, port=port
                 )
@@ -162,7 +123,6 @@ class UsersExtension(object):
                 return False
             return True
 
-        self.sockets.update({client: socket})
         user = self.session.query(Users).filter_by(username=client).first()
 
         # user must create in authenticate function
@@ -177,7 +137,7 @@ class UsersExtension(object):
             self.session.rollback()
             return False
 
-        return _save_history(client, socket)
+        return _save_history(client, address, port)
 
     def quit(self, client):
         """
@@ -250,25 +210,6 @@ class UsersExtension(object):
         user = self.session.query(Users).filter_by(username=client).first()
         return user is not None and user.is_active
 
-    def get_socket(self, client):
-        """
-        Return socket data from internal dict "sockets".
-        Record in this "sockets" will be added when user
-        will be connected to server.
-        """
-
-        if self.is_active(client):
-            return self.sockets.get(client, None)
-        return None
-
-    @property
-    def all_sockets(self):
-        """
-        Return sockets dict with users connections.
-        """
-
-        return self.sockets
-
     @property
     def active_users(self):
         """
@@ -340,14 +281,121 @@ class UsersExtension(object):
             )
         return history
 
+    def _create_group(self, group_name):
+        group = self.session.query(Groups).filter_by(name=group_name).first()
+        if group:
+            return group
+
+        g_object = Groups(name=group_name)
+        try:
+            self.session.add(g_object)
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            raise RuntimeError("group cannot be created")
+        return g_object
+
     def join(self, client, chat):
         """
         Group logic, don't used yet.
         """
 
-        if client not in self.groups:
-            self.groups.update({client: set()})
-        self.groups[client].add(chat)
+        user = self.session.query(Users).filter_by(username=client).first()
+        if not user:
+            return False
+        group = self._create_group(chat)
+
+        exist_record = self.session.query(GroupMembers).filter_by(
+            user=user.id, group=group.id
+        )
+        if exist_record.count():
+            return True
+
+        try:
+            gm_object = GroupMembers(user=user.id, group=group.id)
+            self.session.add(gm_object)
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
+        return True
+
+    def leave(self, client, chat):
+        """
+        Group logic, don't used yet.
+        """
+
+        user = self.session.query(Users).filter_by(username=client).first()
+        if not user:
+            return False
+        group = self.session.query(Groups).filter_by(name=chat).first()
+        if not group:
+            return True
+
+        exist_record = self.session.query(GroupMembers).filter_by(
+            user=user.id, group=group.id
+        )
+        if not exist_record.count():
+            return True
+
+        try:
+            exist_record.delete()
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
+        return True
+
+    def _get_defined_users(self, users=[]):
+        db_users = (
+            self.session.query(Users).filter(Users.username.in_(users)).all()
+        )
+        db_users = sorted(db_users, key=lambda u: users.index(u.username))
+        return db_users
+
+    def add_contact(self, owner, contact):
+        """
+        Function add link between user and contact in contact list.
+        Also it validates that both accounts exist.
+        """
+
+        users = self._get_defined_users([owner, contact])
+        if len(users) != 2:
+            return None
+        owner, contact = users
+        exist_contact = self.session.query(Contacts).filter_by(
+            owner=owner.id, contact=contact.id
+        )
+        if exist_contact.count():
+            return True
+
+        try:
+            c_object = Contacts(owner=owner.id, contact=contact.id)
+            self.session.add(c_object)
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
+        return True
+
+    def del_contact(self, owner, contact):
+        users = self._get_defined_users([owner, contact])
+        if len(users) != 2:
+            return None
+        owner, contact = users
+        exist_contact = self.session.query(Contacts).filter_by(
+            owner=owner.id, contact=contact.id
+        )
+
+        if not exist_contact.count():
+            return True
+
+        try:
+            exist_contact.delete()
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            return False
         return True
 
     def get_profile(self, client):
@@ -380,15 +428,6 @@ class UsersExtension(object):
         except Exception:
             self.session.rollback()
             return False
-        return True
-
-    def leave(self, client, chat):
-        """
-        Group logic, don't used yet.
-        """
-        if client not in self.groups:
-            return False
-        self.groups[client].remove(chat)
         return True
 
     def put_message(self, sender, recipient, encoding, message):
@@ -428,7 +467,12 @@ class UsersExtension(object):
         self.session.commit()
         return True
 
-    def get_chat(self, recipient, sender=None):
+    def censored_message(self, message):
+        if self.profanity(message):
+            return "<censored>"
+        return message
+
+    def get_chat(self, whom, source=None):
         """
         Return chat dialog between users or group.
         Messages limit in request = 50.
@@ -444,18 +488,18 @@ class UsersExtension(object):
 
         messages = []
 
-        if not recipient:
+        if not whom:
             return messages
 
         usersAuthor = aliased(Users)
         usersDestination = aliased(Users)
 
-        if recipient.startswith("#"):
+        if source.startswith("#"):
             for msg in (
                 self.session.query(Messages)
                 .join(usersAuthor, usersAuthor.id == Messages.author)
                 .join(Groups, Groups.id == Messages.destination_group)
-                .filter(Groups.name == recipient)
+                .filter(Groups.name == source)
                 .with_entities(
                     usersAuthor.username,
                     Groups.name,
@@ -471,10 +515,11 @@ class UsersExtension(object):
                     {
                         "from": user,
                         "to": group,
-                        "text": text,
+                        "text": self.censored_message(text),
                         "ctime": ctime.isoformat(),
                     }
                 )
+            return messages
 
         for msg in (
             self.session.query(Messages)
@@ -486,12 +531,12 @@ class UsersExtension(object):
             .filter(
                 or_(
                     and_(
-                        usersAuthor.username == sender,
-                        usersDestination.username == recipient,
+                        usersAuthor.username == source,
+                        usersDestination.username == whom,
                     ),
                     and_(
-                        usersAuthor.username == recipient,
-                        usersDestination.username == sender,
+                        usersAuthor.username == whom,
+                        usersDestination.username == source,
                     ),
                 )
             )
@@ -510,12 +555,23 @@ class UsersExtension(object):
                 {
                     "from": sender,
                     "to": recipient,
-                    "text": text,
+                    "text": self.censored_message(text),
                     "ctime": ctime.isoformat(),
                 }
             )
 
         return messages
+
+    def get_group_members(self, name):
+        members = (
+            self.session.query(GroupMembers)
+            .join(Groups, Groups.id == GroupMembers.group)
+            .join(Users, Users.id == GroupMembers.user)
+            .filter(Groups.name == name)
+            .with_entities(Users.username)
+            .all()
+        )
+        return [member.username for member in members]
 
     def get_contacts(self, user):
         """
@@ -541,113 +597,94 @@ class UsersExtension(object):
             .all()
         )
 
-        return [contact.username for contact in contacts]
+        groups = (
+            self.session.query(GroupMembers)
+            .join(Groups, Groups.id == GroupMembers.group)
+            .join(Users, Users.id == GroupMembers.user)
+            .filter(Users.username == user)
+            .with_entities(Groups.name)
+            .all()
+        )
+
+        contacts = [contact.username for contact in contacts]
+        groups = [group.name for group in groups]
+        return contacts + groups
 
     def contact_operation(self, action, user, input_contact):
         """
-        Function add or del link between users in contacts
-        if users exist. Operation depends on action
-        "add_contact" or "del_contact".
+        Function add or del link between users/groups in contacts
+        if users exist (if group doesn't exist, it wil be created).
+        Operation depends on action "add_contact" or "del_contact".
         """
-        users = self.session.query(Users).filter(
-            or_(Users.username == user, Users.username == input_contact)
-        )
-        if users.count() != 2:
-            return None
 
-        owner, contact = users[0], users[1]
-        if users[0].username == input_contact:
-            owner, contact = users[1], users[0]
+        def _process_group_operation(self, action, user, group):
+            if action == "add_contact":
+                return self.join(user, group)
+            if action == "del_contact":
+                return self.leave(user, group)
+            return False
 
-        exist_contact = self.session.query(Contacts).filter_by(
-            owner=owner.id, contact=contact.id
-        )
+        def _process_user_operation(self, action, user, contact):
+            if action == "add_contact":
+                return self.add_contact(user, contact)
+            if action == "del_contact":
+                return self.del_contact(user, contact)
+            return False
 
-        if not exist_contact.count() and action == "add_contact":
-            c_object = Contacts(owner=owner.id, contact=contact.id)
-            self.session.add(c_object)
-            self.session.commit()
-            return True
-
-        if exist_contact.count() and action == "del_contact":
-            exist_contact.delete()
-            self.session.commit()
-            return True
-
-        return False
+        if input_contact.startswith("#"):
+            return _process_group_operation(self, action, user, input_contact)
+        return _process_user_operation(self, action, user, input_contact)
 
 
-class Server(metaclass=ServerVerifier):
-    port = Port()
+class AsyncioServer(asyncio.Protocol):
+    cipher = AsymmetricCipher()
 
-    """
-    Main server object.
-    All the magic are processing here:
+    _authenticated_clients = set()
+    _ciphers = {}
+    _transport_per_user = {}
 
-    - encode/decode messages
-    - recv and send messages
-    - validate users and them state (connect/disconnect)
-    """
-
-    def __init__(self, address, port, **kwargs):
-        self.cipher = AsymmetricCipher()
-        self.address = address or "localhost"
-        self.port = port
-
-        self.family = kwargs.get("family", AF_INET)
-        self.type = kwargs.get("type", SOCK_STREAM)
-        self.backlog = kwargs.get("backlog", BACKLOG)
-        self.timeout = kwargs.get("timeout", 0.1)
-
-        # listen methods define sock object
-        self.sock = None
+    def __init__(self, **kwargs):
+        self._transport = None
+        self._address = None
+        self._port = None
 
         self.logger = kwargs.get("logger", getLogger("server"))
-
         self.users_extension = UsersExtension()
-        self.client_sockets = []
-        self.authenticated_clients = set()
-        self.client_ciphers = {}
 
-        self.running_flag = None
+    def _write(self, data):
+        cipher = self._ciphers.get(self._transport, None)
+        return self._transport.write(conv_data_to_bytes(data, cipher))
 
-        self.ioloop = asyncio.new_event_loop()
-        asyncio.set_event_loop(self.ioloop)
+    def _read(self, data):
+        cipher = self._ciphers.get(self._transport, None)
+        return conv_bytes_to_data(data, cipher)
 
-    def __del__(self):
-        try:
-            self.stop()
-            self.sock.close()
-            self.ioloop.close()
-        except Exception:
-            pass
-
-    def _process_input_message(self, data, sock):
-        """
-        Internal function, that detect message type
-        and try to process it.
-        """
-
+    def _init_session_messages(self, data):
         if is_key_exchange(data) is not None:
             session_key = self.cipher.decrypt(is_key_exchange(data).encode())
             cipher = SymmetricCipher(session_key)
-            self.client_ciphers.update({sock: cipher})
-            return
+            self._ciphers.update({self._transport: cipher})
+            return True
 
         # check auth data
         if is_authenticate(data) is not None:
-            if self.users_extension.authenticate(*is_authenticate(data)):
-                self.authenticated_clients.add(sock)
-                return
+            username, password = is_authenticate(data)
+            if self.users_extension.authenticate(username, password):
+                self._authenticated_clients.add(self._transport)
+                self._transport_per_user.update({username: self._transport})
+                return True
             raise MessageError("Ошибка авторизации")
 
-        if sock not in self.authenticated_clients:
+        if self._transport not in self._authenticated_clients:
             raise MessageError("Пользователь должен быть авторизован")
 
+        return None
+
+    def _user_state_messages(self, data):
         # online message
         if is_presence_message(data) is not None:
             username = is_presence_message(data)
-            self.users_extension.presence(username, sock)
+            self.users_extension.presence(username, self._address, self._port)
             return {"user_profile": self.users_extension.get_profile(username)}
 
         # update userpic
@@ -656,16 +693,41 @@ class Server(metaclass=ServerVerifier):
 
             self.users_extension.update_userpic(username, image)
             return {"user_profile": self.users_extension.get_profile(username)}
+        return None
 
-        # client message
-        if is_message(data) is not None:
-            self.users_extension.put_message(*is_message(data))
-            return
+    def _send_message_to(self, username, data):
+        if (
+            self.users_extension.is_active(username)
+            and username in self._transport_per_user
+        ):
+            transport = self._transport_per_user[username]
+            cipher = self._ciphers.get(transport, None)
+            transport.write(conv_data_to_bytes(data, cipher))
+            return True
+        return False
 
+    def _user_messages(self, data):
         # load chat history
         if is_chat(data) is not None:
             return {"chat": self.users_extension.get_chat(*is_chat(data))}
 
+        # client message
+        if is_message(data) is not None:
+            self.users_extension.put_message(*is_message(data))
+
+        # deliver message to destination
+        if get_recipient(data) is not None:
+            recipient = get_recipient(data)
+
+            if recipient.startswith("#"):
+                sended = 0
+                for u in self.users_extension.get_group_members(recipient):
+                    sended += self._send_message_to(u, data)
+
+            return self._send_message_to(recipient, data)
+        return None
+
+    def _user_contacts(self, data):
         # receive contacts
         if is_get_contacts(data) is not None:
             return {
@@ -673,238 +735,126 @@ class Server(metaclass=ServerVerifier):
                     is_get_contacts(data)
                 )
             }
+
         # add or delete contacts
         if is_contact_operation(data) is not None:
             self.users_extension.contact_operation(*is_contact_operation(data))
-            return
+            return True
+
+    def handle_request(self, data):
+        if self._init_session_messages(data):
+            return None
+
+        userstate_message = self._user_state_messages(data)
+        if userstate_message:
+            return userstate_message
+
+        messages = self._user_messages(data)
+        if messages:
+            return messages
+
+        contacts = self._user_contacts(data)
+        if contacts:
+            return contacts
 
         return None
 
-    async def _process_output_message(self, data, sock):
-        """
-        Internal func that get recipient in message,
-        find active socket and push message to user.
-        """
+    def connection_made(self, transport):
+        self._transport = transport
+        self._address, self._port = self._transport.get_extra_info("peername")
 
-        sended = 0
-        if get_recipient(data) is not None:
-            username = get_recipient(data)
-            if (
-                self.users_extension.is_active(username)
-                and self.users_extension.get_socket(username) == sock
-            ):
-                await send_data(
-                    sock,
-                    data,
-                    self.client_ciphers.get(sock, None),
-                    self.ioloop,
-                )
-                sended += 1
-        else:
-            await send_data(
-                sock, data, self.client_ciphers.get(sock, None), self.ioloop
-            )
-            sended += 1
-        return sended
-
-    def listen(self):
-        """
-        Create listen socket on defined address and port.
-        """
-
-        self.sock = socket(family=self.family, type=self.type)
-        self.sock.bind((self.address, self.port))
-        self.sock.listen(self.backlog)
-        self.sock.settimeout(self.timeout)
-        self.sock.setblocking(0)
-
-    async def _pull_messages(self, client_sock):
-        """
-        Async read data from socket and collect answers for clients.
-        Here call internal function _process_input_message.
-        """
-
-        def _disconnect_client(c_socket):
-            """
-            Function call when socket doesn't work correct:
-            dicronnect event will be processed here.
-            """
-
-            try:
-                self.logger.debug(f"Client exit {client_sock}: {err}")
-                self.users_extension.disconnect(*c_socket.getpeername())
-
-                self.authenticated_clients.remove(c_socket)
-                self.client_sockets.remove(c_socket)
-                c_socket.close()
-            except Exception:
-                return False
-            return True
-
-        async def _read_data(c_socket):
-            """
-            Try to recv data from client socket.
-            """
-
-            data = await recv_data(
-                c_socket, self.client_ciphers.get(c_socket, None), self.ioloop
-            )
-            if data is None:
-                raise MessageError("Received message None")
-            return data
-
-        answer = {}
-        try:
-            data = await _read_data(client_sock)
-        except Exception as err:
-            _disconnect_client(client_sock)
-            return answer
-
-        self.logger.debug(f"Recv client msg {client_sock}: {data}")
-        message = response(400, "Incorrect JSON", False)
-        try:
-            if is_valid_message(data):
-                message = response(202, "Accepted", True)
-                answer[client_sock] = data
-
-            processing = self._process_input_message(data, client_sock)
-            if processing:
-                message = response(202, processing, True)
-        except MessageError as err:
-            self.logger.error(f"Validation message error {client_sock}, {err}")
-            message = response(400, str(err), False)
-
-        try:
-            await send_data(
-                client_sock,
-                message,
-                self.client_ciphers.get(client_sock, None),
-                self.ioloop,
-            )
-        except Exception as err:
-            _disconnect_client(client_sock)
-
-        return answer
-
-    def pull_requests(self, r_clients):
-        """
-        Read messages from client sockets, returned by select action.
-        Here call async function _pull_messages.
-        """
-
-        tasks = [
-            self.ioloop.create_task(self._pull_messages(client))
-            for client in r_clients
-        ]
-        wait_tasks = asyncio.wait(tasks)
-        results = self.ioloop.run_until_complete(wait_tasks)
-
-        requests = {}
-        for result in results:
-            while result:
-                value = result.pop()
-                requests.update(value.result())
-        return requests
-
-    def push_requests(self, w_clients, requests):
-        """
-        Write messages to sockets, returned by select action.
-        Here call internal function _process_output_message.
-        """
-
-        async def push_messages(client, requests):
-            """
-            Internal async function with message processing.
-            """
-
-            sended = 0
-            try:
-                for req in requests.values():
-                    # reply to clients only messages
-                    sended += await self._process_output_message(req, client)
-            except Exception as err:
-                self.logger.debug(f"Клиент отключился {client}: {err}")
-                self.users_extension.disconnect(*client.getpeername())
-
-                self.authenticated_clients.remove(client)
-                self.client_sockets.remove(client)
-                client.close()
-
-                return False
-            return sended
-
-        tasks = [
-            self.ioloop.create_task(push_messages(client, requests))
-            for client in w_clients
-        ]
-        wait_tasks = asyncio.wait(tasks)
-        self.ioloop.run_until_complete(wait_tasks)
-
-        return True
-
-    def _helo(self, c_socket):
-        """
-        Internal method sends help message with public key
-        when client has been connected.
-        """
-
+        # send ciphers to client, when it has beed connected
         helo_message = helo(self.cipher.public_key.decode())
-        asyncio.run(send_data(c_socket, helo_message))
+        self._write(helo_message)
 
-    def validate_client_sockets(self):
+    def data_received(self, data):
+        data = self._read(data)
+
+        try:
+            answer = self.handle_request(data)
+            if answer and isinstance(answer, dict):
+                answer = response(200, answer, True)
+            elif is_valid_message(data):
+                answer = response(202, "Accepted", True)
+            else:
+                raise MessageError("Incorrect request")
+        except MessageError as err:
+            answer = response(400, str(err), False)
+
+        self._write(answer)
+
+    def connection_lost(self, exc):
+        # clean old ciphers
+        if self._transport in self._ciphers:
+            del self._ciphers[self._transport]
+
+        # clean authenticated flag
+        if self._transport in self._authenticated_clients:
+            self._authenticated_clients.remove(self._transport)
+
+        self.users_extension.disconnect(self._address, self._port)
+
+
+class ServerThread(object):
+    """
+    Running server object as a thread.
+    """
+
+    def __init__(self, logger):
+        super().__init__()
+        self.thread = None
+        self.loop = asyncio.get_event_loop()
+
+        self.logger = logger
+
+    def _serve(self, address, port):
+        coro = self.loop.create_server(lambda: AsyncioServer(), address, port)
+        server = self.loop.run_until_complete(coro)
+
+        try:
+            self.loop.run_forever()
+        finally:
+            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+            server.close()
+
+    def start(self):
         """
-        Function check, that possible to select with socket.
+        Read server settings and run Server object
+        in a thread and store output in self variable.
         """
 
-        for c_sock in list(self.client_sockets):
-            if c_sock.fileno() < 0:
-                self.logger.debug(
-                    f"Клиент отключился {c_sock}: fd is negative"
-                )
-                self.client_sockets.remove(c_sock)
-                self.authenticated_clients.remove(c_sock)
+        if self.thread and self.thread.is_alive():
+            return False
 
-    def run(self):
-        """
-        Main infinite cycle by flag running_flag was running here,
-        it calls select() and get socket for read and write.
-        pull_requests and push_requests are using here.
-        """
-
-        self.listen()
-        self.running_flag = True
-
-        while self.running_flag:
-            try:
-                sock, _ = self.sock.accept()
-                self.client_sockets.append(sock)
-                self._helo(sock)
-            except OSError:
-                # timeout exceeded
-                pass
-
-            try:
-                self.validate_client_sockets()
-                r_clients, w_clients, _ = select(
-                    self.client_sockets, self.client_sockets, [], 0.5
-                )
-            except Exception as err:
-                # received exception when client disconnect
-                self.logger.debug(f"Исключение select: {err}")
-                continue
-
-            requests = {}
-            if r_clients:
-                requests = self.pull_requests(r_clients)
-            if w_clients and requests:
-                self.push_requests(w_clients, requests)
-
-        self.sock.close()
+        settings = load_server_settings()
+        self.thread = Thread(
+            target=self._serve,
+            args=(settings.get("address"), int(settings.get("port"))),
+            daemon=True,
+        )
+        self.thread.start()
+        return True
 
     def stop(self):
         """
-        Set running_flag to false and
-        main cycle in run() will be ended.
+        Calls stop for early running thread and join it.
         """
 
-        self.running_flag = False
+        try:
+            self.loop.call_soon_threadsafe(self.loop.stop)
+            self.thread.join()
+        except Exception as err:
+            self.logger.error(f"Cannot stop server: {err}")
+            return False
+        return True
+
+    def alive(self):
+        """
+        Return thread alive status, boolean.
+        """
+
+        try:
+            return self.thread.is_alive()
+        except Exception:
+            pass
+        return False

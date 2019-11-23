@@ -204,6 +204,10 @@ class Client(Thread, QtCore.QObject):
                     self._get_chat(self.active_chat)
                     continue
 
+                # don't show background notifications for group chats
+                if data["to"].startswith("#"):
+                    continue
+
                 # show notification about background message
                 self.server_message.emit(
                     {

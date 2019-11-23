@@ -2,6 +2,7 @@
 
 from logging import getLogger
 import sys
+from threading import Thread
 
 from PyQt5 import QtWidgets, QtCore
 
@@ -18,7 +19,7 @@ from jim.utils import load_server_settings
 
 
 def update_main_buttons(server, main_window):
-    if server.alive():
+    if server and server.alive():
         main_window.runButton.setDisabled(True)
         main_window.stopButton.setDisabled(False)
     else:
@@ -31,10 +32,10 @@ if __name__ == "__main__":
 
     logger = getLogger("messenger.server")
     server = ServerThread(logger=logger)
+
     user_extenstion = UsersExtension()
 
     app = QtWidgets.QApplication(sys.argv)
-
     main_window = MainWindow(user_extenstion)
     main_window.runButton.clicked.connect(server.start)
     main_window.stopButton.clicked.connect(server.stop)
