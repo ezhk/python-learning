@@ -24,4 +24,4 @@ LOGLEVEL = logging.DEBUG
 STORAGE = "mongodb://root:0Kk3KVDbR0BVKzPUodjw@localhost:27017/messenger"
 SALT = "376gizGQvQqaBE3GXzEC7J72PBKBSN0kB5msKOpGIN0o"
 
-ENABLE_FILTER = True
+ENABLE_FILTER = False
