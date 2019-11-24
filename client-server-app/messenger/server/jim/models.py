@@ -17,7 +17,7 @@ from mongoengine import (
 
 
 class Users(Document):
-    username = StringField(max_length=256, required=True)
+    username = StringField(max_length=256, required=True, unique=True)
     password = StringField(max_length=256, required=True)
     userpic = BinaryField()
 
@@ -52,8 +52,8 @@ class Groups(Document):
 
 
 class GroupMembers(Document):
-    user = ReferenceField(Users)
-    group = ReferenceField(Groups)
+    user = ReferenceField(Users, reverse_delete_rule=CASCADE)
+    group = ReferenceField(Groups, reverse_delete_rule=CASCADE)
 
 
 class Messages(Document):
