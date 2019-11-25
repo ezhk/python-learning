@@ -23,7 +23,7 @@
             -e MONGO_INITDB_ROOT_PASSWORD=0Kk3KVDbR0BVKzPUodjw \
             -p 27017:27017 -d mongo
 
-        $ docker exec -ti messenger-mongo mongo -u root -p 0Kk3KVDbR0BVKzPUodjwa
+        $ docker exec -ti messenger-mongo mongo -u root -p 0Kk3KVDbR0BVKzPUodjw
             > use messenger
             > db.createUser({user: "root", pwd: "0Kk3KVDbR0BVKzPUodjw", roles:[{role: "dbOwner" , db:"messenger"}]})
 
