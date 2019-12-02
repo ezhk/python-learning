@@ -5,7 +5,6 @@ from functools import partial
 from logging import getLogger
 from io import BytesIO, StringIO
 import sys
-import time
 
 sys.path.append(".")
 
@@ -274,6 +273,7 @@ class RootWidget(Widget):
 
     def __init__(self, opts, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         # external arsed options
         self.opts = opts
 
@@ -433,9 +433,6 @@ class RootWidget(Widget):
         message = self.input_text
         try:
             self.client._send_message(self.client.active_chat, message)
-
-            # sleep between request chat
-            time.sleep(0.3)
             self.client._get_chat(self.client.active_chat)
         except Exception:
             pass
@@ -449,8 +446,6 @@ class RootWidget(Widget):
         and call function "get actual contact list".
         """
         self.client._add_contact(username)
-
-        time.sleep(0.3)
         return self.client._get_contacts()
 
     def del_contact(self, username):
@@ -460,8 +455,6 @@ class RootWidget(Widget):
         """
 
         self.client._delete_contact(username)
-
-        time.sleep(0.3)
         return self.client._get_contacts()
 
 

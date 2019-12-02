@@ -90,6 +90,8 @@
     title: "Authentication form"
     BoxLayout:
         orientation: "vertical"
+        spacing: 10
+
         BoxLayout:
             orientation: "horizontal"
 
@@ -185,11 +187,14 @@
 
     BoxLayout:
         orientation: "vertical"
+        spacing: 20
+
         FileChooserListView:
             id: filechooser
 
         BoxLayout:
             size_hint_y: None
+            spacing: 20
 
             Button:
                 text: "Load"

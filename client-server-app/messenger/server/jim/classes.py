@@ -625,20 +625,19 @@ class AsyncioServer(asyncio.Protocol):
         self._write(helo_message)
 
     def data_received(self, data):
-        data = self._read(data)
+        for _data in self._read(data):
+            try:
+                answer = self.handle_request(_data)
+                if answer and isinstance(answer, dict):
+                    answer = response(200, answer, True)
+                elif is_valid_message(_data):
+                    answer = response(202, "Accepted", True)
+                else:
+                    raise MessageError("Incorrect request")
+            except MessageError as err:
+                answer = response(400, str(err), False)
 
-        try:
-            answer = self.handle_request(data)
-            if answer and isinstance(answer, dict):
-                answer = response(200, answer, True)
-            elif is_valid_message(data):
-                answer = response(202, "Accepted", True)
-            else:
-                raise MessageError("Incorrect request")
-        except MessageError as err:
-            answer = response(400, str(err), False)
-
-        self._write(answer)
+            self._write(answer)
 
     def connection_lost(self, exc):
         # clean old ciphers
