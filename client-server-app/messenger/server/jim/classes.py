@@ -1,12 +1,13 @@
 import asyncio
+from datetime import datetime
 from logging import getLogger
 from threading import Thread
 import time
 from select import select
 from socket import socket, AF_INET, SOCK_STREAM
 
-from sqlalchemy import create_engine, or_, and_
-from sqlalchemy.orm import Session, aliased
+import mongoengine
+from mongoengine.queryset.visitor import Q
 
 from .config import STORAGE, SALT, ENABLE_FILTER
 from .descriptors import Port
@@ -28,8 +29,8 @@ from .messages import (
 from .models import (
     Users,
     UsersHistory,
-    Contacts,
     Groups,
+    Contacts,
     GroupMembers,
     Messages,
 )
@@ -43,12 +44,9 @@ from .utils import (
 
 
 class UsersExtension(object):
-    """
-    Class abstraction above user model in SQLAlchemy.
-    """
-
     def __init__(self):
         self.salt = SALT
+        self.conn = mongoengine.connect(host=STORAGE)
 
         self.profanity = lambda message: False
         if ENABLE_FILTER:
@@ -56,13 +54,8 @@ class UsersExtension(object):
             predict = getattr(module, "predict")
             self.profanity = lambda message: predict([message]).max()
 
-        engine = create_engine(
-            STORAGE,
-            pool_recycle=3600,
-            echo=False,
-            connect_args={"check_same_thread": False},
-        )
-        self.session = Session(bind=engine)
+    def __del__(self):
+        self.conn.close()
 
     def authenticate(self, username, password):
         """
@@ -71,21 +64,17 @@ class UsersExtension(object):
         """
 
         password_hash = get_text_digest(f"{username}{password}", self.salt)
-
-        user = self.session.query(Users).filter_by(username=username).first()
+        user = Users.objects(username=username).first()
         if user is None:
-            u_object = Users(username=username, password=password_hash)
             try:
-                self.session.add(u_object)
-                self.session.commit()
+                Users(username=username, password=password_hash).save()
             except Exception:
-                self.session.rollback()
                 return False
             return True
 
         if user.password is None:
             user.password = password_hash
-            self.session.commit()
+            user.save()
             return True
 
         if user.password == password_hash:
@@ -98,32 +87,18 @@ class UsersExtension(object):
         received presence message type.
         """
 
-        def _save_history(client, address, port):
+        def _save_history(user, address, port):
             """
             Internal method, that save login history by user.
             """
 
             try:
-                user = (
-                    self.session.query(Users)
-                    .filter_by(username=client)
-                    .first()
-                )
-                if user is None:
-                    return False
-
-                h_object = UsersHistory(
-                    user=user.id, address=address, port=port
-                )
-                self.session.add(h_object)
-
-                self.session.commit()
+                UsersHistory(user=user, address=address, port=port).save()
             except Exception:
-                self.session.rollback()
                 return False
             return True
 
-        user = self.session.query(Users).filter_by(username=client).first()
+        user = Users.objects(username=client).first()
 
         # user must create in authenticate function
         if user is None:
@@ -132,12 +107,11 @@ class UsersExtension(object):
         # update user-state to active for exist user
         try:
             user.is_active = True
-            self.session.commit()
+            user.save()
         except Exception:
-            self.session.rollback()
             return False
 
-        return _save_history(client, address, port)
+        return _save_history(user, address, port)
 
     def quit(self, client):
         """
@@ -145,12 +119,8 @@ class UsersExtension(object):
         """
 
         try:
-            self.session.query(Users).filter_by(username=client).update(
-                {"is_active": False}
-            )
-            self.session.commit()
+            Users.objects(username=client).update_one(is_active=False)
         except Exception:
-            self.session.rollback()
             return False
         return True
 
@@ -163,27 +133,18 @@ class UsersExtension(object):
         """
 
         try:
-            user = (
-                self.session.query(Users)
-                .join(Users.history)
-                .filter_by(address=address, port=port)
-                .order_by(UsersHistory.ctime.desc())
+            history_record = (
+                UsersHistory.objects(address=address, port=port)
+                .order_by("-ctime")
                 .first()
             )
-            if user is None or not user.history:
+            if history_record is None:
                 return True
 
-            latest_session = user.history[-1]
-            # validate latest session data, user might have same address and port
-            # this case possible, when user is not logged in
-            if (
-                latest_session.address == address
-                and latest_session.port == port
-            ):
-                user.is_active = False
-                self.session.commit()
+            Users.objects(username=history_record.user.username).update_one(
+                is_active=False
+            )
         except Exception:
-            self.session.rollback()
             return False
         return True
 
@@ -194,10 +155,8 @@ class UsersExtension(object):
         """
 
         try:
-            self.session.query(Users).filter_by(username=client).update({})
-            self.session.commit()
+            Users.objects(username=client).update_one(atime=datetime.now())
         except Exception:
-            self.session.rollback()
             return False
         return True
 
@@ -207,7 +166,7 @@ class UsersExtension(object):
         and active (is_active firld is True)
         """
 
-        user = self.session.query(Users).filter_by(username=client).first()
+        user = Users.objects(username=client).first()
         return user is not None and user.is_active
 
     @property
@@ -225,19 +184,18 @@ class UsersExtension(object):
         """
 
         users = []
-        for user in (
-            self.session.query(Users)
-            .join(Users.history)
-            .filter(Users.is_active == True)
-            .order_by(UsersHistory.id)
-            .all()
-        ):
-            last_access = user.history[-1]
+        for user in Users.objects(is_active=True).all():
+            history = (
+                UsersHistory.objects(user=user).order_by("-ctime").first()
+            )
+            if history is None:
+                continue
+
             users.append(
                 {
                     "username": user.username,
-                    "address": last_access.address,
-                    "port": last_access.port,
+                    "address": history.address,
+                    "port": history.port,
                     "atime": user.atime.isoformat(),
                 }
             )
@@ -258,40 +216,27 @@ class UsersExtension(object):
 
         history = []
         for history_record in (
-            self.session.query(UsersHistory)
-            .join(Users, Users.id == UsersHistory.user)
-            .order_by(UsersHistory.id.desc())
-            .with_entities(
-                Users.username,
-                UsersHistory.address,
-                UsersHistory.port,
-                UsersHistory.ctime,
-            )
-            .limit(30)
-            .all()
+            UsersHistory.objects().order_by("-ctime").limit(30)
         ):
-            username, address, port, ctime = history_record
             history.append(
                 {
-                    "username": username,
-                    "address": address,
-                    "port": port,
-                    "ctime": ctime.isoformat(),
+                    "username": history_record.user.username,
+                    "address": history_record.address,
+                    "port": history_record.port,
+                    "ctime": history_record.ctime.isoformat(),
                 }
             )
         return history
 
     def _create_group(self, group_name):
-        group = self.session.query(Groups).filter_by(name=group_name).first()
+        group = Groups.objects(name=group_name).first()
         if group:
             return group
 
         g_object = Groups(name=group_name)
         try:
-            self.session.add(g_object)
-            self.session.commit()
+            g_object.save()
         except Exception:
-            self.session.rollback()
             raise RuntimeError("group cannot be created")
         return g_object
 
@@ -300,23 +245,19 @@ class UsersExtension(object):
         Group logic, don't used yet.
         """
 
-        user = self.session.query(Users).filter_by(username=client).first()
+        user = Users.objects(username=client).first()
         if not user:
             return False
         group = self._create_group(chat)
 
-        exist_record = self.session.query(GroupMembers).filter_by(
-            user=user.id, group=group.id
-        )
+        exist_record = GroupMembers.objects(user=user, group=group)
         if exist_record.count():
             return True
 
         try:
-            gm_object = GroupMembers(user=user.id, group=group.id)
-            self.session.add(gm_object)
-            self.session.commit()
-        except Exception:
-            self.session.rollback()
+            GroupMembers(user=user, group=group).save()
+        except Exception as err:
+            print(err)
             return False
         return True
 
@@ -325,31 +266,25 @@ class UsersExtension(object):
         Group logic, don't used yet.
         """
 
-        user = self.session.query(Users).filter_by(username=client).first()
+        user = Users.objects(username=client).first()
         if not user:
             return False
-        group = self.session.query(Groups).filter_by(name=chat).first()
+        group = Groups.objects(name=group_name).first()
         if not group:
             return True
 
-        exist_record = self.session.query(GroupMembers).filter_by(
-            user=user.id, group=group.id
-        )
+        exist_record = GroupMembers.objects(user=user, group=group)
         if not exist_record.count():
             return True
 
         try:
             exist_record.delete()
-            self.session.commit()
         except Exception:
-            self.session.rollback()
             return False
         return True
 
     def _get_defined_users(self, users=[]):
-        db_users = (
-            self.session.query(Users).filter(Users.username.in_(users)).all()
-        )
+        db_users = Users.objects(username__in=users).all()
         db_users = sorted(db_users, key=lambda u: users.index(u.username))
         return db_users
 
@@ -363,18 +298,13 @@ class UsersExtension(object):
         if len(users) != 2:
             return None
         owner, contact = users
-        exist_contact = self.session.query(Contacts).filter_by(
-            owner=owner.id, contact=contact.id
-        )
+        exist_contact = Contacts.objects(owner=owner, contact=contact)
         if exist_contact.count():
             return True
 
         try:
-            c_object = Contacts(owner=owner.id, contact=contact.id)
-            self.session.add(c_object)
-            self.session.commit()
+            Contacts(owner=owner, contact=contact).save()
         except Exception:
-            self.session.rollback()
             return False
         return True
 
@@ -383,18 +313,14 @@ class UsersExtension(object):
         if len(users) != 2:
             return None
         owner, contact = users
-        exist_contact = self.session.query(Contacts).filter_by(
-            owner=owner.id, contact=contact.id
-        )
 
+        exist_contact = Contacts.objects(owner=owner, contact=contact)
         if not exist_contact.count():
             return True
 
         try:
             exist_contact.delete()
-            self.session.commit()
         except Exception:
-            self.session.rollback()
             return False
         return True
 
@@ -411,7 +337,7 @@ class UsersExtension(object):
             }
         """
 
-        user = self.session.query(Users).filter_by(username=client).first()
+        user = Users.objects(username=client).first()
         return {
             "username": user.username,
             "userpic": user.userpic.decode() if user.userpic else None,
@@ -421,12 +347,8 @@ class UsersExtension(object):
 
     def update_userpic(self, client, userpic):
         try:
-            self.session.query(Users).filter_by(username=client).update(
-                {"userpic": userpic.encode()}
-            )
-            self.session.commit()
+            Users.objects(username=client).update_one(userpic=userpic.encode())
         except Exception:
-            self.session.rollback()
             return False
         return True
 
@@ -435,36 +357,27 @@ class UsersExtension(object):
         Offline message logic.
         """
 
-        author = self.session.query(Users).filter_by(username=sender).first()
+        author = Users.objects(username=sender).first()
         if author is None:
             return None
 
         m_object = None
         if recipient.startswith("#"):
-            destination = (
-                self.session.query(Groups).filter_by(name=recipient).first()
-            )
+            destination = Groups.objects(name=recipient).first()
             if destination is None:
                 return None
             m_object = Messages(
-                author=author.id,
-                destination_group=destination.id,
-                content=message,
+                author=author, destination_group=destination, content=message
             )
         else:
-            destination = (
-                self.session.query(Users).filter_by(username=recipient).first()
-            )
+            destination = Users.objects(username=recipient).first()
             if destination is None:
                 return None
             m_object = Messages(
-                author=author.id,
-                destination_user=destination.id,
-                content=message,
+                author=author, destination_user=destination, content=message
             )
 
-        self.session.add(m_object)
-        self.session.commit()
+        m_object.save()
         return True
 
     def censored_message(self, message):
@@ -487,91 +400,50 @@ class UsersExtension(object):
         """
 
         messages = []
-
         if not whom:
             return messages
 
-        usersAuthor = aliased(Users)
-        usersDestination = aliased(Users)
-
         if source.startswith("#"):
             for msg in (
-                self.session.query(Messages)
-                .join(usersAuthor, usersAuthor.id == Messages.author)
-                .join(Groups, Groups.id == Messages.destination_group)
-                .filter(Groups.name == source)
-                .with_entities(
-                    usersAuthor.username,
-                    Groups.name,
-                    Messages.content,
-                    Messages.ctime,
+                Messages.objects(
+                    destination_group__in=Groups.objects(name=source)
                 )
-                .order_by(Messages.ctime.desc())
+                .order_by("-ctime")
                 .limit(50)
-                .all()
             ):
-                user, group, text, ctime = msg
                 messages.append(
                     {
-                        "from": user,
-                        "to": group,
-                        "text": self.censored_message(text),
-                        "ctime": ctime.isoformat(),
+                        "from": msg.author.username,
+                        "to": msg.destination_group.name,
+                        "text": self.censored_message(msg.content),
+                        "ctime": msg.ctime.isoformat(),
                     }
                 )
-            return messages
 
+        whom = Users.objects(username=whom)
+        source = Users.objects(username=source)
         for msg in (
-            self.session.query(Messages)
-            .join(usersAuthor, usersAuthor.id == Messages.author)
-            .join(
-                usersDestination,
-                usersDestination.id == Messages.destination_user,
+            Messages.objects(
+                (Q(author__in=whom) & Q(destination_user__in=source))
+                | (Q(author__in=source) & Q(destination_user__in=whom))
             )
-            .filter(
-                or_(
-                    and_(
-                        usersAuthor.username == source,
-                        usersDestination.username == whom,
-                    ),
-                    and_(
-                        usersAuthor.username == whom,
-                        usersDestination.username == source,
-                    ),
-                )
-            )
-            .with_entities(
-                usersAuthor.username,
-                usersDestination.username,
-                Messages.content,
-                Messages.ctime,
-            )
-            .order_by(Messages.ctime.desc())
+            .order_by("-ctime")
             .limit(50)
-            .all()
         ):
-            sender, recipient, text, ctime = msg
             messages.append(
                 {
-                    "from": sender,
-                    "to": recipient,
-                    "text": self.censored_message(text),
-                    "ctime": ctime.isoformat(),
+                    "from": msg.author.username,
+                    "to": msg.destination_user.username,
+                    "text": self.censored_message(msg.content),
+                    "ctime": msg.ctime.isoformat(),
                 }
             )
 
         return messages
 
     def get_group_members(self, name):
-        members = (
-            self.session.query(GroupMembers)
-            .join(Groups, Groups.id == GroupMembers.group)
-            .join(Users, Users.id == GroupMembers.user)
-            .filter(Groups.name == name)
-            .with_entities(Users.username)
-            .all()
-        )
-        return [member.username for member in members]
+        members = GroupMembers.objects(group__in=Groups.objects(name=name))
+        return [member.user.username for member in members]
 
     def get_contacts(self, user):
         """
@@ -585,29 +457,14 @@ class UsersExtension(object):
 
         """
 
-        usersContact = aliased(Users)
-        usersOwner = aliased(Users)
+        owner = Users.objects(username=user).first()
 
-        contacts = (
-            self.session.query(Contacts)
-            .join(usersOwner, usersOwner.id == Contacts.owner)
-            .join(usersContact, usersContact.id == Contacts.contact)
-            .filter(usersOwner.username == user)
-            .with_entities(usersContact.username)
-            .all()
-        )
+        contacts = Contacts.objects(owner=owner)
+        contacts = [c.contact.username for c in contacts]
 
-        groups = (
-            self.session.query(GroupMembers)
-            .join(Groups, Groups.id == GroupMembers.group)
-            .join(Users, Users.id == GroupMembers.user)
-            .filter(Users.username == user)
-            .with_entities(Groups.name)
-            .all()
-        )
+        groups = GroupMembers.objects(user=owner)
+        groups = [g.group.name for g in groups]
 
-        contacts = [contact.username for contact in contacts]
-        groups = [group.name for group in groups]
         return contacts + groups
 
     def contact_operation(self, action, user, input_contact):
