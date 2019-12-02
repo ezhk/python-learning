@@ -419,7 +419,7 @@ class RootWidget(Widget):
         if not image:
             return
         with BytesIO() as output:
-            image = image.resize((30, 30), PILImage.BILINEAR)
+            image = image.resize((70, 70), PILImage.BILINEAR)
             image.save(output, format="PNG")
             self.client._upload_userpic(hexlify(output.getvalue()).decode())
 
