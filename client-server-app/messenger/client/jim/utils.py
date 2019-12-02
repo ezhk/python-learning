@@ -59,6 +59,7 @@ def send_data(sock, data, cipher_object=None):
     вычитывать из сокета в recv_data сначала 4 байта —
     длина сообщения, а потом само сообщение по длине.
     """
+
     try:
         data = make_raw_json(data)
         if cipher_object is not None:
@@ -77,6 +78,7 @@ def recv_data(sock, cipher_object=None):
     а затем само сообщение, декодируем и возвращает разобранный
     json в виде структуры данных python.
     """
+
     try:
         len_data = sock.recv(4)
         len_data = struct.unpack("I", len_data)[0]

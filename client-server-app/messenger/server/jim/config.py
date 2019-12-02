@@ -21,7 +21,7 @@ SERVER_LOGFILE = "log/server.log"
 LOGLEVEL = logging.DEBUG
 
 # STORAGE = "sqlite:///messenger.sql"
-STORAGE = "mongodb://root:0Kk3KVDbR0BVKzPUodjw@localhost:27017/messenger"
+STORAGE = "mongodb://root:0Kk3KVDbR0BVKzPUodjw@192.168.99.104:27017/messenger"
 SALT = "376gizGQvQqaBE3GXzEC7J72PBKBSN0kB5msKOpGIN0o"
 
 ENABLE_FILTER = False

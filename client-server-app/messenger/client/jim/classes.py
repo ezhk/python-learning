@@ -3,6 +3,7 @@ from threading import Thread
 import time
 from socket import socket, AF_INET, SOCK_STREAM
 
+from kivy.app import App as KivyApp
 from PyQt5 import QtCore
 
 from .descriptors import Port, Username
@@ -59,7 +60,10 @@ class Client(Thread, QtCore.QObject):
         self.username = username
         self.password = password
         self.address = address or "localhost"
-        self.port = port
+        self.port = port or 7777
+
+        # Root kivy object, using for send events
+        self.kivy_object = kwargs.get("kivy_object", None)
 
         self.family = kwargs.get("family", AF_INET)
         self.type = kwargs.get("type", SOCK_STREAM)
@@ -137,6 +141,8 @@ class Client(Thread, QtCore.QObject):
             self.sock.settimeout(self.timeout)
         except Exception as err:
             self.client_error.emit(str(err))
+            if self.kivy_object:
+                self.kivy_object.emit({"error": str(err)})
             return False
         return True
 
@@ -187,6 +193,8 @@ class Client(Thread, QtCore.QObject):
             # error
             if is_error_response(data) is not None:
                 self.client_error.emit(is_error_response(data))
+                if self.kivy_object:
+                    self.kivy_object.emit({"error": is_error_response(data)})
                 continue
 
             if "action" in data and "msg" in data["action"]:
@@ -216,17 +224,46 @@ class Client(Thread, QtCore.QObject):
                         "message": data["message"],
                     }
                 )
+                if self.kivy_object:
+                    self.kivy_object.emit(
+                        {
+                            "action": "background_message",
+                            "from": data["from"],
+                            "message": data["message"],
+                        }
+                    )
 
             if "alert" in data:
                 if "contacts" in data["alert"]:
                     self.contacts = data["alert"]["contacts"]
                     self.server_message.emit({"action": "update_contacts"})
+                    if self.kivy_object:
+                        self.kivy_object.emit(
+                            {
+                                "action": "update_contacts",
+                                "data": self.contacts,
+                            }
+                        )
+
                 if "chat" in data["alert"]:
                     self.chat = data["alert"]["chat"]
                     self.server_message.emit({"action": "update_chat"})
+                    if self.kivy_object:
+                        self.kivy_object.emit(
+                            {"action": "update_chat", "data": self.chat}
+                        )
+
                 if "user_profile" in data["alert"]:
                     self.user_profile = data["alert"]["user_profile"]
                     self.server_message.emit({"action": "update_profile"})
+                    if self.kivy_object:
+                        self.kivy_object.emit(
+                            {
+                                "action": "update_profile",
+                                "data": self.user_profile,
+                            }
+                        )
+
         self.close()
 
     def stop(self):
