@@ -389,7 +389,7 @@
         id: chat
 
         pos: 500, 400
-        size: 1000, 670
+        size: 1050, 670
         radius: [10, ]
         chat: root.chat_messages
 
@@ -399,7 +399,7 @@
         text: root.input_text
 
         pos: 500, 170
-        size: 1000, 180
+        size: 1050, 180
 
         multiline: True
         background_color: (1, 1, 1, 0.2)
@@ -419,7 +419,7 @@
         on_release: Factory.DelContact().open()
 
     Button:
-        pos: 1310, 50
+        pos: 1360, 50
         size: 190, 70
         text: "Send"
         on_release: root.push_message()
