@@ -365,9 +365,6 @@ class RootWidget(Widget):
             image = PILImage.open(stream)
         _draw_userpic(image)
 
-        # request contacts for user
-        self.client._get_contacts()
-
     def emit_notification(self, message, *args):
         self.notification_popup.set_message(message[:96])
         self.notification_popup.open()
