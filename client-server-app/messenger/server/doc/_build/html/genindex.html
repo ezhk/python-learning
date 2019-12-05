@@ -46,8 +46,6 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
- | <a href="#Q"><strong>Q</strong></a>
- | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#U"><strong>U</strong></a>
  
@@ -55,17 +53,13 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.active_users">active_users() (jim.classes.UsersExtension property)</a>
-</li>
       <li><a href="jim.html#jim.classes.ServerThread.alive">alive() (метод jim.classes.ServerThread)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.all_sockets">all_sockets() (jim.classes.UsersExtension property)</a>
-</li>
       <li><a href="jim.html#jim.security.AsymmetricCipher">AsymmetricCipher (класс в jim.security)</a>
 </li>
-      <li><a href="jim.html#jim.classes.UsersExtension.authenticate">authenticate() (метод jim.classes.UsersExtension)</a>
+      <li><a href="jim.html#jim.classes.AsyncioServer">AsyncioServer (класс в jim.classes)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -73,11 +67,19 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.contact_operation">contact_operation() (метод jim.classes.UsersExtension)</a>
+      <li><a href="jim.html#jim.classes.AsyncioServer.connection_lost">connection_lost() (метод jim.classes.AsyncioServer)</a>
+</li>
+      <li><a href="jim.html#jim.classes.AsyncioServer.connection_made">connection_made() (метод jim.classes.AsyncioServer)</a>
+</li>
+      <li><a href="jim.html#jim.models.Contacts">Contacts (класс в jim.models)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.models.Contacts">Contacts (класс в jim.models)</a>
+      <li><a href="jim.html#jim.models.Contacts.DoesNotExist">Contacts.DoesNotExist</a>
+</li>
+      <li><a href="jim.html#jim.models.Contacts.MultipleObjectsReturned">Contacts.MultipleObjectsReturned</a>
+</li>
+      <li><a href="jim.html#jim.utils.conv_bytes_to_data">conv_bytes_to_data() (в модуле jim.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -85,16 +87,16 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jim.html#jim.classes.AsyncioServer.data_received">data_received() (метод jim.classes.AsyncioServer)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jim.html#jim.security.AsymmetricCipher.decrypt">decrypt() (метод jim.security.AsymmetricCipher)</a>
 
       <ul>
         <li><a href="jim.html#jim.security.SymmetricCipher.decrypt">(метод jim.security.SymmetricCipher)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.disconnect">disconnect() (метод jim.classes.UsersExtension)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -113,27 +115,25 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.get_chat">get_chat() (метод jim.classes.UsersExtension)</a>
-</li>
       <li><a href="jim.html#jim.messages.get_contacts">get_contacts() (в модуле jim.messages)</a>
-
-      <ul>
-        <li><a href="jim.html#jim.classes.UsersExtension.get_contacts">(метод jim.classes.UsersExtension)</a>
 </li>
-      </ul></li>
-      <li><a href="jim.html#jim.classes.UsersExtension.get_profile">get_profile() (метод jim.classes.UsersExtension)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jim.html#jim.messages.get_recipient">get_recipient() (в модуле jim.messages)</a>
-</li>
-      <li><a href="jim.html#jim.classes.UsersExtension.get_socket">get_socket() (метод jim.classes.UsersExtension)</a>
 </li>
       <li><a href="jim.html#jim.security.get_text_digest">get_text_digest() (в модуле jim.security)</a>
 </li>
       <li><a href="jim.html#jim.models.GroupMembers">GroupMembers (класс в jim.models)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jim.html#jim.models.GroupMembers.DoesNotExist">GroupMembers.DoesNotExist</a>
+</li>
+      <li><a href="jim.html#jim.models.GroupMembers.MultipleObjectsReturned">GroupMembers.MultipleObjectsReturned</a>
+</li>
       <li><a href="jim.html#jim.models.Groups">Groups (класс в jim.models)</a>
+</li>
+      <li><a href="jim.html#jim.models.Groups.DoesNotExist">Groups.DoesNotExist</a>
+</li>
+      <li><a href="jim.html#jim.models.Groups.MultipleObjectsReturned">Groups.MultipleObjectsReturned</a>
 </li>
   </ul></td>
 </tr></table>
@@ -141,18 +141,16 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.is_active">is_active() (метод jim.classes.UsersExtension)</a>
-</li>
       <li><a href="jim.html#jim.messages.is_authenticate">is_authenticate() (в модуле jim.messages)</a>
 </li>
       <li><a href="jim.html#jim.messages.is_chat">is_chat() (в модуле jim.messages)</a>
 </li>
       <li><a href="jim.html#jim.messages.is_contact_operation">is_contact_operation() (в модуле jim.messages)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jim.html#jim.messages.is_key_exchange">is_key_exchange() (в модуле jim.messages)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jim.html#jim.messages.is_message">is_message() (в модуле jim.messages)</a>
 </li>
       <li><a href="jim.html#jim.messages.is_presence_message">is_presence_message() (в модуле jim.messages)</a>
@@ -175,10 +173,10 @@
 </li>
       <li><a href="jim.html#module-jim.descriptors">jim.descriptors (модуль)</a>
 </li>
-      <li><a href="jim.html#module-jim.messages">jim.messages (модуль)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jim.html#module-jim.messages">jim.messages (модуль)</a>
+</li>
       <li><a href="jim.html#module-jim.metaclasses">jim.metaclasses (модуль)</a>
 </li>
       <li><a href="jim.html#module-jim.models">jim.models (модуль)</a>
@@ -187,20 +185,16 @@
 </li>
       <li><a href="jim.html#module-jim.utils">jim.utils (модуль)</a>
 </li>
-      <li><a href="jim.html#jim.classes.UsersExtension.join">join() (метод jim.classes.UsersExtension)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.leave">leave() (метод jim.classes.UsersExtension)</a>
+      <li><a href="jim.html#jim.utils.load_server_settings">load_server_settings() (в модуле jim.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.utils.load_server_settings">load_server_settings() (в модуле jim.utils)</a>
-</li>
       <li><a href="jim.html#jim.decorators.log">log() (в модуле jim.decorators)</a>
 </li>
   </ul></td>
@@ -211,9 +205,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jim.html#jim.utils.make_raw_json">make_raw_json() (в модуле jim.utils)</a>
 </li>
+      <li><a href="jim.html#jim.models.Messages">Messages (класс в jim.models)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.models.Messages">Messages (класс в jim.models)</a>
+      <li><a href="jim.html#jim.models.Messages.DoesNotExist">Messages.DoesNotExist</a>
+</li>
+      <li><a href="jim.html#jim.models.Messages.MultipleObjectsReturned">Messages.MultipleObjectsReturned</a>
 </li>
   </ul></td>
 </tr></table>
@@ -223,29 +221,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jim.html#jim.utils.parse_raw_json">parse_raw_json() (в модуле jim.utils)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jim.html#jim.descriptors.Port">Port (класс в jim.descriptors)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.presence">presence() (метод jim.classes.UsersExtension)</a>
-</li>
-      <li><a href="jim.html#jim.classes.UsersExtension.put_message">put_message() (метод jim.classes.UsersExtension)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="Q">Q</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.quit">quit() (метод jim.classes.UsersExtension)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="R">R</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.utils.recv_data">recv_data() (в модуле jim.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -253,14 +231,20 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jim.html#jim.models.Messages.save">save() (метод jim.models.Messages)</a>
+
+      <ul>
+        <li><a href="jim.html#jim.models.Users.save">(метод jim.models.Users)</a>
+</li>
+        <li><a href="jim.html#jim.models.UsersHistory.save">(метод jim.models.UsersHistory)</a>
+</li>
+      </ul></li>
       <li><a href="jim.html#jim.utils.save_server_settings">save_server_settings() (в модуле jim.utils)</a>
-</li>
-      <li><a href="jim.html#jim.utils.send_data">send_data() (в модуле jim.utils)</a>
-</li>
-      <li><a href="jim.html#jim.classes.ServerThread">ServerThread (класс в jim.classes)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="jim.html#jim.classes.ServerThread">ServerThread (класс в jim.classes)</a>
+</li>
       <li><a href="jim.html#jim.metaclasses.ServerVerifier">ServerVerifier (класс в jim.metaclasses)</a>
 </li>
       <li><a href="jim.html#jim.classes.ServerThread.start">start() (метод jim.classes.ServerThread)</a>
@@ -275,17 +259,19 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.update_atime">update_atime() (метод jim.classes.UsersExtension)</a>
-</li>
       <li><a href="jim.html#jim.models.Users">Users (класс в jim.models)</a>
+</li>
+      <li><a href="jim.html#jim.models.Users.DoesNotExist">Users.DoesNotExist</a>
+</li>
+      <li><a href="jim.html#jim.models.Users.MultipleObjectsReturned">Users.MultipleObjectsReturned</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="jim.html#jim.classes.UsersExtension.users_history">users_history() (jim.classes.UsersExtension property)</a>
-</li>
-      <li><a href="jim.html#jim.classes.UsersExtension">UsersExtension (класс в jim.classes)</a>
-</li>
       <li><a href="jim.html#jim.models.UsersHistory">UsersHistory (класс в jim.models)</a>
+</li>
+      <li><a href="jim.html#jim.models.UsersHistory.DoesNotExist">UsersHistory.DoesNotExist</a>
+</li>
+      <li><a href="jim.html#jim.models.UsersHistory.MultipleObjectsReturned">UsersHistory.MultipleObjectsReturned</a>
 </li>
   </ul></td>
 </tr></table>
