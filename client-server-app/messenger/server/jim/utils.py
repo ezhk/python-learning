@@ -83,14 +83,28 @@ def conv_data_to_bytes(data, cipher_object=None):
 
 
 def conv_bytes_to_data(data, cipher_object=None):
-    len_data = data[:4]
-    len_data = struct.unpack("I", len_data)[0]
+    """
+    Function return list of messages,
+    processing data by changing offset
+    while doesn't get OEF.
+    """
 
-    raw_data = data[4 : 4 + len_data]
-    if cipher_object is not None:
-        raw_data = cipher_object.decrypt(raw_data)
+    output_jsons = []
+    offset = 0
 
-    return parse_raw_json(raw_data)
+    while offset < len(data):
+        len_data = data[offset : offset + 4]
+        len_data = struct.unpack("I", len_data)[0]
+        offset += 4
+
+        raw_data = data[offset : offset + len_data]
+        if cipher_object is not None:
+            raw_data = cipher_object.decrypt(raw_data)
+
+        output_jsons.append(parse_raw_json(raw_data))
+        offset += len_data
+
+    return output_jsons
 
 
 def load_server_settings():

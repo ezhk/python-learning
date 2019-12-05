@@ -1,0 +1,427 @@
+#:import Factory kivy.factory.Factory
+
+
+# <RoundedTextInput@TextInput>:
+#     background_color: (1, 1, 1, 0)
+# 
+#     selection_color: (0.7, 0.7, 0.7, 0.5)
+#     cursor_color: (1, 1, 1, 1)
+#     text_color: (1, 1, 1, 1)
+# 
+#     hint_text_color: (1, 1, 1, 1)
+#     canvas.before:
+#         Color:
+#             rgba: (1, 1, 1, 0.3)
+#     canvas.after:
+#         RoundedRectangle:
+#             pos: self.pos
+#             size: self.size
+#             radius: [10,]
+#         Color:
+#             rgba: (1, 1, 1, 0.3)
+
+# <RoundedButton@Button>:
+#     background_color: 0, 0, 0, 0
+#     canvas.before:
+#         Color:
+#             rgba: (0.4, 0.4, 0.4, 1) if self.state == 'normal' else (0.2, 0.2, 0.2, 1) 
+#         RoundedRectangle:
+#             pos: self.pos
+#             size: self.size
+#             radius: [10,]
+
+<SelectableLabel>:
+    canvas.before:
+        Color:
+            rgba: (0.8, 0.8, 0.8, .5) if self.selected else (0, 0, 0, 0)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Contacts>:
+    canvas.before:  
+        Color:
+            rgba: (1, 1, 1, 0.2)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            # radius: [10, ]
+
+    viewclass: 'SelectableLabel'
+    SelectableRecycleBoxLayout:
+        default_size: None, dp(20)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
+<Chat>:
+    chat: label.text
+
+    canvas.before:
+        Color:
+            rgba: (1, 1, 1, 0.2)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            # radius: [10,]
+
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+
+        Label:
+            id: label
+            size_hint_y: None
+            height: self.texture_size[1]
+            text_size: self.width, None
+            padding: 10, 10
+            text: root.chat
+
+<AuthPopup>:
+    username: username.text
+    password: password.text
+
+    auto_dismiss: False
+    size_hint: (None, None)
+    size: (600, 350)
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    title: "Authentication form"
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+
+        BoxLayout:
+            orientation: "horizontal"
+
+            Label:
+                text: "Username"
+
+            TextInput:
+                id: username
+                halign: "center"
+                multiline: False
+                text: root.username
+
+        BoxLayout:
+            orientation: "horizontal"
+
+            Label:
+                text: "Password"
+
+            TextInput:
+                id: password
+                password: True
+                halign: "center"
+                multiline: False
+                text: root.password
+
+        Button:
+            size: 190, 70
+            text: 'Login'
+            on_release: root.save()
+
+<NotificationPopup>:
+    message: message.text
+
+    auto_dismiss: False
+    size_hint: (None, None)
+    size: (600, 350)
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    title: "Notification"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        Label:
+            id: message
+
+            text_size: self.width, None
+            size_hint: 1, None
+            height: self.texture_size[1]
+
+            text: root.message
+
+        Button:
+            size_hint: (None, None)
+            size: (150, 80)
+            pos_hint: {"center_x": 0.5}
+            text: "Close"
+            on_release: root.dismiss()
+
+<ErrorPopup>:
+    message: message.text
+
+    auto_dismiss: False
+    size_hint: (None, None)
+    size: (600, 350)
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    title: "Error"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        Label:
+            id: message
+
+            text_size: self.width, None
+            size_hint: 1, None
+            height: self.texture_size[1]
+
+            text: root.message
+
+        Button:
+            size_hint: (None, None)
+            size: (150, 80)
+            pos_hint: {"center_x": 0.5}
+            text: "Close"
+            on_release: root.close()
+
+
+<LoadImage>:
+    title: "Choose image"
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            spacing: 20
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.selection)
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+
+<UserpicEditor>:
+    image: image
+    x1: x1.text
+    y1: y1.text
+    x2: x2.text
+    y2: y2.text
+
+    title: "Userpic editor"
+
+    auto_dismiss: True
+    size_hint: (None, None)
+    size: (1200, 660)
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    BoxLayout:
+        orientation: "horizontal"
+
+
+        Image:
+            id: image
+
+            source: "ui/images/information.png"
+            size: (600, 600)
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: [10, ]
+            spacing: 10
+
+            Label:
+                text: "Upper-left point (x1, y1)"
+            BoxLayout:
+                orientation: "horizontal"
+                Label:
+                    text: "("
+                TextInput:
+                    id: x1
+                    multiline: False
+                Label:
+                    text: ";"
+                TextInput:
+                    id: y1
+                    multiline: False
+                Label:
+                    text: ")"
+
+            Label:
+                text: "Lower-right point (x2, y2)"
+            BoxLayout:
+                orientation: "horizontal"
+                Label:
+                    text: "("
+                TextInput:
+                    id: x2
+                    multiline: False
+                Label:
+                    text: ";"
+                TextInput:
+                    id: y2
+                    multiline: False
+                Label:
+                    text: ")"
+
+            Button:
+                text: 'Open'
+                on_release: root.push_load_image()
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 10
+
+                Button:
+                    text: 'Crop'
+                    on_release: root.crop()
+                Button:
+                    text: 'Save'
+                    on_release: root.save()
+
+
+
+<AddContact>:
+    contact: contact.text
+
+    auto_dismiss: True
+    size_hint: (None, None)
+    size: (400, 350)
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    title: "Add contact"
+    BoxLayout:
+        orientation: "vertical"
+        TextInput:
+            id: contact
+
+            size: 190, 50
+            multiline: False
+
+        Button:
+            size: 190, 70
+            text: 'Add contact'
+            on_release: root.save()
+
+        Button:
+            size: 190, 70
+            text: 'Close'
+            on_release: root.dismiss()
+
+<DelContact>:
+    contact: contact.text
+
+    auto_dismiss: True
+    size_hint: (None, None)
+    size: (400, 350)
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    title: "Del contact"
+    BoxLayout:
+        orientation: "vertical"
+        TextInput:
+            id: contact
+
+            size: 190, 50
+            multiline: False
+
+        Button:
+            size: 190, 70
+            text: 'Del contact'
+            on_release: root.save()
+
+        Button:
+            size: 190, 70
+            text: 'Close'
+            on_release: root.dismiss()
+
+<RootWidget>:
+    userpic: image
+    username: username.text
+    chat_with: chat_label.text
+    chat_messages: chat.chat
+    contact_list: contacts.data
+    input_text: message.text
+
+    Button:
+        background_color: (0, 0, 0, 0)
+        pos: 50, 1090
+        size: 70, 70
+        on_release: Factory.UserpicEditor().open()
+
+        Image:
+            id: image
+            size: 70, 70
+
+            source: "ui/images/userpic.png"
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+
+    Label:
+        id: username
+
+        pos: 150, 1090
+        size: 300, 70
+
+        text: root.username
+
+    Label:
+        id: chat_label
+
+        pos: 500, 1090
+        size: 1000, 70
+
+        # valigh: "middle"
+        # halign: "left"
+        text: root.chat_with
+
+    Contacts:
+        id: contacts
+
+        pos: 50, 170
+        size: 400, 900
+        radius: [10, ]
+        data: root.contact_list
+
+    Chat:
+        id: chat
+
+        pos: 500, 400
+        size: 1050, 670
+        radius: [10, ]
+        chat: root.chat_messages
+
+    # message
+    TextInput:
+        id: message
+        text: root.input_text
+
+        pos: 500, 170
+        size: 1050, 180
+
+        multiline: True
+        background_color: (1, 1, 1, 0.2)
+        cursor_color: (1, 1, 1, 1)
+        foreground_color: (1, 1, 1, 1)
+
+    Button:
+        pos: 50, 50
+        size: 190, 70
+        text: "Add contact"
+        on_release: Factory.AddContact().open()
+
+    Button:
+        pos: 260, 50
+        size: 190, 70
+        text: "Del contact"
+        on_release: Factory.DelContact().open()
+
+    Button:
+        pos: 1360, 50
+        size: 190, 70
+        text: "Send"
+        on_release: root.push_message()
+
+        
