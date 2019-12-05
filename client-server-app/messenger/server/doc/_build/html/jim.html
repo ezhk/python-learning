@@ -41,6 +41,36 @@
 <div class="section" id="module-jim.classes">
 <span id="classes-py"></span><h2>classes.py<a class="headerlink" href="#module-jim.classes" title="Ссылка на этот заголовок">¶</a></h2>
 <dl class="class">
+<dt id="jim.classes.AsyncioServer">
+<em class="property">class </em><code class="sig-prename descclassname">jim.classes.</code><code class="sig-name descname">AsyncioServer</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.AsyncioServer" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="method">
+<dt id="jim.classes.AsyncioServer.connection_lost">
+<code class="sig-name descname">connection_lost</code><span class="sig-paren">(</span><em class="sig-param">exc</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.AsyncioServer.connection_lost" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Called when the connection is lost or closed.</p>
+<p>The argument is an exception object or None (the latter
+meaning a regular EOF is received or the connection was
+aborted or closed).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.AsyncioServer.connection_made">
+<code class="sig-name descname">connection_made</code><span class="sig-paren">(</span><em class="sig-param">transport</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.AsyncioServer.connection_made" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Called when a connection is made.</p>
+<p>The argument is the transport representing the pipe connection.
+To receive data, wait for data_received() calls.
+When the connection is closed, connection_lost() is called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jim.classes.AsyncioServer.data_received">
+<code class="sig-name descname">data_received</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.AsyncioServer.data_received" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Called when some data is received.</p>
+<p>The argument is a bytes object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="jim.classes.ServerThread">
 <em class="property">class </em><code class="sig-prename descclassname">jim.classes.</code><code class="sig-name descname">ServerThread</code><span class="sig-paren">(</span><em class="sig-param">logger</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.ServerThread" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Running server object as a thread.</p>
@@ -61,167 +91,6 @@ in a thread and store output in self variable.</p>
 <dt id="jim.classes.ServerThread.stop">
 <code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.ServerThread.stop" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Calls stop for early running thread and join it.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="jim.classes.UsersExtension">
-<em class="property">class </em><code class="sig-prename descclassname">jim.classes.</code><code class="sig-name descname">UsersExtension</code><a class="headerlink" href="#jim.classes.UsersExtension" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Class abstraction above user model in SQLAlchemy.</p>
-<dl class="method">
-<dt id="jim.classes.UsersExtension.active_users">
-<em class="property">property </em><code class="sig-name descname">active_users</code><a class="headerlink" href="#jim.classes.UsersExtension.active_users" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Return dict with active users like a</p>
-<blockquote>
-<div><p>{
-«username»: &lt;value&gt;,
-«address»: &lt;value&gt;,
-«port»: &lt;value&gt;,
-«atime»: &lt;value&gt;
-}</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.all_sockets">
-<em class="property">property </em><code class="sig-name descname">all_sockets</code><a class="headerlink" href="#jim.classes.UsersExtension.all_sockets" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Return sockets dict with users connections.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.authenticate">
-<code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.authenticate" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Validate user password and create user if doesn’t exist.
-Function calculate hash from string user + passwd + salt.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.contact_operation">
-<code class="sig-name descname">contact_operation</code><span class="sig-paren">(</span><em class="sig-param">action</em>, <em class="sig-param">user</em>, <em class="sig-param">input_contact</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.contact_operation" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Function add or del link between users in contacts
-if users exist. Operation depends on action
-«add_contact» or «del_contact».</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.disconnect">
-<code class="sig-name descname">disconnect</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">port</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.disconnect" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Try to make disconnected user is inactive.
-Found in history database last session with
-current address and port, set this user flag
-is_active to False.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.get_chat">
-<code class="sig-name descname">get_chat</code><span class="sig-paren">(</span><em class="sig-param">recipient</em>, <em class="sig-param">sender=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_chat" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Return chat dialog between users or group.
-Messages limit in request = 50.
-Answer is a dict</p>
-<blockquote>
-<div><p>{
-«from»: sender,
-«to»: recipient,
-«text»: text,
-«ctime»: ctime.isoformat(),
-}</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.get_contacts">
-<code class="sig-name descname">get_contacts</code><span class="sig-paren">(</span><em class="sig-param">user</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_contacts" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Get contact usernames by username-owner.
-Background it called SQL query like a:</p>
-<blockquote>
-<div><p>SELECT u2.username FROM contacts
-JOIN users ON users.id = contacts.owner
-JOIN users AS u2 ON u2.id = contacts.contact
-WHERE users.username = user;</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.get_profile">
-<code class="sig-name descname">get_profile</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_profile" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Return user detail information:
-models Users without password data:</p>
-<blockquote>
-<div><p>{
-«username»: user.username,
-«userpic»: user.userpic,
-«atime»: user.atime,
-«is_active»: user.is_active,
-}</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.get_socket">
-<code class="sig-name descname">get_socket</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.get_socket" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Return socket data from internal dict «sockets».
-Record in this «sockets» will be added when user
-will be connected to server.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.is_active">
-<code class="sig-name descname">is_active</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.is_active" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Return boolean value and check that user exists
-and active (is_active firld is True)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.join">
-<code class="sig-name descname">join</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">chat</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.join" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Group logic, don’t used yet.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.leave">
-<code class="sig-name descname">leave</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">chat</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.leave" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Group logic, don’t used yet.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.presence">
-<code class="sig-name descname">presence</code><span class="sig-paren">(</span><em class="sig-param">client</em>, <em class="sig-param">socket</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.presence" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Create and save user history when
-received presence message type.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.put_message">
-<code class="sig-name descname">put_message</code><span class="sig-paren">(</span><em class="sig-param">sender</em>, <em class="sig-param">recipient</em>, <em class="sig-param">encoding</em>, <em class="sig-param">message</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.put_message" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Offline message logic.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.quit">
-<code class="sig-name descname">quit</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.quit" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Currently not used.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.update_atime">
-<code class="sig-name descname">update_atime</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.classes.UsersExtension.update_atime" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Function call update with empty object,
-it causes update atime field in database.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="jim.classes.UsersExtension.users_history">
-<em class="property">property </em><code class="sig-name descname">users_history</code><a class="headerlink" href="#jim.classes.UsersExtension.users_history" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Return users login history, presented as a dict:</p>
-<blockquote>
-<div><p>{
-«username»: &lt;value&gt;,
-«address»: &lt;value&gt;,
-«port»: &lt;value&gt;,
-«ctime»: &lt;value&gt;
-}</p>
-</div></blockquote>
 </dd></dl>
 
 </dd></dl>
@@ -344,33 +213,291 @@ but doesn’t validate, that these constans will be used</p></li>
 <p>Models contains user presentation in database.</p>
 <dl class="class">
 <dt id="jim.models.Contacts">
-<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Contacts</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Contacts" title="Ссылка на это определение">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Contacts</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**values</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Contacts" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="exception">
+<dt id="jim.models.Contacts.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#jim.models.Contacts.DoesNotExist" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="exception">
+<dt id="jim.models.Contacts.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#jim.models.Contacts.MultipleObjectsReturned" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 <dl class="class">
 <dt id="jim.models.GroupMembers">
-<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">GroupMembers</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.GroupMembers" title="Ссылка на это определение">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">GroupMembers</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**values</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.GroupMembers" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="exception">
+<dt id="jim.models.GroupMembers.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#jim.models.GroupMembers.DoesNotExist" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="exception">
+<dt id="jim.models.GroupMembers.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#jim.models.GroupMembers.MultipleObjectsReturned" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 <dl class="class">
 <dt id="jim.models.Groups">
-<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Groups</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Groups" title="Ссылка на это определение">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Groups</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**values</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Groups" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="exception">
+<dt id="jim.models.Groups.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#jim.models.Groups.DoesNotExist" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="exception">
+<dt id="jim.models.Groups.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#jim.models.Groups.MultipleObjectsReturned" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 <dl class="class">
 <dt id="jim.models.Messages">
-<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Messages</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Messages" title="Ссылка на это определение">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Messages</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**values</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Messages" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="exception">
+<dt id="jim.models.Messages.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#jim.models.Messages.DoesNotExist" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="exception">
+<dt id="jim.models.Messages.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#jim.models.Messages.MultipleObjectsReturned" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jim.models.Messages.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Messages.save" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Save the <code class="xref py py-class docutils literal notranslate"><span class="pre">Document</span></code> to the database. If the
+document already exists, it will be updated, otherwise it will be
+created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>force_insert</strong> – only try to create a new document, don’t allow
+updates of existing documents.</p></li>
+<li><p><strong>validate</strong> – validates the document; set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to skip.</p></li>
+<li><p><strong>clean</strong> – call the document clean method, requires <cite>validate</cite> to be
+True.</p></li>
+<li><p><strong>write_concern</strong> – Extra keyword arguments are passed down to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code> OR
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">insert()</span></code>
+which will be used as options for the resultant
+<code class="docutils literal notranslate"><span class="pre">getLastError</span></code> command.  For example,
+<code class="docutils literal notranslate"><span class="pre">save(...,</span> <span class="pre">write_concern={w:</span> <span class="pre">2,</span> <span class="pre">fsync:</span> <span class="pre">True},</span> <span class="pre">...)</span></code> will
+wait until at least two servers have recorded the write and
+will force an fsync on the primary server.</p></li>
+<li><p><strong>cascade</strong> – Sets the flag for cascading saves.  You can set a
+default by setting «cascade» in the document __meta__</p></li>
+<li><p><strong>cascade_kwargs</strong> – (optional) kwargs dictionary to be passed throw
+to cascading saves.  Implies <code class="docutils literal notranslate"><span class="pre">cascade=True</span></code>.</p></li>
+<li><p><strong>_refs</strong> – A list of processed references used in cascading saves</p></li>
+<li><p><strong>save_condition</strong> – only perform save if matching record in db
+satisfies condition(s) (e.g. version number).
+Raises <code class="xref py py-class docutils literal notranslate"><span class="pre">OperationError</span></code> if the conditions are not satisfied</p></li>
+<li><p><strong>signal_kwargs</strong> – (optional) kwargs dictionary to be passed to
+the signal calls.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.5: </span>In existing documents it only saves changed fields using
+set / unset.  Saves are cascaded and any
+<code class="xref py py-class docutils literal notranslate"><span class="pre">DBRef</span></code> objects that have changes are
+saved as well.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.6: </span>Added cascading saves</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.8: </span>Cascade saves are optional and default to False.  If you want
+fine grain control then you can turn off using document
+meta[„cascade“] = True.  Also you can pass different kwargs to
+the cascade save using cascade_kwargs which overwrites the
+existing kwargs with custom values.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.8.5: </span>Optional save_condition that only overwrites existing documents
+if the condition is satisfied in the current db record.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10: </span><code class="xref py py-class docutils literal notranslate"><span class="pre">OperationError</span></code> exception raised if save_condition fails.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10.1: </span>:class: save_condition failure now raises a <cite>SaveConditionError</cite></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10.7: </span>Add signal_kwargs argument</p>
+</div>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="class">
 <dt id="jim.models.Users">
-<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Users</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Users" title="Ссылка на это определение">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">Users</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**values</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Users" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="exception">
+<dt id="jim.models.Users.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#jim.models.Users.DoesNotExist" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="exception">
+<dt id="jim.models.Users.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#jim.models.Users.MultipleObjectsReturned" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jim.models.Users.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.Users.save" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Save the <code class="xref py py-class docutils literal notranslate"><span class="pre">Document</span></code> to the database. If the
+document already exists, it will be updated, otherwise it will be
+created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>force_insert</strong> – only try to create a new document, don’t allow
+updates of existing documents.</p></li>
+<li><p><strong>validate</strong> – validates the document; set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to skip.</p></li>
+<li><p><strong>clean</strong> – call the document clean method, requires <cite>validate</cite> to be
+True.</p></li>
+<li><p><strong>write_concern</strong> – Extra keyword arguments are passed down to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code> OR
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">insert()</span></code>
+which will be used as options for the resultant
+<code class="docutils literal notranslate"><span class="pre">getLastError</span></code> command.  For example,
+<code class="docutils literal notranslate"><span class="pre">save(...,</span> <span class="pre">write_concern={w:</span> <span class="pre">2,</span> <span class="pre">fsync:</span> <span class="pre">True},</span> <span class="pre">...)</span></code> will
+wait until at least two servers have recorded the write and
+will force an fsync on the primary server.</p></li>
+<li><p><strong>cascade</strong> – Sets the flag for cascading saves.  You can set a
+default by setting «cascade» in the document __meta__</p></li>
+<li><p><strong>cascade_kwargs</strong> – (optional) kwargs dictionary to be passed throw
+to cascading saves.  Implies <code class="docutils literal notranslate"><span class="pre">cascade=True</span></code>.</p></li>
+<li><p><strong>_refs</strong> – A list of processed references used in cascading saves</p></li>
+<li><p><strong>save_condition</strong> – only perform save if matching record in db
+satisfies condition(s) (e.g. version number).
+Raises <code class="xref py py-class docutils literal notranslate"><span class="pre">OperationError</span></code> if the conditions are not satisfied</p></li>
+<li><p><strong>signal_kwargs</strong> – (optional) kwargs dictionary to be passed to
+the signal calls.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.5: </span>In existing documents it only saves changed fields using
+set / unset.  Saves are cascaded and any
+<code class="xref py py-class docutils literal notranslate"><span class="pre">DBRef</span></code> objects that have changes are
+saved as well.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.6: </span>Added cascading saves</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.8: </span>Cascade saves are optional and default to False.  If you want
+fine grain control then you can turn off using document
+meta[„cascade“] = True.  Also you can pass different kwargs to
+the cascade save using cascade_kwargs which overwrites the
+existing kwargs with custom values.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.8.5: </span>Optional save_condition that only overwrites existing documents
+if the condition is satisfied in the current db record.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10: </span><code class="xref py py-class docutils literal notranslate"><span class="pre">OperationError</span></code> exception raised if save_condition fails.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10.1: </span>:class: save_condition failure now raises a <cite>SaveConditionError</cite></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10.7: </span>Add signal_kwargs argument</p>
+</div>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="class">
 <dt id="jim.models.UsersHistory">
-<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">UsersHistory</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.UsersHistory" title="Ссылка на это определение">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jim.models.</code><code class="sig-name descname">UsersHistory</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**values</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.UsersHistory" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="exception">
+<dt id="jim.models.UsersHistory.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#jim.models.UsersHistory.DoesNotExist" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="exception">
+<dt id="jim.models.UsersHistory.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#jim.models.UsersHistory.MultipleObjectsReturned" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jim.models.UsersHistory.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.models.UsersHistory.save" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Save the <code class="xref py py-class docutils literal notranslate"><span class="pre">Document</span></code> to the database. If the
+document already exists, it will be updated, otherwise it will be
+created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>force_insert</strong> – only try to create a new document, don’t allow
+updates of existing documents.</p></li>
+<li><p><strong>validate</strong> – validates the document; set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to skip.</p></li>
+<li><p><strong>clean</strong> – call the document clean method, requires <cite>validate</cite> to be
+True.</p></li>
+<li><p><strong>write_concern</strong> – Extra keyword arguments are passed down to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code> OR
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">insert()</span></code>
+which will be used as options for the resultant
+<code class="docutils literal notranslate"><span class="pre">getLastError</span></code> command.  For example,
+<code class="docutils literal notranslate"><span class="pre">save(...,</span> <span class="pre">write_concern={w:</span> <span class="pre">2,</span> <span class="pre">fsync:</span> <span class="pre">True},</span> <span class="pre">...)</span></code> will
+wait until at least two servers have recorded the write and
+will force an fsync on the primary server.</p></li>
+<li><p><strong>cascade</strong> – Sets the flag for cascading saves.  You can set a
+default by setting «cascade» in the document __meta__</p></li>
+<li><p><strong>cascade_kwargs</strong> – (optional) kwargs dictionary to be passed throw
+to cascading saves.  Implies <code class="docutils literal notranslate"><span class="pre">cascade=True</span></code>.</p></li>
+<li><p><strong>_refs</strong> – A list of processed references used in cascading saves</p></li>
+<li><p><strong>save_condition</strong> – only perform save if matching record in db
+satisfies condition(s) (e.g. version number).
+Raises <code class="xref py py-class docutils literal notranslate"><span class="pre">OperationError</span></code> if the conditions are not satisfied</p></li>
+<li><p><strong>signal_kwargs</strong> – (optional) kwargs dictionary to be passed to
+the signal calls.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.5: </span>In existing documents it only saves changed fields using
+set / unset.  Saves are cascaded and any
+<code class="xref py py-class docutils literal notranslate"><span class="pre">DBRef</span></code> objects that have changes are
+saved as well.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.6: </span>Added cascading saves</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.8: </span>Cascade saves are optional and default to False.  If you want
+fine grain control then you can turn off using document
+meta[„cascade“] = True.  Also you can pass different kwargs to
+the cascade save using cascade_kwargs which overwrites the
+existing kwargs with custom values.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.8.5: </span>Optional save_condition that only overwrites existing documents
+if the condition is satisfied in the current db record.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10: </span><code class="xref py py-class docutils literal notranslate"><span class="pre">OperationError</span></code> exception raised if save_condition fails.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10.1: </span>:class: save_condition failure now raises a <cite>SaveConditionError</cite></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Изменено в версии 0.10.7: </span>Add signal_kwargs argument</p>
+</div>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="module-jim.security">
@@ -424,6 +551,14 @@ Uses SHA-256 algorithm.</p>
 <div class="section" id="module-jim.utils">
 <span id="utils-py"></span><h2>utils.py<a class="headerlink" href="#module-jim.utils" title="Ссылка на этот заголовок">¶</a></h2>
 <dl class="function">
+<dt id="jim.utils.conv_bytes_to_data">
+<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">conv_bytes_to_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">cipher_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.conv_bytes_to_data" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Function return list of messages,
+processing data by changing offset
+while doesn’t get OEF.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="jim.utils.is_valid_message">
 <code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">is_valid_message</code><span class="sig-paren">(</span><em class="sig-param">msg</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.is_valid_message" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Function check that received message is correct.</p>
@@ -459,27 +594,10 @@ presented as a dict:</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="jim.utils.recv_data">
-<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">recv_data</code><span class="sig-paren">(</span><em class="sig-param">sock</em>, <em class="sig-param">cipher_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.recv_data" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Финкция сначала читает 4 байта из сокета — длина сообщения,
-а затем само сообщение, декодируем и возвращает разобранный
-json в виде структуры данных python.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="jim.utils.save_server_settings">
 <code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">save_server_settings</code><span class="sig-paren">(</span><em class="sig-param">address</em>, <em class="sig-param">port</em>, <em class="sig-param">storage</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.save_server_settings" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Func stores server settings (address, port, storage)
 into sessings.ini.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="jim.utils.send_data">
-<code class="sig-prename descclassname">jim.utils.</code><code class="sig-name descname">send_data</code><span class="sig-paren">(</span><em class="sig-param">sock</em>, <em class="sig-param">data</em>, <em class="sig-param">cipher_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jim.utils.send_data" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Функция отправляет сообщение в сокет добавляя
-в начало сообщения его длину, это позволяет
-вычитывать из сокета в recv_data сначала 4 байта —
-длина сообщения, а потом само сообщение по длине.</p>
 </dd></dl>
 
 </div>
