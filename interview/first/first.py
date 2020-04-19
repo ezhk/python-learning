@@ -26,7 +26,7 @@ def multiplication_table(x_lines=10, y_lines=10):
     lines = []
     for y_pos in range(1, y_lines + 1):
         lines.append([x_pos * y_pos for x_pos in range(1, x_lines + 1)])
-    print(tabulate(lines))
+    return tabulate(lines)
 
 
 def print_directory_contents(source_dir):
@@ -174,10 +174,10 @@ def calc_deposit(amount, month_duration, month_change=0):
 
 if __name__ == "__main__":
     print("---\nMultiplication table")
-    multiplication_table(10, 5)
+    print(multiplication_table(10, 5))
 
     print("---\nDirectory list")
-    print_directory_contents("/Users/ezhichek/Work/vue.js/")
+    print_directory_contents(".")
 
     print("---\nRandom generator")
     rand_generator(0, 10)
