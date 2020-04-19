@@ -90,9 +90,9 @@ def rand_generator(start=-50, stop=50, count=10):
     print(rand_dict)
 
 
-def calc_deposit(amount, month_duration):
+def calc_deposit(amount, month_duration, month_change=0):
     """
-    4. Написать программу «Банковский депозит».
+    4 и 5. Написать программу «Банковский депозит».
     Она должна состоять из функции и ее вызова с аргументами.
     Клиент банка делает депозит на определенный срок.
     В зависимости от суммы и срока вклада определяется процентная ставка:
@@ -107,6 +107,8 @@ def calc_deposit(amount, month_duration):
     В функции необходимо проверять принадлежность суммы вклада к одному из диапазонов
         и выполнять расчет по нужной процентной ставке.
     Функция возвращает сумму вклада на конец срока.
+
+    Также добавлена функциональность с ежемесячным пополнением счета.
     """
 
     INTEREST_RATE = {
@@ -116,17 +118,31 @@ def calc_deposit(amount, month_duration):
     }
     MONTH_IN_YEAR = 12
 
-    def _deposit_with_percents(amount, rate, duration):
-        amount = Decimal(amount)
-        rate = Decimal(rate)
+    def _monthly_capitalization_calc(amount, rate, duration):
+        return amount * (1 + rate / (100 * 12)) ** duration
 
+    def _year_capitalization_calc(amount, rate, duration):
         year_ratio = max(1, duration // MONTH_IN_YEAR)
         effective_ratio = Decimal(1 + rate / 100) ** year_ratio - 1
         monthly_effective_ratio = effective_ratio / (
             year_ratio * MONTH_IN_YEAR
         )
-
         return amount + amount * duration * monthly_effective_ratio
+
+    def _deposit_with_percents(amount, rate, duration, change=0):
+        amount = Decimal(amount)
+        rate = Decimal(rate)
+
+        amount = _monthly_capitalization_calc(amount, rate, duration)
+        if not change:
+            return amount
+
+        for month in range(1, duration):
+            amount += _monthly_capitalization_calc(
+                change, rate, duration - month
+            )
+
+        return amount
 
     current_year_rate = None
     for product, rate in INTEREST_RATE.items():
@@ -138,8 +154,10 @@ def calc_deposit(amount, month_duration):
         if begin_sum <= amount < end_sum:
             while product:
                 duration = product.pop()
+                current_rate = rate.pop()
+
                 if month_duration // duration > 0:
-                    current_year_rate = rate.pop()
+                    current_year_rate = current_rate
                     break
         if current_year_rate:
             break
@@ -147,7 +165,9 @@ def calc_deposit(amount, month_duration):
         return None
 
     return format(
-        _deposit_with_percents(amount, current_year_rate, month_duration),
+        _deposit_with_percents(
+            amount, current_year_rate, month_duration, month_change
+        ),
         ".4f",
     )
 
@@ -163,6 +183,20 @@ if __name__ == "__main__":
     rand_generator(0, 10)
 
     print("---\nDeposit")
-    print(f"5_000 for 2 years: {calc_deposit(5000, 24)}")
-    print(f"15_000 for 3 years: {calc_deposit(15000, 36)}")
-    print(f"150_000 for 10 years: {calc_deposit(150000, 120)}")
+    print(f"10_000 in 2 years: {calc_deposit(10000, 24)}")
+    print(f"15_000 in a half year: {calc_deposit(15000, 6)}")
+    print(f"150_000 in 10 years: {calc_deposit(150000, 120)}")
+
+    print("---\nDeposit with monthly replenishment")
+    print(
+        "10_000 in 2 years, monthly payment 100: "
+        f"{calc_deposit(10000, 24, 100)}"
+    )
+    print(
+        "15_000 in 3 years, monthly payment 1000: "
+        f"{calc_deposit(15000, 36, 1000)}"
+    )
+    print(
+        "150_000 in 10 years, monthly payment 5000: "
+        f"{calc_deposit(150000, 120, 5000)}"
+    )
