@@ -1,24 +1,37 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
 {% block content %}
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Наименование</th>
-      <th scope="col">Стоимость</th>
-      <th scope="col">Поставщик</th>
-    </tr>
-  </thead>
+<div class="product-form border border-secondary" hidden="true">
+  <form>
+    <!-- Form body will be loaded on click #add-button event. -->
+  </form>
+  <button type="submit" class="btn btn-outline-secondary" id="save-product">Сохранить</button>
+</div>
 
-  <tbody>
-    {% for item in object_list %}
-    <tr>
-      <td>{{ item.name }}</td>
-      <td>{{ item.price }}</td>
-      <td>{{ item.provider.name }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="product-view">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Наименование</th>
+        <th scope="col">Стоимость</th>
+        <th scope="col">Поставщик</th>
+      </tr>
+    </thead>
 
-<a href="{% url 'product:create' %}"><button class="btn">Добавить товар</button></a>
+    <tbody>
+      {% for item in object_list %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.provider.name }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button class="btn btn-outline-primary" id="add-button" data-product-form="{% url 'product:create' %}">
+    Добавить товар
+  </button>
+</div>
 {% endblock %}
