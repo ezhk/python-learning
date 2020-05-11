@@ -14,7 +14,6 @@ body {
 
 header,
 footer {
-  border: 1px solid darkgray;
   border-radius: 5px;
   padding: 7px;
   margin: 3px 0;
