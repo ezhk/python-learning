@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.views import View
 from django.views.generic import ListView
 from django.shortcuts import render
 
@@ -16,16 +16,61 @@ class ProductView(ListView):
             .order_by("created_at")
         )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = ProductForm()
 
-def create(request):
-    if request.method == "POST":
+        return context
+
+
+class ProductEditView(View):
+    """
+    Class for operations with product, such as create or get product form.
+    Using templates for this operations, that defined below.
+
+    Why did two methods?
+    POST might be correct or not, and when form is invalid —
+        we have to show invalid fields.
+        On next open form, fields will be marked incorrect as previous open operation.
+    So when need to get empty form — we use GET — receive form without suggestions.
+    When need save or show invalid form — use POST method.
+    """
+
+    FORM_TEMPLATE = "product/product_form.html"
+    TABLE_TEMPLATE = "product/product_table.html"
+
+    def get(self, request, *args, **kwargs):
+        """
+        Return empty rendered form, without error suggest.
+        """
+
+        return render(
+            request,
+            self.__class__.FORM_TEMPLATE,
+            {"form": ProductForm()},
+            status=200,
+        )
+
+    def post(self, request, *args, **kwargs):
+        """
+        Create product if form is valid
+            or return status code 400
+            and form with suggest errors.
+        """
+
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect("/")
+            return render(
+                request,
+                self.__class__.TABLE_TEMPLATE,
+                {
+                    "object_list": Product.objects.select_related("provider")
+                    .all()
+                    .order_by("created_at")
+                },
+            )
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = ProductForm()
-
-    return render(request, "product/product_create.html", {"form": form})
+        return render(
+            request, self.__class__.FORM_TEMPLATE, {"form": form}, status=400,
+        )

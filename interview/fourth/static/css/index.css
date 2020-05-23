@@ -14,7 +14,6 @@ body {
 
 header,
 footer {
-  border: 1px solid darkgray;
   border-radius: 5px;
   padding: 7px;
   margin: 3px 0;
@@ -33,4 +32,28 @@ footer {
 .block {
   padding: 10px 5px;
   flex-grow: 1;
+
+  display: flex;
+  justify-content: center;
+}
+
+.product-form {
+  padding: 15px;
+
+  z-index: 1;
+  position: fixed;
+  background: white;
+
+  border-radius: 5px;
+  min-width: 300px;
+
+  text-align: center;
+}
+
+.form-pop-filter {
+  filter: blur(2px);
+}
+
+.product-view {
+  width: 100%;
 }
