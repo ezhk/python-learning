@@ -4,6 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from sqlalchemy.engine.base import Engine
+
 from models import Base, Categories, Units, Positions, Ownerships
 
 
@@ -11,14 +13,14 @@ DATABASE_PATH = "db.sqlite3"
 
 
 class Repository:
-    def __init__(self, database_path):
+    def __init__(self, database_path: str) -> None:
         self.engine = create_engine(f"sqlite:///{database_path}")
         self.session = sessionmaker(bind=self.engine)()
 
         Repository.create_database(self.engine)
 
     @staticmethod
-    def create_database(engine):
+    def create_database(engine: Engine) -> None:
         Base.metadata.create_all(engine)
 
 

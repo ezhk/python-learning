@@ -1,4 +1,5 @@
 import sys
+from typing import Dict
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtSql import (
@@ -14,28 +15,28 @@ DEFAULT_DATABASE_PATH = "db.sqlite3"
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self.db = None
+        self.db = QSqlDatabase.addDatabase("QSQLITE")
         self.dbpath = DEFAULT_DATABASE_PATH
         self.qmainwindow = QtWidgets.QMainWindow()
 
         # define buttons vehaviour
-        self.button_actions = {}
+        self.button_actions: Dict[str, QtWidgets.QAction] = {}
         self.define_buttons()
 
         # UI variables
-        self.label = None
-        self.combo_box = None
-        self.table_model = None
-        self.table_view = None
+        self.label = QtWidgets.QLabel()
+        self.combo_box = QtWidgets.QComboBox()
+        self.table_model = QSqlRelationalTableModel()
+        self.table_view = QtWidgets.QTableView()
 
         # create window and show it
         self.draw()
         self.qmainwindow.show()
 
-    def draw(self):
+    def draw(self) -> None:
         self.qmainwindow.setObjectName("MainWindow")
         self.qmainwindow.resize(800, 600)
         self.qmainwindow.setWindowTitle("Database manager")
@@ -71,16 +72,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.table_view.setGeometry(QtCore.QRect(QtCore.QPoint(10, 115), QtCore.QSize(780, 475)))
         self.table_view.setShowGrid(False)
 
-    def define_buttons(self,):
-        def _exit_action():
+    def define_buttons(self) -> None:
+        def _exit_action() -> None:
             QtWidgets.qApp.quit()
 
-        def _show_dialog():
+        def _show_dialog() -> None:
             self.dbpath, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open file")
             self.label.setText(self.dbpath)
 
-        def _load_database():
-            self.db = QSqlDatabase.addDatabase("QSQLITE")
+        def _load_database() -> None:
             self.db.setDatabaseName(self.dbpath)
             self.db.open()
 
@@ -90,13 +90,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.combo_box.addItem(tbl)
             self.update_table()
 
-        def _save_database():
+        def _save_database() -> None:
             self.table_model.submitAll()
 
-        def _insert_row():
+        def _insert_row() -> None:
             self.table_model.insertRows(self.table_model.rowCount(), 1)
 
-        def _remove_row():
+        def _remove_row() -> None:
             for idx in self.table_view.selectedIndexes():
                 self.table_model.removeRows(idx.row(), 1)
 
@@ -120,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.button_actions.update({"remove": QtWidgets.QAction("Remove row", self.qmainwindow)})
         self.button_actions["remove"].triggered.connect(_remove_row)
 
-    def update_table(self):
+    def update_table(self) -> None:
         self.table_model = QSqlRelationalTableModel()
 
         tablename = self.combo_box.currentText()
