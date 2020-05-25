@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from models import Base, Categories, Units
+from models import Base, Categories, Units, Positions, Ownerships
 
 
 DATABASE_PATH = "db.sqlite3"
@@ -25,13 +25,20 @@ class Repository:
 if __name__ == "__main__":
     repository = Repository(DATABASE_PATH)
 
-    # choices demo
-    unit = Units(unit="pcs")
-    print(unit.unit)
+    repository.session.add(Categories(name="Продукты", description="Категория продуктов"))
 
-    category = Categories(name="Продукты", description="Категория продуктов")
+    repository.session.add(Units(unit="pcs"))
+    repository.session.add(Units(unit="kg"))
+    repository.session.add(Units(unit="lb"))
 
-    repository.session.add(unit)
-    repository.session.add(category)
+    repository.session.add(Positions(position="Manager"))
+    repository.session.add(Positions(position="Admitistrator"))
+
+    repository.session.add(Ownerships(ownership="Sole"))
+    repository.session.add(Ownerships(ownership="General"))
+    repository.session.add(Ownerships(ownership="Corporation"))
+    repository.session.add(Ownerships(ownership="Limited Liability Company"))
+    repository.session.add(Ownerships(ownership="Limited Partnership"))
+    repository.session.add(Ownerships(ownership="Limited Liability Partnership"))
 
     repository.session.commit()

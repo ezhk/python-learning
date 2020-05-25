@@ -1,3 +1,2 @@
-phonenumbers
+PyQt5
 SQLAlchemy
-SQLAlchemy-Utils
