@@ -34,28 +34,24 @@ class Categories(Base):
 
 
 class Units(Base):
-    TYPES = [
-        ("pcs", "Pieces"),
-        ("kg", "Kilograms"),
-        ("lb", "Pounds"),
-    ]
-
     __tablename__ = "units"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    unit = Column(choice.ChoiceType(TYPES), nullable=False)
+    unit = Column(String(128), nullable=False)
 
 
 class Positions(Base):
-    TYPES = [
-        ("manager", "Manager"),
-        ("administrator", "Admitistrator"),
-    ]
-
     __tablename__ = "positions"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    position = Column(choice.ChoiceType(TYPES), nullable=False)
+    position = Column(String(128), nullable=False)
+
+
+class Ownerships(Base):
+    __tablename__ = "ownerships"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ownership = Column(String(128), nullable=False)
 
 
 """
@@ -104,20 +100,11 @@ class Employees(Base):
 
 
 class Vendors(Base):
-    OWNERSHIP_TYPES = [
-        ("sole", "Sole proprietorship"),
-        ("general", "General partnership"),
-        ("corporation", "Corporation"),
-        ("LLC", "Limited Liability Company"),
-        ("LP", "Limited Partnership"),
-        ("LLP", "Limited Liability Partnership"),
-    ]
-
     __tablename__ = "vendors"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(256), nullable=False, index=True)
-    ownership_form = Column(choice.ChoiceType(OWNERSHIP_TYPES), nullable=False)
+    ownership_form = Column(Integer, ForeignKey("ownerships.id"))
     address = Column(String(512), nullable=False)
-    phone = Column(phone_number.PhoneNumberType(), nullable=False)
-    email = Column(email.EmailType)
+    phone = Column(String(20), nullable=False)
+    email = Column(String(128), nullable=False)
