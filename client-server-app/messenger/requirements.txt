@@ -1,7 +1,7 @@
 asyncio==3.4.3
 Kivy==1.11.1
 mongoengine==0.18.2
-Pillow==6.2.1
+Pillow==8.1.1
 profanity-check==1.0.3
 pycryptodome==3.9.0
 PyQt5==5.13.1
